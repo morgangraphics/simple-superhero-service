@@ -6,6 +6,8 @@ const firstBy = require('thenby');
 
 const common = require('../api/_common');
 
+// Don't want to keep passing config or universe as function parameters
+// to all the functions the use it on this page. So we set them onve and resuse
 let config;
 let universe;
 
@@ -37,7 +39,7 @@ const _filterData = () => {
     const e = config.character.every;
     const x = config.character.exclude;
     common.cache[universe].forEach((itm) => {
-      // See above for explination
+      // See above for explanation
       if (((s.length > 0 && s.some(str => itm.name.includes(str)))
             || (e.length > 0 && e.every(str => itm.name.includes(str))))
          && !x.some(str => itm.name.includes(str))) {
@@ -119,7 +121,7 @@ const _getData = (unvrs, cfg) => {
 };
 
 /**
- * Stub - Only "publically" available method for getting data
+ * Stub - Only "publicly" available method for getting data
  * @param  {String} unvrs Comic Universe (DC or Marvel)
  * @param  {Object} cfg   Configuration Object
  * @return {Promise}      Promise object of results

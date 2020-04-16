@@ -2,9 +2,9 @@
 
 I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
-Service runs on Node JS and Hapi.
+Service runs on Node and hapijs.
 
-The the service itself and data contained within service is useful for testing:
+The service itself and the data contained within service is useful for testing:
 
 * CORS configuration
 * Server configuration

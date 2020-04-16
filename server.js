@@ -7,7 +7,20 @@ const Inert = require('inert');
 const Vision = require('vision');
 const Routes = require('./api/index');
 
+/**
+ * Default environment configuration options
+ * WARNING! NOT ENVIRONMENT VARIABLES LIKE process.env.NODE_ENV
+ * If needed elsewhere, this will need to be redone
+ * @type {[type]}
+ */
 const env = config.get(process.env.NODE_ENV || 'development');
+
+/**
+ * TLS Configuration with Self Signed Certs
+ * allowHTTP1 is needed for Software that does not support
+ * HTTP2 like Postman :(
+ * @type {Object}
+ */
 const tls = {
   key: fs.readFileSync('./sss-key.pem'),
   cert: fs.readFileSync('./sss-cert.pem'),
@@ -16,7 +29,10 @@ const tls = {
 
 const listener = http2.createSecureServer(tls);
 
-// Create a server with a host and port
+/**
+ * Hapi Server configuration
+ * @type {[type]}
+ */
 const server = hapi.server({
   host: env.HOST || 'localhost',
   listener,
@@ -38,14 +54,11 @@ const server = hapi.server({
   }
 });
 
-const swaggerOptions = {
-  info: {
-    title: 'Simple Superhero Service API Documentation',
-    description: `I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
+const swgrDesc = `I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
-Service runs on Node JS and Hapi.
+Service runs on Node and hapijs.
 
-The the service itself and data contained within service is useful for testing:
+The service itself and the data contained within service is useful for testing:
 
 1. CORS configuration
 1. Server configuration
@@ -55,7 +68,12 @@ The the service itself and data contained within service is useful for testing:
 1. Stubbing out UI components
 ...
 
-Data is the comic book character dataset from [fivethrityeight](https://datahub.io/five-thirty-eight/comic-characters#readme)`,
+Data is the comic book character dataset from [fivethrityeight](https://datahub.io/five-thirty-eight/comic-characters#readme)`;
+
+const swaggerOptions = {
+  info: {
+    title: 'Simple Superhero Service API Documentation',
+    description: swgrDesc,
     contact: {
       name: 'MORGANGRAPHICS',
       url: `https://github.com/morgangraphics`
@@ -70,6 +88,11 @@ Data is the comic book character dataset from [fivethrityeight](https://datahub.
   `,
 };
 
+/**
+ * Asynchronously start hapi server
+ * @param  {[type]} async [description]
+ * @return {[type]}       [description]
+ */
 (async () => {
   await server.register([
     Inert,

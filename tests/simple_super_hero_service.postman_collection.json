@@ -1829,6 +1829,107 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/dc/superman/?help",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"});",
+									"",
+									"pm.test(\"test if help is printed\", function () {",
+									"    const helpText = pm.response.text();",
+									"    pm.expect(helpText).to.include('headers');",
+									"    pm.expect(helpText).to.include('The identity status');",
+									"});",
+									"",
+									"pm.test(\"test if its the right version of help\", function () {",
+									"    const helpText = pm.response.text();",
+									"    pm.expect(helpText).to.include('superman');",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc/superman?help",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								"superman"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "name:asc",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -4517,6 +4618,108 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/marvel/spiderman/?help",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"});",
+									"",
+									"pm.test(\"test if help is printed\", function () {",
+									"    const helpText = pm.response.text();",
+									"    pm.expect(helpText).to.include('headers');",
+									"    pm.expect(helpText).to.include('The identity status');",
+									"});",
+									"",
+									"pm.test(\"test if its the right version of help\", function () {",
+									"    const helpText = pm.response.text();",
+									"    pm.expect(helpText).to.include('spider+man');",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel/spider man/?help",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								"spider man",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "name:asc",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -5412,18 +5615,7 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Access-Control-Request-Method",
-								"value": "PUT",
-								"type": "text"
-							},
-							{
-								"key": "Origin",
-								"value": "https://{{base_url}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "",

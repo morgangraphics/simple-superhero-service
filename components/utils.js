@@ -14,6 +14,24 @@ const _direction = val => ((val === 'asc') ? 1 : -1);
 const isStr = str => (str instanceof String) || typeof (str) === 'string';
 
 /**
+ * Parameters can come in several different formant. This private method
+ * tests for the format and munges it accordingly
+ * @param  {String|Object|Array} param parameter sent to endpoint
+ * @return {Array}       Array of parametes for further processing
+ */
+const _handleParamTypes = (param) => {
+  let response;
+  if (isStr(param)) {
+    response = param.split(',');
+  } else if (param instanceof Array) {
+    response = param;
+  } else if (param instanceof Object) {
+    response = [param];
+  }
+  return response;
+};
+
+/**
  * Will attempt to make perumtations on names passed in so empty result sets are limited
  * e.g. spider man, spider-man, spiderman
  * @param  {String} name name of the character you are searching for
@@ -45,21 +63,13 @@ const permutate = (name) => {
  * @return {Object}   Object of search option arrays
  */
 const searchObj = (c) => {
-  let sArry;
+  let chars;
+  const sArry = _handleParamTypes(c);
   const search = {
     some: [],
     every: [],
     exclude: [],
   };
-  if (isStr(c)) {
-    sArry = c.split(',');
-  } else if (c instanceof Array) {
-    sArry = c;
-  } else if (c instanceof Object) {
-    sArry = [c];
-  }
-  // const sArry = (c.includes(',')) ? c.split(',') : [c];
-  let chars;
   sArry.forEach((itm) => {
     if (itm.startsWith('-')) {
       chars = permutate(itm.replace('-', ''));
@@ -90,14 +100,7 @@ const searchObj = (c) => {
  */
 const sortObj = (s) => {
   const sort = [];
-  let sortArry;
-  if (isStr(s)) {
-    sortArry = s.split(',');
-  } else if (s instanceof Array) {
-    sortArry = s;
-  } else if (s instanceof Object) {
-    sortArry = [s];
-  }
+  const sortArry = _handleParamTypes(s);
   sortArry.forEach((itm) => {
     if (isStr(itm) && itm.includes(':')) {
       const t = itm.split(':');
@@ -112,23 +115,9 @@ const sortObj = (s) => {
   return sort;
 };
 
-/**
- * Generic Error Handler
- * @param  {Object} err Error Object
- * @return {Object}     New Error
- */
-const throwError = (err) => {
-  if (err.message === "Cannot read property 'name' of undefined") {
-    throw new Error('Invalid keyword');
-  } else {
-    throw new Error(err.message);
-  }
-};
-
 
 module.exports = {
   isStr,
-  throwError,
   searchObj,
   sortObj,
 };

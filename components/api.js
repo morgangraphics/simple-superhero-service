@@ -50,11 +50,11 @@ const helpBase = `
  * Search specific help - Only available on Character endpoints
  * @type {[type]}
  */
-const helpSearch = `
+const helpSearch = universe => `
   character  |   | empty    | Output format (currently only JSON)
-             |   |          | {keyword1},{keyword2} e.g. superman,batman will search for each character individually,
-             |   |          | {keyword1}+{keyword2} e.g. super+man will search for a character name with both 'super' AND 'man' in it,
-             |   |          | {keyword1},-{keyword2} e.g. batman,-new earth will search for character names containing batman EXCLUDING results with 'new earth' in it,
+             |   |          | {keyword1},{keyword2} e.g. ${universe.characters[0]},${universe.characters[1]} will search for each character individually
+             |   |          | {keyword1}+{keyword2} e.g. ${universe.search[0]}+${universe.search[1]} will search for a character name with both '${universe.search[0]}' AND '${universe.search[1]}' in it
+             |   |          | {keyword1},-{keyword2} e.g. ${universe.characters[0]},${universe.exclude} will search for character names containing '${universe.characters[0]}' EXCLUDING results with ${universe.exclude} in it
              |   |          |
   format     |   | json     | Output format (currently only JSON)
   headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
@@ -192,7 +192,7 @@ const handleRequest = (config, handlr) => {
   let response;
   try {
     if (config.help) {
-      const hlp = (!config.character) ? helpBase : helpSearch;
+      const hlp = (!config.character) ? helpBase : helpSearch(config.universe);
       response = handlr.response(hlp).header('Content-Type', 'text/plain');
     } else {
       response = file.readFile(config.universe, config)
@@ -232,7 +232,7 @@ const validateParams = (validParams, method) => {
       .valid('json'),
   });
   const tfText = 'No default value is required, presence equates to true';
-
+  const commaSepRegEx = /([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/
   /**
     There is a limitation with Happi Swagger where alternatives (the validation of multiple
     kinds of parameterized data) is not accurately represented within the Swagger UI. The
@@ -247,7 +247,7 @@ const validateParams = (validParams, method) => {
       .description('Character(s) to search for')
       .label('String')
       .optional()
-      .regex(/([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/);
+      .regex(commaSepRegEx);
     const arryStr = Joi.string()
       .label('character: characters');
     const arry = Joi.array()
@@ -259,13 +259,6 @@ const validateParams = (validParams, method) => {
     params = params.append({
       character: c.description('Character(s) to search for. Either a string or Array of strings'),
     });
-    // params = params.append({
-    //   character: Joi.string()
-    //     .description('Character(s) to search for')
-    //     .label('String')
-    //     .optional()
-    //     .regex(/([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/),
-    // });
   }
 
   if (validParams.includes('h')) {
@@ -273,7 +266,7 @@ const validateParams = (validParams, method) => {
       .description('Headers to display')
       .label('String')
       .optional()
-      .regex(/([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/);
+      .regex(commaSepRegEx);
     const arry = Joi.array()
       .description('Headers to display. Either a string or Array of strings')
       .items(

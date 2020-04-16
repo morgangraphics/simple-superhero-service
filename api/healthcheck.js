@@ -10,6 +10,6 @@ const healthcheck = {
   },
 };
 
-const routes = [healthcheck]
+const routes = [healthcheck];
 
 module.exports = routes;

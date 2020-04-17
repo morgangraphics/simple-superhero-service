@@ -106,6 +106,7 @@ const sortObj = (s) => {
       const t = itm.split(':');
       sort.push({ column: t[0], sort: _direction(t[1]) });
     } else if (itm.sort) {
+      // eslint-disable-next-line no-param-reassign
       itm.sort = _direction(itm.sort);
       sort.push(itm);
     } else {

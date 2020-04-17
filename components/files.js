@@ -7,10 +7,9 @@ const firstBy = require('thenby');
 const common = require('../api/_common');
 
 // Don't want to keep passing config or universe as function parameters
-// to all the functions the use it on this page. So we set them onve and resuse
+// to all the functions the use it on this page. So we set them once and resuse
 let config;
 let universe;
-
 
 /**
  * Filter handles Limits, Randomness, Sorting and Post Limits Munging if needed

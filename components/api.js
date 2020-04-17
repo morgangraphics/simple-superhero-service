@@ -8,7 +8,7 @@ const utils = require('../components/utils');
 
 /**
  * String interpolation respects spacing, therefore we have a bunch of spacing so it aligns properly
- * when output to browser
+ * when output to the browser
  * Description of available columns
  * @type {String}
  */
@@ -47,9 +47,9 @@ const helpBase = `
 `;
 
 /**
- * [helpSearch description]
- * @param  {[type]} universe [description]
- * @return {[type]}          [description]
+ * Help is different when searching for a speciic character
+ * @param  {Object} universe Small text object to handle different universes depending on endpoint
+ * @return {String}          Properly formatted string
  */
 const helpSearch = universe => `
   character  |   | empty    | Output format (currently only JSON)
@@ -146,6 +146,12 @@ const commonText = universe => ({
   },
 });
 
+/**
+ * Normalizes configuration options by setting defaults
+ * @param  {Object} options Object containing Parameters, Payload
+ * and/or Querystring parameters
+ * @return {[Object]}         Normalized configuration object
+ */
 const handleConfig = (options) => {
   const config = {};
   // These are the only params we're concerned about - Object Destructuring
@@ -233,7 +239,7 @@ const validateParams = (validParams, method) => {
       .valid('json'),
   });
   const tfText = 'No default value is required, presence equates to true';
-  const commaSepRegEx = /([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/
+  const commaSepRegEx = /([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*/;
   /**
     There is a limitation with Happi Swagger where alternatives (the validation of multiple
     kinds of parameterized data) is not accurately represented within the Swagger UI. The

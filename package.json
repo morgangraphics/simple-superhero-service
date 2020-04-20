@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --inspect server.js --ignore node_modules/",
+    "dev": "./node_modules/.bin/nodemon --inspect server.js --ignore node_modules/",
     "service": "pm2 start server.js --name \"simple superhero service\"",
     "tests": "./node_modules/.bin/newman run tests/simple_super_hero_service.postman_collection.json --environment tests/test.postman_environment.json --insecure"
   },
@@ -17,7 +17,8 @@
     "eslint-plugin-html": "5.0.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-security": "1.4.0",
-    "newman": "5.0.0"
+    "newman": "5.0.0",
+    "nodemon": "2.0.3"
   },
   "dependencies": {
     "axios": "0.19.2",

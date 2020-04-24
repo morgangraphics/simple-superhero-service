@@ -14,6 +14,30 @@ The service itself and the data contained within service is useful for testing:
 * Stubbing out UI components
 * ...
 
+## Service
+
+![Simple Superhero Service](img/swagger.png)
+
+#### Requirements
+node.js (9+)
+pm2 `npm install pm2`
+
+#### Installation
+1. Clone the repo `git clone <REPO>`
+1. cd into the directory and install node.js requirements `npm install`
+1. Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
+1. Rename the `config/default.example.yaml` file to `config/default.yaml`
+1. Update the <PLACEHOLDERS> according to your setup
+1. `npm run service` or `npm run dev` or `npm run tests`
+
+Marvel URL: https://localhost:3000/marvel
+
+DC URL: https://localhost:3000/dc
+
+Swagger Interface: https://localhost:3000/documentation#!/
+
+
+
 
 ## Dataset
 
@@ -97,29 +121,12 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 ]
 ```
 
-## Service
-
-#### Requirements
-node.js (9+)
-pm2 `npm install pm2`
-
-#### Installation
-1. Clone the repo `git clone <REPO>`
-1. cd into the directory and install node.js requirements `npm install`
-1. Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss.pem -keyout sss.pem -days 365`
-1. Rename the `config/default.example.yaml` file to `config/default.yaml`
-1. Update the <PLACEHOLDERS> according to your setup
-1. `npm run service` or `npm run dev` or `npm run tests`
-
-Swagger Interface: https://simplesuperheroservice:3000/documentation#!/
-
-
 
 ### Retrieving Data `/marvel` or `/dc`
 
 The base endpoints allow for retrieving data and applying a series of filters to that data to accomplish whatever you need with an array or JSON objects. They can be used in combination with one another
 
-:warning: THIS IS NOT A DATABASE! Nor is it intedded to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of it's functionality.
+:warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality.
 
 #### Filter options
 | Variable Name | Variable | Default | Description
@@ -138,7 +145,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
 <sup>\** Only available on /{character} endpoints</sup>
 
 ##### Examples
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/dc?pretty&limit=3&s=name:asc'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?pretty&limit=3&s=name:asc'`
 ```json
 [
     {
@@ -189,7 +196,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
 ]
 ```
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/dc?h=name,appearances&pretty&limit=3&s=name:asc'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?h=name,appearances&pretty&limit=3&s=name:asc'`
 ```json
 [
     {
@@ -206,7 +213,8 @@ The base endpoints allow for retrieving data and applying a series of filters to
     }
 ]
 ```
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/marvel/spider+man,-woman/?pretty&s=name:asc'`
+
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/spider+man,-woman/?pretty&s=name:asc'`
 ```json
 [
     {
@@ -272,7 +280,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
 ]
 ```
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/marvel?help'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel?help'`
 ```text
   format     |   | json     | Output format (currently only JSON)
   headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
@@ -289,7 +297,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
              |   |          | sex               | Sex of the character (e.g. Male, Female, etc.)
              |   |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
              |   |          | alive             | If the character is alive or deceased
-             |   |          | appearances       | The number of appareances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
+             |   |          | appearances       | The number of appearances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
              |   |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
              |   |          | year              | The year of the character’s first appearance in a comic book, if available
              |   |
@@ -301,14 +309,14 @@ The base endpoints allow for retrieving data and applying a series of filters to
   sort       | s | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
 ```
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/dc?limit=2&random&seed'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?limit=2&random&seed'`
 ```json
 [{"page_id":127398,"name":"cassandra cartland (new earth)","urlslug":"/wiki/cassandra_cartland_(new_earth)","id":"","align":"bad characters","eye":"green eyes","hair":"brown hair","sex":"female characters","gsm":"","alive":"living characters","appearances":6,"first appearance":"1997, february","year":1997},{"page_id":192282,"name":"poltergeist (new earth)","urlslug":"/wiki/poltergeist_(new_earth)","id":"","align":"bad characters","eye":"blue eyes","hair":"black hair","sex":"male characters","gsm":"","alive":"living characters","appearances":1,"first appearance":"1996, december","year":1996}]
 ```
 
 In many cases where there are multiple characters with the same name (in alternative story lines) the first result is usually the "Original" character. That is how the data is structured. However, you might want to specifically target a character or characters by using the search filters.
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/marvel/spider+man,-woman,-616?pretty'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/spider+man,-woman,-616?pretty'`
 
 This request is looking for a character name that contains both "spider" AND 'man' BUT NOT "woman" or '616'
 ```json
@@ -408,8 +416,9 @@ OR
       "sort": "asc"
     }
   ]
-}'
+}' 'https://127.0.0.1:3000/marvel'
 `
+
 ```json
 [
   {
@@ -434,7 +443,7 @@ OR
 
 Character names can have a bit of variation which can be a bit inconsistent between story lines. The official name for Spider-man contains a dash, however, other variants can be Spiderman, Spider man, in addition to Spider-man. The service attempts to use permutation to generate different spellings depending on how the name is entered. If you are unsure, leave a space e.g. `spider man` and the service will search for `spider-man, spiderman, and spider man`
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/marvel/spider%20man/?pretty'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/spider%20man/?pretty'`
 
 ```json
 [
@@ -487,7 +496,7 @@ Character names can have a bit of variation which can be a bit inconsistent betw
 ```
 Filters work the same as the base endpoint. (Excluding `random` and `seed`)
 
-`curl -X GET --header 'Accept: application/json' 'https://simplesuperheroservice:3000/marvel/iron%20man/?pretty&s=year:desc'`
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/iron%20man/?pretty&s=year:desc'`
 
 ```json
 [
@@ -568,8 +577,6 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
     }
 ]
 ```
-
-### POST
 
 ## License
 

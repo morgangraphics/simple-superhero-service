@@ -25,7 +25,7 @@ const cols = `
              |   |          | sex               | Sex of the character (e.g. Male, Female, etc.)
              |   |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
              |   |          | alive             | If the character is alive or deceased
-             |   |          | appearances       | The number of appareances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
+             |   |          | appearances       | The number of appearances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
              |   |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
              |   |          | year              | The year of the character’s first appearance in a comic book, if available
              |   |`;
@@ -243,10 +243,10 @@ const validateParams = (validParams, method) => {
   /**
     There is a limitation with Happi Swagger where alternatives (the validation of multiple
     kinds of parameterized data) is not accurately represented within the Swagger UI. The
-    UI takes whatever the first entry is and ignores he rest. This is only an issue where
+    UI takes whatever the first entry is and ignores the rest. This is only an issue where
     I want to distinguish differences between GET and POST methods On GET methods, I want the String
     to be defaulted first, on POST Array should be the default. It's a small detail but
-    one I think is work the extra effort
+    one I think is worth the extra effort
   */
 
   if (validParams.includes('character')) {
@@ -282,7 +282,6 @@ const validateParams = (validParams, method) => {
           .valid(common.columns),
       )
       .label('h: array of column names');
-
 
     const h = (method === 'post') ? Joi.alternatives().try(arry, str) : Joi.alternatives().try(str);
     params = params.append({

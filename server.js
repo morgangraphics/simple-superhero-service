@@ -21,16 +21,15 @@ const env = config.get(process.env.NODE_ENV || 'development');
  * HTTP2 like Postman :(
  * @type {Object}
  */
-const tls = {
-  key: fs.readFileSync('./sss-key.pem'),
-  cert: fs.readFileSync('./sss-cert.pem'),
+const listener = http2.createSecureServer({
   allowHTTP1: true,
-};
-
-const listener = http2.createSecureServer(tls);
+  cert: fs.readFileSync('./sss-cert.pem'),
+  key: fs.readFileSync('./sss-key.pem'),
+});
 
 /**
  * Hapi Server configuration
+ * tls: true is needed to tell hapi.js that TLS is running when you pass in a custom listener
  * @type {[type]}
  */
 const server = hapi.server({
@@ -51,7 +50,8 @@ const server = hapi.server({
       allow: ['application/json', 'application/*+json'],
     },
     security: true,
-  }
+  },
+  tls: true,
 });
 
 const swgrDesc = `I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.

@@ -1,5 +1,41 @@
 # Simple Superhero Service
 
+```text
+
+            ██████  ██▓ ███▄ ▄███▓ ██▓███   ██▓    ▓█████
+          ▒██    ▒ ▓██▒▓██▒▀█▀ ██▒▓██░  ██▒▓██▒    ▓█   ▀
+          ░ ▓██▄   ▒██▒▓██    ▓██░▓██░ ██▓▒▒██░    ▒███
+            ▒   ██▒░██░▒██    ▒██ ▒██▄█▓▒ ▒▒██░    ▒▓█  ▄
+          ▒██████▒▒░██░▒██▒   ░██▒▒██▒ ░  ░░██████▒░▒████▒
+          ▒ ▒▓▒ ▒ ░░▓  ░ ▒░   ░  ░▒▓▒░ ░  ░░ ▒░▓  ░░░ ▒░ ░
+          ░ ░▒  ░ ░ ▒ ░░  ░      ░░▒ ░     ░ ░ ▒  ░ ░ ░  ░
+          ░  ░  ░   ▒ ░░      ░   ░░         ░ ░      ░
+                ░   ░         ░                ░  ░   ░  ░
+
+  ██████  █    ██  ██▓███  ▓█████  ██▀███   ██░ ██ ▓█████  ██▀███   ▒█████
+▒██    ▒  ██  ▓██▒▓██░  ██▒▓█   ▀ ▓██ ▒ ██▒▓██░ ██▒▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒
+░ ▓██▄   ▓██  ▒██░▓██░ ██▓▒▒███   ▓██ ░▄█ ▒▒██▀▀██░▒███   ▓██ ░▄█ ▒▒██░  ██▒
+  ▒   ██▒▓▓█  ░██░▒██▄█▓▒ ▒▒▓█  ▄ ▒██▀▀█▄  ░▓█ ░██ ▒▓█  ▄ ▒██▀▀█▄  ▒██   ██░
+▒██████▒▒▒▒█████▓ ▒██▒ ░  ░░▒████▒░██▓ ▒██▒░▓█▒░██▓░▒████▒░██▓ ▒██▒░ ████▓▒░
+▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ▒▓▒░ ░  ░░░ ▒░ ░░ ▒▓ ░▒▓░ ▒ ░░▒░▒░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░▒░▒░
+░ ░▒  ░ ░░░▒░ ░ ░ ░▒ ░      ░ ░  ░  ░▒ ░ ▒░ ▒ ░▒░ ░ ░ ░  ░  ░▒ ░ ▒░  ░ ▒ ▒░
+░  ░  ░   ░░░ ░ ░ ░░          ░     ░░   ░  ░  ░░ ░   ░     ░░   ░ ░ ░ ░ ▒
+      ░     ░                 ░  ░   ░      ░  ░  ░   ░  ░   ░         ░ ░
+
+          ██████ ▓█████  ██▀███   ██▒   █▓ ██▓ ▄████▄  ▓█████
+        ▒██    ▒ ▓█   ▀ ▓██ ▒ ██▒▓██░   █▒▓██▒▒██▀ ▀█  ▓█   ▀
+        ░ ▓██▄   ▒███   ▓██ ░▄█ ▒ ▓██  █▒░▒██▒▒▓█    ▄ ▒███
+          ▒   ██▒▒▓█  ▄ ▒██▀▀█▄    ▒██ █░░░██░▒▓▓▄ ▄██▒▒▓█  ▄
+        ▒██████▒▒░▒████▒░██▓ ▒██▒   ▒▀█░  ░██░▒ ▓███▀ ░░▒████▒
+        ▒ ▒▓▒ ▒ ░░░ ▒░ ░░ ▒▓ ░▒▓░   ░ ▐░  ░▓  ░ ░▒ ▒  ░░░ ▒░ ░
+        ░ ░▒  ░ ░ ░ ░  ░  ░▒ ░ ▒░   ░ ░░   ▒ ░  ░  ▒    ░ ░  ░
+        ░  ░  ░     ░     ░░   ░      ░░   ▒ ░░           ░
+              ░     ░  ░   ░           ░   ░  ░ ░         ░  ░
+                                      ░       ░
+
+
+```
+
 I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
 Service runs on Node and hapijs.
@@ -20,6 +56,7 @@ The service itself and the data contained within service is useful for testing:
 
 #### Requirements
 node.js (9+)
+
 pm2 `npm install pm2`
 
 #### Installation
@@ -27,8 +64,9 @@ pm2 `npm install pm2`
 1. cd into the directory and install node.js requirements `npm install`
 1. Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
 1. Rename the `config/default.example.yaml` file to `config/default.yaml`
-1. Update the <PLACEHOLDERS> according to your setup
-1. `npm run service` or `npm run dev` or `npm run tests`
+1. Update the ``<PLACEHOLDERS>`` according to your setup
+1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
+1. The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
 Marvel URL: https://localhost:3000/marvel
 
@@ -43,9 +81,9 @@ Swagger Interface: https://localhost:3000/documentation#!/
 
 Data is the comic book character dataset from [@fivethrityeight](https://github.com/fivethirtyeight/data/tree/master/comic-characters)
 > This folder contains data behind the story Comic Books Are Still Made By Men, For Men And About Men.
-
+>
 > The data comes from Marvel Wikia and DC Wikia. Characters were scraped on August 24. Appearance counts were scraped on September 2. The month and year of the first issue each character appeared in was pulled on October 6.
-
+>
 > The data is split into two files, for DC and Marvel, respectively: dc-wikia-data.csv and marvel-wikia-data.csv.
 
 Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#readme](https://datahub.io/five-thirty-eight/comic-characters#readme)

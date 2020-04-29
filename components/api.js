@@ -35,15 +35,15 @@ const cols = `
  * @type {[type]}
  */
 const helpBase = `
-  format     |   | json     | Output format (currently only JSON)
-  headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
-             |   |          | ${cols}
-  help       |   | false    | Display Help
-  limit      |   | 100      | Limit results ( 0 = unlimited)
-  pretty     |   | false    | Pretty print JSON results
-  random     |   | false    | Array of random characters based on limit
-  seed       |   | false    | Keep the same random characters on multiple requests
-  sort       | s | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
+  format     | format  | json     | Output format (currently only JSON)
+  headers    | h       | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
+             |         |          | ${cols}
+  help       | help    | false    | Display Help
+  limit      | limit   | 100      | Limit results ( 0 = unlimited)
+  pretty     | pretty  | false    | Pretty print JSON results
+  random     | random  | false    | Array of random characters based on limit
+  seed       | seed    | false    | Keep the same random characters on multiple requests
+  sort       | s       | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
 `;
 
 /**
@@ -52,18 +52,18 @@ const helpBase = `
  * @return {String}          Properly formatted string
  */
 const helpSearch = universe => `
-  character  |   | empty    | Output format (currently only JSON)
-             |   |          | {keyword1},{keyword2} e.g. ${universe.characters[0]},${universe.characters[1]} will search for each character individually
-             |   |          | {keyword1}+{keyword2} e.g. ${universe.search[0]}+${universe.search[1]} will search for a character name with both '${universe.search[0]}' AND '${universe.search[1]}' in it
-             |   |          | {keyword1},-{keyword2} e.g. ${universe.characters[0]},${universe.exclude} will search for character names containing '${universe.characters[0]}' EXCLUDING results with ${universe.exclude} in it
-             |   |          |
-  format     |   | json     | Output format (currently only JSON)
-  headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
-             |   |          | ${cols}
-  help       |   | false    | Display Help
-  limit      |   | 100      | Limit results ( 0 = unlimited)
-  pretty     |   | false    | Pretty print JSON results
-  sort       | s | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
+  character  |         | empty    | Output format (currently only JSON)
+             |         |          | {keyword1},{keyword2} e.g. ${universe.characters[0]},${universe.characters[1]} will search for each character individually
+             |         |          | {keyword1}+{keyword2} e.g. ${universe.search[0]}+${universe.search[1]} will search for a character name with both '${universe.search[0]}' AND '${universe.search[1]}' in it
+             |         |          | {keyword1},-{keyword2} e.g. ${universe.characters[0]},${universe.exclude} will search for character names containing '${universe.characters[0]}' EXCLUDING results with ${universe.exclude} in it
+             |         |          |
+  format     | format  | json     | Output format (currently only JSON)
+  headers    | h       | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
+             |         |          | ${cols}
+  help       | help    | false    | Display Help
+  limit      | limit   | 100      | Limit results ( 0 = unlimited)
+  pretty     | pretty  | false    | Pretty print JSON results
+  sort       | s       | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
 `;
 
 /**

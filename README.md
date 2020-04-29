@@ -167,16 +167,16 @@ The base endpoints allow for retrieving data and applying a series of filters to
 :warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality.
 
 #### Filter options
-| Variable Name | Variable | Default | Description
-| ---
-| format     |   | json     | Output format (currently only JSON)
-| headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
-| help <sup>*</sup>      |   | false    | Display Help
-| limit      |   | 100      | Limit results (0 = unlimited)
-| pretty <sup>*</sup>    |   | false    | Pretty print JSON results
-| random <sup>*</sup> <sup>**</sup>   |   | false    | Retrieve a random number of characters based on limit
-| seed <sup>*</sup> <sup>**</sup>    |   | false    | Keep the random number of characters consistent between requests
-| sort       | s | unsorted | Sort response asc\desc e.g. s=name,appearances:desc
+| Variable Name | Variable | Default  | Description                                                                                                            |
+|---------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
+| format        | format   | json     | Output format (currently only JSON)                                                                                    |
+| headers       | h        | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year) |
+| help *        | help     | false    | Display Help                                                                                                           |
+| limit         | limit    | 100      | Limit results (0 = unlimited)                                                                                          |
+| pretty *      | pretty   | false    | Pretty print JSON results                                                                                              |
+| random * **   | random   | false    | Retrieve a random number of characters based on limit                                                                  |
+| seed * **     | seed     | false    | Keep the random number of characters consistent between requests                                                       |
+| sort          | s        | unsorted | Sort response asc\|desc e.g. s=name,appearances:desc                                                                   |
 
 <sup>\* Shorthand query parameter, meaning its presence automatically equates to true</sup>
 
@@ -454,7 +454,7 @@ OR
       "sort": "asc"
     }
   ]
-}' 'https://127.0.0.1:3000/marvel'
+}' 'https://localhost:3000/marvel'
 `
 
 ```json

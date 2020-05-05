@@ -68,10 +68,10 @@ const dcGetByCharacter = {
   },
 };
 
-const routes = {
-  ...dcGetBase,
-  ...dcPostBase,
-  ...dcGetByCharacter,
-};
+const routes = [
+  dcGetBase,
+  dcPostBase,
+  dcGetByCharacter,
+];
 
 module.exports = routes;

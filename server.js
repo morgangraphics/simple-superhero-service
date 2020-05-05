@@ -7,6 +7,8 @@ const Inert = require('inert');
 const Vision = require('vision');
 const Routes = require('./api/index');
 
+const hapiPlugins = [];
+
 /**
  * Default environment configuration options
  * WARNING! NOT ENVIRONMENT VARIABLES LIKE process.env.NODE_ENV
@@ -54,39 +56,101 @@ const server = hapi.server({
   tls: true,
 });
 
-const swgrDesc = `I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
-Service runs on Node and hapijs.
 
-The service itself and the data contained within service is useful for testing:
+if (env.SWAGGER_ENABLED) {
 
-1. CORS configuration
-1. Server configuration
-1. Bandwidth
-1. Form population
-1. Data visualization
-1. Stubbing out UI components
-...
+  const swgrDesc = `I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
-Data is the comic book character dataset from [fivethrityeight](https://datahub.io/five-thirty-eight/comic-characters#readme)`;
+  Service runs on Node and hapijs.
 
-const swaggerOptions = {
-  info: {
-    title: 'Simple Superhero Service API Documentation',
-    description: swgrDesc,
-    contact: {
-      name: 'MORGANGRAPHICS',
-      url: `https://github.com/morgangraphics`
-    }
-  },
-  schemes: ['https'],
-  host: `${env.HOST || 'localhost'}:${env.PORT || 3000}`,
-  uiCompleteScript: `
-    $(document).ready(() => {
-      // $('input[name=help],input[name=pretty],input[name=random],input[name=seed]').toggle(false);
-    });
-  `,
+  The service itself and the data contained within service is useful for testing:
+
+  1. CORS configuration
+  1. Server configuration
+  1. Bandwidth
+  1. Form population
+  1. Data visualization
+  1. Stubbing out UI components
+  ...
+
+  Data is the comic book character dataset from [fivethrityeight](https://datahub.io/five-thirty-eight/comic-characters#readme)`;
+
+  const swaggerOptions = {
+    info: {
+      title: 'Simple Superhero Service API Documentation',
+      description: swgrDesc,
+      contact: {
+        name: 'MORGANGRAPHICS',
+        url: `https://github.com/morgangraphics`
+      }
+    },
+    schemes: ['https'],
+    host: `${env.HOST || 'localhost'}:${env.PORT || 3000}`,
+    uiCompleteScript: `
+      $(document).ready(() => {
+        // $('input[name=help],input[name=pretty],input[name=random],input[name=seed]').toggle(false);
+      });
+    `,
+  };
+
+  hapiPlugins.push(
+    Inert,                        // Static Files
+    Vision,                       // Template Rendering
+    {                             // Swagger
+      plugin: HapiSwagger,
+      options: swaggerOptions,
+    },
+  );
 };
+
+const banner = (server) => {
+  console.log(env)
+  const swggr = (env.SWAGGER_ENABLED)? `\n Swagger Interface: ${server.info.uri}/documentation#! \n` : ''
+  console.log('SWGGR = ', swggr);
+  const main = `
+
+              ██████  ██▓ ███▄ ▄███▓ ██▓███   ██▓    ▓█████
+            ▒██    ▒ ▓██▒▓██▒▀█▀ ██▒▓██░  ██▒▓██▒    ▓█   ▀
+            ░ ▓██▄   ▒██▒▓██    ▓██░▓██░ ██▓▒▒██░    ▒███
+              ▒   ██▒░██░▒██    ▒██ ▒██▄█▓▒ ▒▒██░    ▒▓█  ▄
+            ▒██████▒▒░██░▒██▒   ░██▒▒██▒ ░  ░░██████▒░▒████▒
+            ▒ ▒▓▒ ▒ ░░▓  ░ ▒░   ░  ░▒▓▒░ ░  ░░ ▒░▓  ░░░ ▒░ ░
+            ░ ░▒  ░ ░ ▒ ░░  ░      ░░▒ ░     ░ ░ ▒  ░ ░ ░  ░
+            ░  ░  ░   ▒ ░░      ░   ░░         ░ ░      ░
+                  ░   ░         ░                ░  ░   ░  ░
+
+    ██████  █    ██  ██▓███  ▓█████  ██▀███   ██░ ██ ▓█████  ██▀███   ▒█████
+  ▒██    ▒  ██  ▓██▒▓██░  ██▒▓█   ▀ ▓██ ▒ ██▒▓██░ ██▒▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒
+  ░ ▓██▄   ▓██  ▒██░▓██░ ██▓▒▒███   ▓██ ░▄█ ▒▒██▀▀██░▒███   ▓██ ░▄█ ▒▒██░  ██▒
+    ▒   ██▒▓▓█  ░██░▒██▄█▓▒ ▒▒▓█  ▄ ▒██▀▀█▄  ░▓█ ░██ ▒▓█  ▄ ▒██▀▀█▄  ▒██   ██░
+  ▒██████▒▒▒▒█████▓ ▒██▒ ░  ░░▒████▒░██▓ ▒██▒░▓█▒░██▓░▒████▒░██▓ ▒██▒░ ████▓▒░
+  ▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ▒▓▒░ ░  ░░░ ▒░ ░░ ▒▓ ░▒▓░ ▒ ░░▒░▒░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░▒░▒░
+  ░ ░▒  ░ ░░░▒░ ░ ░ ░▒ ░      ░ ░  ░  ░▒ ░ ▒░ ▒ ░▒░ ░ ░ ░  ░  ░▒ ░ ▒░  ░ ▒ ▒░
+  ░  ░  ░   ░░░ ░ ░ ░░          ░     ░░   ░  ░  ░░ ░   ░     ░░   ░ ░ ░ ░ ▒
+        ░     ░                 ░  ░   ░      ░  ░  ░   ░  ░   ░         ░ ░
+
+            ██████ ▓█████  ██▀███   ██▒   █▓ ██▓ ▄████▄  ▓█████
+          ▒██    ▒ ▓█   ▀ ▓██ ▒ ██▒▓██░   █▒▓██▒▒██▀ ▀█  ▓█   ▀
+          ░ ▓██▄   ▒███   ▓██ ░▄█ ▒ ▓██  █▒░▒██▒▒▓█    ▄ ▒███
+            ▒   ██▒▒▓█  ▄ ▒██▀▀█▄    ▒██ █░░░██░▒▓▓▄ ▄██▒▒▓█  ▄
+          ▒██████▒▒░▒████▒░██▓ ▒██▒   ▒▀█░  ░██░▒ ▓███▀ ░░▒████▒
+          ▒ ▒▓▒ ▒ ░░░ ▒░ ░░ ▒▓ ░▒▓░   ░ ▐░  ░▓  ░ ░▒ ▒  ░░░ ▒░ ░
+          ░ ░▒  ░ ░ ░ ░  ░  ░▒ ░ ▒░   ░ ░░   ▒ ░  ░  ▒    ░ ░  ░
+          ░  ░  ░     ░     ░░   ░      ░░   ▒ ░░           ░
+                ░     ░  ░   ░           ░   ░  ░ ░         ░  ░
+                                        ░       ░
+
+=============================================================================
+    Server running at: ${server.info.uri}
+
+    Marvel: ${server.info.uri}/marvel
+        DC: ${server.info.uri}/dc
+    ${swggr}
+=============================================================================
+`;
+return main;
+}
 
 /**
  * Asynchronously start hapi server
@@ -94,60 +158,11 @@ const swaggerOptions = {
  * @return {[type]}       [description]
  */
 (async () => {
-  await server.register([
-    Inert,
-    Vision,
-    {
-      plugin: HapiSwagger,
-      options: swaggerOptions,
-    },
-  ]);
+  await server.register(hapiPlugins);
   try {
     await server.start();
     server.route(Routes);
-    console.log(`
-
-            ██████  ██▓ ███▄ ▄███▓ ██▓███   ██▓    ▓█████
-          ▒██    ▒ ▓██▒▓██▒▀█▀ ██▒▓██░  ██▒▓██▒    ▓█   ▀
-          ░ ▓██▄   ▒██▒▓██    ▓██░▓██░ ██▓▒▒██░    ▒███
-            ▒   ██▒░██░▒██    ▒██ ▒██▄█▓▒ ▒▒██░    ▒▓█  ▄
-          ▒██████▒▒░██░▒██▒   ░██▒▒██▒ ░  ░░██████▒░▒████▒
-          ▒ ▒▓▒ ▒ ░░▓  ░ ▒░   ░  ░▒▓▒░ ░  ░░ ▒░▓  ░░░ ▒░ ░
-          ░ ░▒  ░ ░ ▒ ░░  ░      ░░▒ ░     ░ ░ ▒  ░ ░ ░  ░
-          ░  ░  ░   ▒ ░░      ░   ░░         ░ ░      ░
-                ░   ░         ░                ░  ░   ░  ░
-
-  ██████  █    ██  ██▓███  ▓█████  ██▀███   ██░ ██ ▓█████  ██▀███   ▒█████
-▒██    ▒  ██  ▓██▒▓██░  ██▒▓█   ▀ ▓██ ▒ ██▒▓██░ ██▒▓█   ▀ ▓██ ▒ ██▒▒██▒  ██▒
-░ ▓██▄   ▓██  ▒██░▓██░ ██▓▒▒███   ▓██ ░▄█ ▒▒██▀▀██░▒███   ▓██ ░▄█ ▒▒██░  ██▒
-  ▒   ██▒▓▓█  ░██░▒██▄█▓▒ ▒▒▓█  ▄ ▒██▀▀█▄  ░▓█ ░██ ▒▓█  ▄ ▒██▀▀█▄  ▒██   ██░
-▒██████▒▒▒▒█████▓ ▒██▒ ░  ░░▒████▒░██▓ ▒██▒░▓█▒░██▓░▒████▒░██▓ ▒██▒░ ████▓▒░
-▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ▒▓▒░ ░  ░░░ ▒░ ░░ ▒▓ ░▒▓░ ▒ ░░▒░▒░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░▒░▒░
-░ ░▒  ░ ░░░▒░ ░ ░ ░▒ ░      ░ ░  ░  ░▒ ░ ▒░ ▒ ░▒░ ░ ░ ░  ░  ░▒ ░ ▒░  ░ ▒ ▒░
-░  ░  ░   ░░░ ░ ░ ░░          ░     ░░   ░  ░  ░░ ░   ░     ░░   ░ ░ ░ ░ ▒
-      ░     ░                 ░  ░   ░      ░  ░  ░   ░  ░   ░         ░ ░
-
-          ██████ ▓█████  ██▀███   ██▒   █▓ ██▓ ▄████▄  ▓█████
-        ▒██    ▒ ▓█   ▀ ▓██ ▒ ██▒▓██░   █▒▓██▒▒██▀ ▀█  ▓█   ▀
-        ░ ▓██▄   ▒███   ▓██ ░▄█ ▒ ▓██  █▒░▒██▒▒▓█    ▄ ▒███
-          ▒   ██▒▒▓█  ▄ ▒██▀▀█▄    ▒██ █░░░██░▒▓▓▄ ▄██▒▒▓█  ▄
-        ▒██████▒▒░▒████▒░██▓ ▒██▒   ▒▀█░  ░██░▒ ▓███▀ ░░▒████▒
-        ▒ ▒▓▒ ▒ ░░░ ▒░ ░░ ▒▓ ░▒▓░   ░ ▐░  ░▓  ░ ░▒ ▒  ░░░ ▒░ ░
-        ░ ░▒  ░ ░ ░ ░  ░  ░▒ ░ ▒░   ░ ░░   ▒ ░  ░  ▒    ░ ░  ░
-        ░  ░  ░     ░     ░░   ░      ░░   ▒ ░░           ░
-              ░     ░  ░   ░           ░   ░  ░ ░         ░  ░
-                                      ░       ░
-
-
-=============================================================================
-      Server running at: ${server.info.uri}
-
-      Marvel: ${server.info.uri}/marvel
-          DC: ${server.info.uri}/dc
-
-      Swagger Interface: ${server.info.uri}/documentation#!
-=============================================================================
-    `);
+    console.log(banner(server));
   } catch (err) {
     console.log(err);
   }

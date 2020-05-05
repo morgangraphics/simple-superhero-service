@@ -13,22 +13,22 @@ const utils = require('../components/utils');
  * @type {String}
  */
 const cols = `
-             |   |          | Variable          | Definition
-             |   |          | ------------------|----------------
-             |   |          | page_id           | The unique identifier for that characters page within the wikia
-             |   |          | name              | The name of the character
-             |   |          | urlslug           | The unique url within the wikia that takes you to the character
-             |   |          | id                | The identity status of the character (Secret Identity, Public identity, [on marvel only: No Dual Identity])
-             |   |          | align             | If the character is Good, Bad or Neutral
-             |   |          | eye               | Eye color of the character
-             |   |          | hair              | Hair color of the character
-             |   |          | sex               | Sex of the character (e.g. Male, Female, etc.)
-             |   |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
-             |   |          | alive             | If the character is alive or deceased
-             |   |          | appearances       | The number of appearances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
-             |   |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
-             |   |          | year              | The year of the character’s first appearance in a comic book, if available
-             |   |`;
+             |         |          | Variable          | Definition
+             |         |          | ------------------|----------------
+             |         |          | page_id           | The unique identifier for that characters page within the wikia
+             |         |          | name              | The name of the character
+             |         |          | urlslug           | The unique url within the wikia that takes you to the character
+             |         |          | id                | The identity status of the character (Secret Identity, Public identity, [on marvel only: No Dual Identity])
+             |         |          | align             | If the character is Good, Bad or Neutral
+             |         |          | eye               | Eye color of the character
+             |         |          | hair              | Hair color of the character
+             |         |          | sex               | Sex of the character (e.g. Male, Female, etc.)
+             |         |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
+             |         |          | alive             | If the character is alive or deceased
+             |         |          | appearances       | The number of appearances of the character in comic books *
+             |         |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
+             |         |          | year              | The year of the character’s first appearance in a comic book, if available
+             |         |          |`;
 
 /**
  * Available filter help
@@ -44,6 +44,8 @@ const helpBase = `
   random     | random  | false    | Array of random characters based on limit
   seed       | seed    | false    | Keep the same random characters on multiple requests
   sort       | s       | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
+
+  * (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
 `;
 
 /**

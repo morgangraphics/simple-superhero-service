@@ -1,6 +1,6 @@
 # Simple Superhero Service
 
-```text
+```bash
 
             ██████  ██▓ ███▄ ▄███▓ ██▓███   ██▓    ▓█████
           ▒██    ▒ ▓██▒▓██▒▀█▀ ██▒▓██░  ██▒▓██▒    ▓█   ▀
@@ -60,7 +60,7 @@ node.js (9+)
 pm2 `npm install pm2`
 
 #### Installation
-1. Clone the repo `git clone <REPO>`
+1. Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
 1. cd into the directory and install node.js requirements `npm install`
 1. Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
 1. Rename the `config/default.example.yaml` file to `config/default.yaml`
@@ -320,31 +320,33 @@ The base endpoints allow for retrieving data and applying a series of filters to
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel?help'`
 ```text
-  format     |   | json     | Output format (currently only JSON)
-  headers    | h | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
-             |   |          |
-             |   |          | Variable          | Definition
-             |   |          | ------------------|----------------
-             |   |          | page_id           | The unique identifier for that characters page within the wikia
-             |   |          | name              | The name of the character
-             |   |          | urlslug           | The unique url within the wikia that takes you to the character
-             |   |          | id                | The identity status of the character (Secret Identity, Public identity, [on marvel only: No Dual Identity])
-             |   |          | align             | If the character is Good, Bad or Neutral
-             |   |          | eye               | Eye color of the character
-             |   |          | hair              | Hair color of the character
-             |   |          | sex               | Sex of the character (e.g. Male, Female, etc.)
-             |   |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
-             |   |          | alive             | If the character is alive or deceased
-             |   |          | appearances       | The number of appearances of the character in comic books (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
-             |   |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
-             |   |          | year              | The year of the character’s first appearance in a comic book, if available
-             |   |
-  help       |   | false    | Display Help
-  limit      |   | 100      | Limit results ( 0 = unlimited)
-  pretty     |   | false    | Pretty print JSON results
-  random     |   | false    | Array of random characters based on limit
-  seed       |   | false    | Keep the same random characters on multiple requests
-  sort       | s | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
+format     | format  | json     | Output format (currently only JSON)
+headers    | h       | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year)
+           |         |          |
+           |         |          | Variable          | Definition
+           |         |          | ------------------|----------------
+           |         |          | page_id           | The unique identifier for that characters page within the wikia
+           |         |          | name              | The name of the character
+           |         |          | urlslug           | The unique url within the wikia that takes you to the character
+           |         |          | id                | The identity status of the character (Secret Identity, Public identity, [on marvel only: No Dual Identity])
+           |         |          | align             | If the character is Good, Bad or Neutral
+           |         |          | eye               | Eye color of the character
+           |         |          | hair              | Hair color of the character
+           |         |          | sex               | Sex of the character (e.g. Male, Female, etc.)
+           |         |          | gsm               | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)
+           |         |          | alive             | If the character is alive or deceased
+           |         |          | appearances       | The number of appearances of the character in comic books *
+           |         |          | first appearance  | The month and year of the character’s first appearance in a comic book, if available
+           |         |          | year              | The year of the character’s first appearance in a comic book, if available
+           |         |          |
+help       | help    | false    | Display Help
+limit      | limit   | 100      | Limit results ( 0 = unlimited)
+pretty     | pretty  | false    | Pretty print JSON results
+random     | random  | false    | Array of random characters based on limit
+seed       | seed    | false    | Keep the same random characters on multiple requests
+sort       | s       | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
+
+* (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
 ```
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?limit=2&random&seed'`

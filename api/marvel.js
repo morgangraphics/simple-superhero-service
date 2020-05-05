@@ -69,10 +69,10 @@ const marvelGetByCharacter = {
   },
 };
 
-const routes = {
-  ...marvelGetBase,
-  ...marvelPostBase,
-  ...marvelGetByCharacter,
-};
+const routes = [
+  marvelGetBase,
+  marvelPostBase,
+  marvelGetByCharacter,
+];
 
 module.exports = routes;

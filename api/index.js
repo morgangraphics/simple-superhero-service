@@ -3,9 +3,9 @@ const dc = require('./dc');
 const marvel = require('./marvel');
 
 const routes = [
-  healthcheck,
-  dc,
-  marvel,
+  ...healthcheck,
+  ...dc,
+  ...marvel,
 ];
 
 module.exports = routes;

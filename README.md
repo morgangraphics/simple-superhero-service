@@ -36,11 +36,11 @@
 
 ```
 
-I needed a self-contained data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
+I needed a self-contained, data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
-Service runs on Node and hapijs.
+Service runs on Node and Hapi.js.
 
-The service itself and the data contained within service is useful for testing:
+The service itself and the data contained within service may be useful for testing:
 
 * CORS configuration
 * Server configuration
@@ -109,13 +109,13 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 | sex              | string  | Sex of the character (e.g. Male, Female, etc.)                                                                                               |
 | gsm              | string  | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)                                            |
 | alive            | string  | If the character is alive or deceased                                                                                                        |
-| appearances      | int     | The number of appearances of the character in comic books <sup>*</sup> |
-| first appearance <sup>**</sup> | string  | The month and year of the character’s first appearance in a comic book, if available                                                         |
-| year           | int     | The year of the character’s first appearance in a comic book, if available                                                                   |
+| appearances      | int     | The number of appearances of the character in comic books <sup>*</sup>                                                                       |
+| first appearance <sup>**</sup> | string  | The month and year of the character’s first appearance in a comic book, if available                                           |
+| year           | int     | The year of the character’s first appearance in a comic book, if available                                                                     |
 
 <sup>\* as of Sep. 2, 2014. Number will become increasingly out of date as time goes on</sup>
 
-<sup>\** `first appearance` formatting can be different </sup>
+<sup>\** `first appearance` date formatting can be different </sup>
 
 
 #### Example Output
@@ -131,7 +131,7 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
     "eye": "blue eyes",
     "hair": "black hair",
     "sex": "male characters",
-    "gsm": "",
+    "gsm": null,
     "alive": "living characters",
     "appearances": 3093,
     "first appearance": "1939, may",
@@ -150,7 +150,7 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
     "eye": "hazel eyes",
     "hair": "brown hair",
     "sex": "male characters",
-    "gsm": "",
+    "gsm": null,
     "alive": "living characters",
     "appearances": 4043,
     "first appearance": "aug-62",
@@ -173,14 +173,19 @@ The base endpoints allow for retrieving data and applying a series of filters to
 | headers       | h        | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year) |
 | help *        | help     | false    | Display Help                                                                                                           |
 | limit         | limit    | 100      | Limit results (0 = unlimited)                                                                                          |
+| nulls         | nulls    | first    | When sorting, null values show up first or last depending e.g. [null, 1, 2, 3] or [1, 2, 3, null] †                    |
 | pretty *      | pretty   | false    | Pretty print JSON results                                                                                              |
+| prune *       | prune    | false    | Prune null values from result sets                                                                                     |
 | random * **   | random   | false    | Retrieve a random number of characters based on limit                                                                  |
 | seed * **     | seed     | false    | Keep the random number of characters consistent between requests                                                       |
-| sort          | s        | unsorted | Sort response asc\|desc e.g. s=name,appearances:desc                                                                   |
+| sort          | s        | unsorted | Sort response asc or desc e.g.s=name,appearances:desc                                                                   |
 
 <sup>\* Shorthand query parameter, meaning its presence automatically equates to true</sup>
 
 <sup>\** Only available on /{character} endpoints</sup>
+
+<sup>† Does not apply when sorting on column/header which contains a null value, records with null values are removed</sup>
+
 
 ##### Examples
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?pretty&limit=3&s=name:asc'`
@@ -195,7 +200,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "eye": "blue eyes",
         "hair": "black hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 3093,
         "first appearance": "1939, may",
@@ -210,7 +215,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "eye": "brown eyes",
         "hair": "brown hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 1565,
         "first appearance": "1959, october",
@@ -225,7 +230,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "eye": "blue eyes",
         "hair": "black hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 2496,
         "first appearance": "1986, october",
@@ -264,7 +269,7 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "eye": "hazel eyes",
         "hair": "brown hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 4043,
         "first appearance": "aug-62",
@@ -276,10 +281,10 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "urlslug": "/spiderman_(1940s)_(earth-616)",
         "id": "secret identity",
         "align": "bad characters",
-        "eye": "",
+        "eye": null,
         "hair": "white hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "deceased characters",
         "appearances": 1,
         "first appearance": "dec-46",
@@ -289,12 +294,12 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "page_id": 15388,
         "name": "strongman (spider-squad) (earth-616)",
         "urlslug": "/strongman_(spider-squad)_(earth-616)",
-        "id": "",
-        "align": "",
-        "eye": "",
-        "hair": "",
-        "sex": "",
-        "gsm": "",
+        "id": null,
+        "align": null,
+        "eye": null,
+        "hair": null,
+        "sex": null,
+        "gsm": null,
         "alive": "living characters",
         "appearances": 1,
         "first appearance": "aug-77",
@@ -304,12 +309,12 @@ The base endpoints allow for retrieving data and applying a series of filters to
         "page_id": 117593,
         "name": "vern (spider-man) (earth-616)",
         "urlslug": "/vern_(spider-man)_(earth-616)",
-        "id": "",
-        "align": "",
-        "eye": "",
-        "hair": "",
+        "id": null,
+        "align": null,
+        "eye": null,
+        "hair": null,
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 2,
         "first appearance": "jun-08",
@@ -317,6 +322,59 @@ The base endpoints allow for retrieving data and applying a series of filters to
     }
 ]
 ```
+
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/spider+man,-woman/?pretty&s=name:asc&prune'`
+```json
+[
+    {
+        "page_id": 1678,
+        "name": "spider-man (peter parker)",
+        "urlslug": "/spider-man_(peter_parker)",
+        "id": "secret identity",
+        "align": "good characters",
+        "eye": "hazel eyes",
+        "hair": "brown hair",
+        "sex": "male characters",
+        "alive": "living characters",
+        "appearances": 4043,
+        "first appearance": "aug-62",
+        "year": 1962
+    },
+    {
+        "page_id": 336259,
+        "name": "spiderman (1940s) (earth-616)",
+        "urlslug": "/spiderman_(1940s)_(earth-616)",
+        "id": "secret identity",
+        "align": "bad characters",
+        "hair": "white hair",
+        "sex": "male characters",
+        "alive": "deceased characters",
+        "appearances": 1,
+        "first appearance": "dec-46",
+        "year": 1946
+    },
+    {
+        "page_id": 15388,
+        "name": "strongman (spider-squad) (earth-616)",
+        "urlslug": "/strongman_(spider-squad)_(earth-616)",
+        "alive": "living characters",
+        "appearances": 1,
+        "first appearance": "aug-77",
+        "year": 1977
+    },
+    {
+        "page_id": 117593,
+        "name": "vern (spider-man) (earth-616)",
+        "urlslug": "/vern_(spider-man)_(earth-616)",
+        "sex": "male characters",
+        "alive": "living characters",
+        "appearances": 2,
+        "first appearance": "jun-08",
+        "year": 2008
+    }
+]
+```
+
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel?help'`
 ```text
@@ -341,12 +399,15 @@ headers    | h       | all      | Available Columns (page_id, name, urlslug, id,
            |         |          |
 help       | help    | false    | Display Help
 limit      | limit   | 100      | Limit results ( 0 = unlimited)
+nulls      | nulls   | first    | null values sorted first or last e.g. [null, 1, 2, 3] or [1, 2, 3, null] †
 pretty     | pretty  | false    | Pretty print JSON results
+prune      | prune   | false    | Remove null values from output
 random     | random  | false    | Array of random characters based on limit
 seed       | seed    | false    | Keep the same random characters on multiple requests
 sort       | s       | unsorted | Sort response asc|desc e.g. s=name,appearances:desc
 
 * (as of Sep. 2, 2014. Number will become increasingly out of date as time goes on.)
+† Does not apply when sorting on column/header which contains a null value, records with null values are removed
 ```
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/dc?limit=2&random&seed'`
@@ -370,7 +431,7 @@ This request is looking for a character name that contains both "spider" AND 'ma
         "eye": "hazel eyes",
         "hair": "brown hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 4043,
         "first appearance": "aug-62",
@@ -496,7 +557,7 @@ Character names can have a bit of variation which can be a bit inconsistent betw
         "eye": "hazel eyes",
         "hair": "brown hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 4043,
         "first appearance": "aug-62",
@@ -506,12 +567,12 @@ Character names can have a bit of variation which can be a bit inconsistent betw
         "page_id": 117593,
         "name": "vern (spider-man) (earth-616)",
         "urlslug": "/vern_(spider-man)_(earth-616)",
-        "id": "",
-        "align": "",
-        "eye": "",
-        "hair": "",
+        "id": null,
+        "align": null,
+        "eye": null,
+        "hair": null,
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 2,
         "first appearance": "jun-08",
@@ -523,10 +584,10 @@ Character names can have a bit of variation which can be a bit inconsistent betw
         "urlslug": "/spiderman_(1940s)_(earth-616)",
         "id": "secret identity",
         "align": "bad characters",
-        "eye": "",
+        "eye": null,
         "hair": "white hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "deceased characters",
         "appearances": 1,
         "first appearance": "dec-46",
@@ -541,6 +602,21 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
 ```json
 [
     {
+        "page_id": 753403,
+        "name": "zola iron man (earth-616)",
+        "urlslug": "/zola_iron_man_(earth-616)",
+        "id": "secret identity",
+        "align": "bad characters",
+        "eye": "black eyes",
+        "hair": "no hair",
+        "sex": "male characters",
+        "gsm": null,
+        "alive": "living characters",
+        "appearances": 1,
+        "first appearance": null,
+        "year": null
+    },
+    {
         "page_id": 639805,
         "name": "iron man (sentient armor) (earth-616)",
         "urlslug": "/iron_man_(sentient_armor)_(earth-616)",
@@ -549,7 +625,7 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
         "eye": "white eyes",
         "hair": "no hair",
         "sex": "agender characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "deceased characters",
         "appearances": 4,
         "first appearance": "mar-00",
@@ -561,10 +637,10 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
         "urlslug": "/iron_man_(taskmaster_robot)_(earth-616)",
         "id": "secret identity",
         "align": "bad characters",
-        "eye": "",
-        "hair": "",
+        "eye": null,
+        "hair": null,
         "sex": "agender characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 1,
         "first appearance": "oct-98",
@@ -576,10 +652,10 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
         "urlslug": "/white_dragon_(iron_man)_(earth-616)",
         "id": "secret identity",
         "align": "bad characters",
-        "eye": "",
+        "eye": null,
         "hair": "black hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "deceased characters",
         "appearances": 2,
         "first appearance": "jul-71",
@@ -594,7 +670,74 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
         "eye": "blue eyes",
         "hair": "black hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
+        "alive": "living characters",
+        "appearances": 2961,
+        "first appearance": "mar-63",
+        "year": 1963
+    }
+]
+```
+
+`curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel/iron%20man/?pretty&s=year:desc&nulls=last'`
+
+```json
+[
+    {
+        "page_id": 639805,
+        "name": "iron man (sentient armor) (earth-616)",
+        "urlslug": "/iron_man_(sentient_armor)_(earth-616)",
+        "id": "public identity",
+        "align": "neutral characters",
+        "eye": "white eyes",
+        "hair": "no hair",
+        "sex": "agender characters",
+        "gsm": null,
+        "alive": "deceased characters",
+        "appearances": 4,
+        "first appearance": "mar-00",
+        "year": 2000
+    },
+    {
+        "page_id": 755268,
+        "name": "iron man (taskmaster robot) (earth-616)",
+        "urlslug": "/iron_man_(taskmaster_robot)_(earth-616)",
+        "id": "secret identity",
+        "align": "bad characters",
+        "eye": null,
+        "hair": null,
+        "sex": "agender characters",
+        "gsm": null,
+        "alive": "living characters",
+        "appearances": 1,
+        "first appearance": "oct-98",
+        "year": 1998
+    },
+    {
+        "page_id": 235195,
+        "name": "white dragon (iron man) (earth-616)",
+        "urlslug": "/white_dragon_(iron_man)_(earth-616)",
+        "id": "secret identity",
+        "align": "bad characters",
+        "eye": null,
+        "hair": "black hair",
+        "sex": "male characters",
+        "gsm": null,
+        "alive": "deceased characters",
+        "appearances": 2,
+        "first appearance": "jul-71",
+        "year": 1971
+    },
+    {
+        "page_id": 1868,
+        "name": "iron man (anthony \"tony\" stark)",
+        "urlslug": "/iron_man_(anthony_%22tony%22_stark)",
+        "id": "public identity",
+        "align": "good characters",
+        "eye": "blue eyes",
+        "hair": "black hair",
+        "sex": "male characters",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 2961,
         "first appearance": "mar-63",
@@ -609,14 +752,15 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
         "eye": "black eyes",
         "hair": "no hair",
         "sex": "male characters",
-        "gsm": "",
+        "gsm": null,
         "alive": "living characters",
         "appearances": 1,
-        "first appearance": "",
+        "first appearance": null,
         "year": null
     }
 ]
 ```
+
 
 ## License
 

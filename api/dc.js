@@ -1,5 +1,11 @@
-const api = require('../components/api');
+const Boom = require('boom');
+const apiUtil = require('../components/api');
 const common = require('./_common');
+const fileUtil = require('../components/files');
+
+const universe = 'dc';
+const api = new apiUtil.ApiUtils(universe);
+const file = new fileUtil.FileUtils(universe);
 
 /**
  * Base dc Endpoint
@@ -11,12 +17,26 @@ const dcGetBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, { universe: 'dc' });
-      const config = api.handleConfig(options);
-      return api.handleRequest(config, handlr);
+      const options = Object.assign({}, req.query, { universe });
+      let response;
+      if ('help' in options) {
+        const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
+        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+      }
+      if (!('help' in options)) {
+        const config = api.handleConfig(options);
+        response = file.readCharacterFile(config)
+          .then((data) => {
+            const d = config.pretty ? JSON.stringify(data, null, 4) : data;
+            return handlr.response(d).header('Content-Type', 'application/json');
+          })
+          .catch(err => Boom.badRequest(err.message))
+          .finally(() => { });
+      }
+      return response;
     },
-    description: api.popText('dc', 'base.description'),
-    notes: api.popText('dc', 'base.notes'),
+    description: api.popText('base.description'),
+    notes: api.popText('base.notes'),
     tags: ['api'], // ADD THIS TAG
     validate: {
       query: api.validateParams(common.validBaseQParams, 'get'),
@@ -32,12 +52,26 @@ const dcPostBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, req.payload, { universe: 'dc' });
-      const config = api.handleConfig(options);
-      return api.handleRequest(config, handlr);
+      const options = Object.assign({}, req.query, req.payload, { universe });
+      let response;
+      if ('help' in options) {
+        const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
+        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+      }
+      if (!('help' in options)) {
+        const config = api.handleConfig(options);
+        response = file.readCharacterFile(config)
+          .then((data) => {
+            const d = config.pretty ? JSON.stringify(data, null, 4) : data;
+            return handlr.response(d).header('Content-Type', 'application/json');
+          })
+          .catch(err => Boom.badRequest(err.message))
+          .finally(() => { });
+      }
+      return response;
     },
-    description: api.popText('dc', 'character.description'),
-    notes: api.popText('dc', 'character.notes').concat(api.popText('dc', 'character.notesExtended')),
+    description: api.popText('character.description'),
+    notes: api.popText('character.notes').concat(api.popText('character.notesExtended')),
     tags: ['api'], // ADD THIS TAG
     validate: {
       payload: api.validateParams(common.validBaseQParams, 'post'),
@@ -51,18 +85,32 @@ const dcPostBase = {
  */
 const dcGetByCharacter = {
   method: ['GET'],
-  path: '/dc/{character}',
+  path: '/dc/{characters}',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, req.payload, req.params, { universe: 'dc' });
-      const config = api.handleConfig(options);
-      return api.handleRequest(config, handlr);
+      const options = Object.assign({}, req.query, req.payload, req.params, { universe });
+      let response;
+      if ('help' in options) {
+        const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
+        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+      }
+      if (!('help' in options)) {
+        const config = api.handleConfig(options);
+        response = file.readCharacterFile(config)
+          .then((data) => {
+            const d = config.pretty ? JSON.stringify(data, null, 4) : data;
+            return handlr.response(d).header('Content-Type', 'application/json');
+          })
+          .catch(err => Boom.badRequest(err.message))
+          .finally(() => { });
+      }
+      return response;
     },
-    description: api.popText('dc', 'character.description'),
-    notes: api.popText('dc', 'character.notes'),
+    description: api.popText('character.description'),
+    notes: api.popText('character.notes'),
     tags: ['api'], // ADD THIS TAG
     validate: {
-      params: api.validateParams(['character'], 'post'),
+      params: api.validateParams(['characters'], 'post'),
       query: api.validateParams(common.validCharQParams, 'get'),
     },
   },

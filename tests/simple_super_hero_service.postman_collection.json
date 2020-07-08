@@ -1077,6 +1077,202 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/dc?h=name,id,align,hair,appearances&limit=50&s=align:des,name:ascc&nulls=last",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response alignment is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].align).is.not.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response alignment is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].align).is.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc?h=name,id,align,hair,appearances&limit=50&nulls=last&s=align:des,name:ascc",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "nulls",
+									"value": "last"
+								},
+								{
+									"key": "s",
+									"value": "align:des,name:ascc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/dc?h=name,id,align,hair,appearances&limit=50&s=align:des,name:asc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response alignment is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].align).is.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response alignment is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].align).is.not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc?h=name,id,align,hair,appearances&limit=50&s=align:des,name:asc",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "s",
+									"value": "align:des,name:asc"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1308,7 +1504,7 @@
 									"    pm.response.to.be.json;",
 									"});",
 									"",
-									"pm.test(\"first result is iron man\", function () {",
+									"pm.test(\"first result is green lantern\", function () {",
 									"    const jsonData = pm.response.json();",
 									"    pm.expect(jsonData[0].name).to.eql('bizarro green lantern (new earth)');",
 									"});",
@@ -1930,6 +2126,244 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "dc/bates?h=name,align,eye,gsm,appearances",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe53a192-2d7e-46fa-8a67-b4ef19bf8e8e",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"first result is hannibal bates\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.eql('hannibal bates (new earth)');",
+									"});",
+									"",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"align\": \"string\",",
+									"        \"eye\": \"string\",",
+									"        \"gsm\": \"string\",",
+									"        \"appearances\": \"integer\"",
+									"    };",
+									"    pm.expect(jsonData[0]).to.be.an('object').that.has.all.keys('name', 'align', 'eye','gsm', 'appearances');",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"response object key values\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].eye).to.eql(null);",
+									"    pm.expect(jsonData[0].gsm).to.eql(null);",
+									"});",
+									"",
+									"pm.test(\"limit returns 1 results\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.lengthOf(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{base_url}}/dc/bates?h=name,align,eye,gsm,appearances",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								"bates"
+							],
+							"query": [
+								{
+									"key": "h",
+									"value": "name,align,eye,gsm,appearances"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dc/bates?h=name,align,eye,gsm,appearances&prune",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a294fda7-c393-4296-9879-9936103d4299",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"first result is hannibal bates\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.eql('hannibal bates (new earth)');",
+									"});",
+									"",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"align\": \"string\",",
+									"        \"appearances\": \"integer\"",
+									"    };",
+									"    pm.expect(jsonData[0]).to.be.an('object').that.has.all.keys('name', 'align', 'appearances');",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"",
+									"pm.test(\"limit returns 1 results\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.lengthOf(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{base_url}}/dc/bates?h=name,align,eye,gsm,appearances&prune",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								"bates"
+							],
+							"query": [
+								{
+									"key": "h",
+									"value": "name,align,eye,gsm,appearances"
+								},
+								{
+									"key": "prune",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/dc/bat man/?h=name,id,align,hair,appearances&limit=50&s=align:des,name:ascc&nulls=last",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response id is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).is.not.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response id is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].id).is.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc/bat man?h=name,id,align,hair,appearances&nulls=last&s=id:des,name:ascc",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								"bat man"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "nulls",
+									"value": "last"
+								},
+								{
+									"key": "s",
+									"value": "id:des,name:ascc"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1971,7 +2405,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"batman\"\n}",
+							"raw": "{\n\t\"characters\": \"batman\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2035,7 +2469,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"batman,green lantern\"\n}",
+							"raw": "{\n\t\"characters\": \"batman,green lantern\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2099,7 +2533,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"batman\" ,\"green lantern\"]\n}",
+							"raw": "{\n\t\"characters\": [\"batman\" ,\"green lantern\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2168,7 +2602,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"batman\",\n\t\"h\": \"name,first appearance,appearances,year\",\n\t\"limit\" : 10\n}",
+							"raw": "{\n\t\"characters\": \"batman\",\n\t\"h\": \"name,first appearance,appearances,year\",\n\t\"limit\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2236,7 +2670,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"batman\",\n\t\"h\": [\"name\" ,\"first appearance\", \"appearances\", \"year\"],\n\t\"limit\" : 10\n}",
+							"raw": "{\n\t\"characters\": \"batman\",\n\t\"h\": [\"name\" ,\"first appearance\", \"appearances\", \"year\"],\n\t\"limit\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2298,7 +2732,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"bat+man\"\n}",
+							"raw": "{\n\t\"characters\": \"bat+man\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2350,7 +2784,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"bat+man\", \"super+woman\"]\n}",
+							"raw": "{\n\t\"characters\": [\"bat+man\", \"super+woman\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2409,7 +2843,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"bat+man\", \"super\"]\n}",
+							"raw": "{\n\t\"characters\": [\"bat+man\", \"super\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2471,7 +2905,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"bat+man\"],\n\t\"s\": \"name:desc\"\n}",
+							"raw": "{\n\t\"characters\": [\"bat+man\"],\n\t\"s\": \"name:desc\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2533,7 +2967,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"bat+man\"],\n\t\"s\": [\n\t\t{ \"column\": \"name\", \"sort\": \"desc\" }\n\t]\n}",
+							"raw": "{\n\t\"characters\": [\"bat+man\"],\n\t\"s\": [\n\t\t{ \"column\": \"name\", \"sort\": \"desc\" }\n\t]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2595,7 +3029,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"bat+man\"],\n\t\"s\": { \"column\": \"name\", \"sort\": \"desc\" }\n}",
+							"raw": "{\n\t\"characters\": [\"bat+man\"],\n\t\"s\": { \"column\": \"name\", \"sort\": \"desc\" }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2664,7 +3098,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"bat+man,-earth\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"]\n}\n",
+							"raw": "{\n\t\"characters\": \"bat+man,-earth\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2744,7 +3178,227 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc/",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/dc/?prune=true",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response object all keys present check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1]).to.be.an('object').that.has.all.keys('name', 'appearances', 'first appearance', 'sex', 'year');",
+									"});",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"first appearance\": \"string\",",
+									"        \"appearances\": \"integer\",",
+									"        \"sex\": \"string\",",
+									"        \"year\": \"integer\"",
+									"    };",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"check all results contain man, but exclude woman\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const names = jsonData.map(x => x.name);",
+									"    names.forEach((itm) => {",
+									"        pm.expect(itm).to.satisfy(string =>",
+									"          ['man'].every(bit => string.includes(bit) && !string.includes('woman'))",
+									"        );",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"check sort order for year 1963\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const sorted = jsonData.filter(x => x.year === 1966);",
+									"    pm.expect(sorted[0].year).to.be.eql(sorted[1].year);",
+									"    pm.expect(sorted[0].appearances).to.be.gte(sorted[1].appearances);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"gsm\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t],\n\t\"prune\": true\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/dc/",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"dc",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/dc/?prune=false",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response object all keys present check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1]).to.be.an('object').that.has.all.keys('name', 'appearances', 'first appearance', 'gsm', 'sex', 'year');",
+									"});",
+									"",
+									"pm.test(\"response data.gsm is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1].gsm).to.be.null",
+									"});",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"first appearance\": \"string\",",
+									"        'gsm': \"string\",",
+									"        \"appearances\": \"integer\",",
+									"        \"sex\": \"string\",",
+									"        \"year\": \"integer\"",
+									"    };",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"check all results contain man, but exclude woman\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const names = jsonData.map(x => x.name);",
+									"    names.forEach((itm) => {",
+									"        pm.expect(itm).to.satisfy(string =>",
+									"          ['man'].every(bit => string.includes(bit) && !string.includes('woman'))",
+									"        );",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"check sort order for year 1963\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const sorted = jsonData.filter(x => x.year === 1966);",
+									"    pm.expect(sorted[0].year).to.be.eql(sorted[1].year);",
+									"    pm.expect(sorted[0].appearances).to.be.gte(sorted[1].appearances);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"gsm\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3652,6 +4306,7 @@
 									"",
 									"pm.test(\"limit returns 50 random results\", function () {",
 									"    const jsonData = pm.response.json();",
+									"    console.log('setting randome 1 = ', jsonData)",
 									"    pm.globals.set(\"random_1\", jsonData);",
 									"    pm.expect(jsonData).to.have.lengthOf(50);",
 									"});",
@@ -3667,9 +4322,11 @@
 									"",
 									"pm.test(\"check for randomness round two - compare first and second tests\", function () {",
 									"    const url = `https://${pm.environment.get('base_url')}/marvel?limit=50&random=true`;",
+									"    console.log(\"getting randome 1 0  = \", pm.globals.get('random_1'))",
+									"    random_1 = pm.globals.get('random_1')",
 									"    pm.sendRequest(url, function (err, response) {",
 									"        const jsonData = response.json();",
-									"        const pids0 = pm.globals.get('random_1').map(id => id.page_id);",
+									"        const pids0 = random_1.map(id => id.page_id);",
 									"        const pids1 = jsonData.map(id => id.page_id);",
 									"        pm.expect(pids0).to.have.lengthOf(50);",
 									"        pm.expect(pids1).to.have.lengthOf(50);",
@@ -3680,9 +4337,10 @@
 									"// long as it's no more then 3 overlapping numbers. Out of 16,376 options, this shouldn't happen often",
 									"pm.test(\"check for randomness round three - uniqueness tolerance\", function () {",
 									"    const url = `https://${pm.environment.get('base_url')}/marvel?limit=50&random=true`;",
+									"    random_1 = pm.globals.get('random_1')",
 									"    pm.sendRequest(url, function (err, response) {",
 									"        const jsonData = response.json();",
-									"        const pids0 = pm.globals.get('random_1').map(id => id.page_id);",
+									"        const pids0 = random_1.map(id => id.page_id);",
 									"        const pids1 = jsonData.map(id => id.page_id);",
 									"        const setpid = new Set(pids0.concat(pids1));",
 									"        const spid = [...setpid];",
@@ -3786,9 +4444,10 @@
 									"",
 									"pm.test(\"check is results are seeded\", function () {",
 									"    const url = `https://${pm.environment.get('base_url')}/marvel?limit=5&random=true&seed=true`;",
+									"    random_seed_1 = pm.globals.get('random_seed_1')",
 									"    pm.sendRequest(url, function (err, response) {",
 									"        const jsonData = response.json();",
-									"        const pids0 = pm.globals.get('random_seed_1').map(id => id.page_id);",
+									"        const pids0 = random_seed_1.map(id => id.page_id);",
 									"        const pids1 = jsonData.map(id => id.page_id);",
 									"        pm.expect(pids0).to.eql(pids1);",
 									"        pm.globals.unset('random_seed_1');",
@@ -3862,6 +4521,202 @@
 								{
 									"key": "seed",
 									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/marvel?h=name,id,align,hair,appearances&limit=1000&s=align:des,name:ascc&nulls=last",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response alignment is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].align).is.not.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response alignment is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].align).is.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel?h=name,id,align,hair,appearances&nulls=last&s=align:des,name:ascc&limit=1000",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "nulls",
+									"value": "last"
+								},
+								{
+									"key": "s",
+									"value": "align:des,name:ascc"
+								},
+								{
+									"key": "limit",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/marvel?h=name,id,align,hair,appearances&limit=1000&s=align:des,name:asc nulls first",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response alignment is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].align).is.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response alignment is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].align).is.not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel?h=name,id,align,hair,appearances&s=align:des,name:asc&limit=1000",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "s",
+									"value": "align:des,name:asc"
+								},
+								{
+									"key": "limit",
+									"value": "1000"
 								}
 							]
 						}
@@ -3992,7 +4847,7 @@
 									"",
 									"pm.test(\"first result is spiderman\", function () {",
 									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].name).to.eql('spider-man (peter parker)');",
+									"    pm.expect(jsonData[0].name).to.eql('spiderman (1940s) (earth-616)');",
 									"});",
 									"",
 									"pm.test(\"test number of spidermans = 3\", function () {",
@@ -4191,6 +5046,107 @@
 					"response": []
 				},
 				{
+					"name": "/marvel/spider+man+earth?s=name:desc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"test if the first result contains the string vern\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.include('vern');",
+									"});",
+									"",
+									"pm.test(\"check all results contain spider, man, and earth\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const names = jsonData.map(x => x.name);",
+									"    names.forEach((itm) => {",
+									"        pm.expect(itm).to.satisfy(string =>",
+									"          ['spider', 'man', 'earth'].every(bit => string.includes(bit))",
+									"        );",
+									"    });",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel/spider+man+earth?s=name:desc",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								"spider+man+earth"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "name:desc"
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/marvel/spider+man",
 					"event": [
 						{
@@ -4281,107 +5237,6 @@
 									"key": "s",
 									"value": "name:asc",
 									"disabled": true
-								},
-								{
-									"key": "seed",
-									"value": "true",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/marvel/spider+man+earth?s=name:desc",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "c0d79958-bf3a-428b-975b-657354987a80",
-								"exec": [
-									"pm.test(\"Status\", function () {",
-									"    pm.response.to.have.status(200);",
-									"    pm.response.to.be.ok;",
-									"    pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"test if the first result contains the string vern\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    pm.expect(jsonData[0].name).to.include('vern');",
-									"});",
-									"",
-									"pm.test(\"check all results contain spider, man, and earth\", function () {",
-									"    const jsonData = pm.response.json();",
-									"    const names = jsonData.map(x => x.name);",
-									"    names.forEach((itm) => {",
-									"        pm.expect(itm).to.satisfy(string =>",
-									"          ['spider', 'man', 'earth'].every(bit => string.includes(bit))",
-									"        );",
-									"    });",
-									"});",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://{{base_url}}/marvel/spider+man+earth?s=name:desc",
-							"protocol": "https",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"marvel",
-								"spider+man+earth"
-							],
-							"query": [
-								{
-									"key": "format",
-									"value": "json",
-									"disabled": true
-								},
-								{
-									"key": "h",
-									"value": "name,id,eye,appearances,year",
-									"disabled": true
-								},
-								{
-									"key": "help",
-									"value": "true",
-									"disabled": true
-								},
-								{
-									"key": "pretty",
-									"value": "true",
-									"disabled": true
-								},
-								{
-									"key": "random",
-									"value": "true",
-									"disabled": true
-								},
-								{
-									"key": "s",
-									"value": "name:desc"
 								},
 								{
 									"key": "seed",
@@ -4720,6 +5575,243 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "marvel/vern?h=name,align,eye,gsm,appearances",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe53a192-2d7e-46fa-8a67-b4ef19bf8e8e",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"first result is vern (spider-man) (earth-616)\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.eql('vern (spider-man) (earth-616)');",
+									"});",
+									"",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"align\": \"string\",",
+									"        \"eye\": \"string\",",
+									"        \"gsm\": \"string\",",
+									"        \"appearances\": \"integer\"",
+									"    };",
+									"    pm.expect(jsonData[0]).to.be.an('object').that.has.all.keys('name', 'align', 'eye','gsm', 'appearances');",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"response object key values\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].eye).to.eql(null);",
+									"    pm.expect(jsonData[0].gsm).to.eql(null);",
+									"});",
+									"",
+									"pm.test(\"limit returns 1 results\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.lengthOf(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{base_url}}/marvel/vern+spider?h=name,align,eye,gsm,appearances",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								"vern+spider"
+							],
+							"query": [
+								{
+									"key": "h",
+									"value": "name,align,eye,gsm,appearances"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "marvel/vern?h=name,align,eye,gsm,appearances&prune",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fe53a192-2d7e-46fa-8a67-b4ef19bf8e8e",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"first result is vern (spider-man) (earth-616)\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].name).to.eql('vern (spider-man) (earth-616)');",
+									"});",
+									"",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"appearances\": \"integer\"",
+									"    };",
+									"    pm.expect(jsonData[0]).to.be.an('object').that.has.all.keys('name', 'appearances');",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"",
+									"pm.test(\"limit returns 1 results\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.lengthOf(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{base_url}}/marvel/vern+spider?h=name,align,eye,gsm,appearances&prune",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								"vern+spider"
+							],
+							"query": [
+								{
+									"key": "h",
+									"value": "name,align,eye,gsm,appearances"
+								},
+								{
+									"key": "prune",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/marvel/thor/?h=name,id,align,hair,appearances&limit=1000&s=align:des,name:ascc&nulls=last",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"",
+									"pm.test(\"check first response id is not null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).is.not.null;",
+									"});",
+									"",
+									"pm.test(\"check lastst response id is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[jsonData.length-1].id).is.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel/thor?h=name,id,align,hair,appearances&nulls=last&s=id:des,name:ascc",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								"thor"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,eye,appearances,year",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "s",
+									"value": "year:asc",
+									"disabled": true
+								},
+								{
+									"key": "h",
+									"value": "name,id,align,hair,appearances"
+								},
+								{
+									"key": "nulls",
+									"value": "last"
+								},
+								{
+									"key": "s",
+									"value": "id:des,name:ascc"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -4761,7 +5853,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"spider man\"\n}",
+							"raw": "{\n\t\"characters\": \"spider man\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4825,7 +5917,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"spider man,thor odinson\"\n}",
+							"raw": "{\n\t\"characters\": \"spider man,thor odinson\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4889,7 +5981,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider man\" ,\"thor odinson\"]\n}",
+							"raw": "{\n\t\"characters\": [\"spider man\" ,\"thor odinson\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4958,7 +6050,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"iron man\",\n\t\"h\": \"name,first appearance,appearances,year\",\n\t\"limit\" : 10\n}",
+							"raw": "{\n\t\"characters\": \"iron man\",\n\t\"h\": \"name,first appearance,appearances,year\",\n\t\"limit\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5026,7 +6118,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"iron man\",\n\t\"h\": [\"name\" ,\"first appearance\", \"appearances\", \"year\"],\n\t\"limit\" : 10\n}",
+							"raw": "{\n\t\"characters\": \"iron man\",\n\t\"h\": [\"name\" ,\"first appearance\", \"appearances\", \"year\"],\n\t\"limit\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5088,7 +6180,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"spider+man\"\n}",
+							"raw": "{\n\t\"characters\": \"spider+man\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5140,7 +6232,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider+man\", \"aqua+woman\"]\n}",
+							"raw": "{\n\t\"characters\": [\"spider+man\", \"aqua+woman\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5199,7 +6291,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider+man\", \"aqua\"]\n}",
+							"raw": "{\n\t\"characters\": [\"spider+man\", \"aqua\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5261,7 +6353,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider+man\"],\n\t\"s\": \"name:desc\"\n}",
+							"raw": "{\n\t\"characters\": [\"spider+man\"],\n\t\"s\": \"name:desc\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5323,7 +6415,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider+man\"],\n\t\"s\": [\n\t\t{ \"column\": \"name\", \"sort\": \"desc\" }\n\t]\n}",
+							"raw": "{\n\t\"characters\": [\"spider+man\"],\n\t\"s\": [\n\t\t{ \"column\": \"name\", \"sort\": \"desc\" }\n\t]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5385,7 +6477,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": [\"spider+man\"],\n\t\"s\": { \"column\": \"name\", \"sort\": \"desc\" }\n}",
+							"raw": "{\n\t\"characters\": [\"spider+man\"],\n\t\"s\": { \"column\": \"name\", \"sort\": \"desc\" }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5454,7 +6546,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"spider+man,-earth\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"]\n}\n",
+							"raw": "{\n\t\"characters\": \"spider+man,-earth\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5534,7 +6626,227 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"character\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel/",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/marvel/?prune=false",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response object all keys present check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1]).to.be.an('object').that.has.all.keys('name', 'appearances', 'first appearance', 'gsm', 'sex', 'year');",
+									"});",
+									"",
+									"pm.test(\"response data.gsm is null\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1].gsm).to.be.null",
+									"});",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"first appearance\": \"string\",",
+									"        'gsm': \"string\",",
+									"        \"appearances\": \"integer\",",
+									"        \"sex\": \"string\",",
+									"        \"year\": \"integer\"",
+									"    };",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"check all results contain man, but exclude woman\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const names = jsonData.map(x => x.name);",
+									"    names.forEach((itm) => {",
+									"        pm.expect(itm).to.satisfy(string =>",
+									"          ['man'].every(bit => string.includes(bit) && !string.includes('woman'))",
+									"        );",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"check sort order for year 1963\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const sorted = jsonData.filter(x => x.year === 1966);",
+									"    pm.expect(sorted[0].year).to.be.eql(sorted[1].year);",
+									"    pm.expect(sorted[0].appearances).to.be.gte(sorted[1].appearances);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"appearances\", \"gsm\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{base_url}}/marvel/",
+							"protocol": "https",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marvel",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "help",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "pretty",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "seed",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "marvel/?prune=true",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0d79958-bf3a-428b-975b-657354987a80",
+								"exec": [
+									"pm.test(\"Status\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"response object all keys present check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData[1]).to.be.an('object').that.has.all.keys('name', 'appearances', 'first appearance', 'sex', 'year');",
+									"});",
+									"",
+									"pm.test(\"response object schema check\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const schema = {",
+									"        \"name\": \"string\",",
+									"        \"first appearance\": \"string\",",
+									"        \"appearances\": \"integer\",",
+									"        \"sex\": \"string\",",
+									"        \"year\": \"integer\"",
+									"    };",
+									"    pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"pm.test(\"check all results contain man, but exclude woman\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const names = jsonData.map(x => x.name);",
+									"    names.forEach((itm) => {",
+									"        pm.expect(itm).to.satisfy(string =>",
+									"          ['man'].every(bit => string.includes(bit) && !string.includes('woman'))",
+									"        );",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"check sort order for year 1963\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    const sorted = jsonData.filter(x => x.year === 1966);",
+									"    pm.expect(sorted[0].year).to.be.eql(sorted[1].year);",
+									"    pm.expect(sorted[0].appearances).to.be.gte(sorted[1].appearances);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"characters\": \"man,-woman\",\n\t\"h\": [\"name\", \"first appearance\", \"gsm\", \"appearances\", \"sex\", \"year\"],\n\t\"s\": [\n\t\t{ \"column\": \"year\", \"sort\": \"asc\" },\n\t\t{ \"column\": \"appearances\", \"sort\": \"desc\" }\n\t],\n\t\"prune\": true\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"

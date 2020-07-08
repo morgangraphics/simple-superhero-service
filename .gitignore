@@ -33,3 +33,6 @@ npm-debug.log
 config/default.yaml
 .env
 *.pem
+
+# Merge conflict
+*.orig

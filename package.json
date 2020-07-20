@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon --inspect server.js --ignore node_modules/",
-    "service": "pm2 start server.js --name \"simple superhero service\"",
+    "service": "./node_modules/.bin/pm2 start server.js --name \"simple superhero service\"",
     "tests": "./node_modules/.bin/newman run tests/simple_super_hero_service.postman_collection.json --environment tests/test.postman_environment.json --insecure"
   },
   "author": "DM00000",

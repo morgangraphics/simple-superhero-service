@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon --inspect server.js --ignore node_modules/",
-    "service": "pm2 start server.js --name \"simple superhero service\"",
+    "service": "./node_modules/.bin/pm2 start server.js --name \"simple superhero service\"",
     "tests": "./node_modules/.bin/newman run tests/simple_super_hero_service.postman_collection.json --environment tests/test.postman_environment.json --insecure"
   },
   "author": "DM00000",
@@ -17,10 +17,11 @@
     "eslint-plugin-html": "5.0.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-security": "1.4.0",
-    "newman": "5.0.0",
+    "newman": "5.1.2",
     "nodemon": "2.0.3"
   },
   "dependencies": {
+    "@hapi/hapi": "19.2.0",
     "axios": "0.19.2",
     "boom": "7.3.0",
     "bunyan": "1.8.12",
@@ -28,10 +29,10 @@
     "config": "3.3.1",
     "csv-parser": "2.3.2",
     "get-value": "3.0.1",
-    "hapi": "18.1.0",
     "hapi-swagger": "9.3.0",
     "inert": "5.1.2",
     "joi": "14.3.1",
+    "pm2": "4.4.0",
     "thenby": "1.3.0",
     "vision": "5.4.4"
   }

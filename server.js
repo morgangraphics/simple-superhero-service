@@ -1,6 +1,6 @@
 const config = require('config');
 const fs = require('fs');
-const hapi = require('hapi');
+const hapi = require('@hapi/hapi');
 const HapiSwagger = require('hapi-swagger');
 const http2 = require('http2');
 const Inert = require('inert');

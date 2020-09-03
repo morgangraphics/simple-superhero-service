@@ -105,9 +105,7 @@ if (env.SWAGGER_ENABLED) {
 };
 
 const banner = (server) => {
-  console.log(env)
   const swggr = (env.SWAGGER_ENABLED)? `\n Swagger Interface: ${server.info.uri}/documentation#! \n` : ''
-  console.log('SWGGR = ', swggr);
   const main = `
 
               ██████  ██▓ ███▄ ▄███▓ ██▓███   ██▓    ▓█████
@@ -149,8 +147,8 @@ const banner = (server) => {
     ${swggr}
 =============================================================================
 `;
-return main;
-}
+  return main;
+};
 
 /**
  * Asynchronously start hapi server

@@ -36,6 +36,11 @@
 
 ```
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/context:javascript)
+
+
+
 I needed a self-contained, data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
 Service runs on Node and Hapi.js.

@@ -31,8 +31,10 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', {
       'optionalDependencies': ['test/unit/index.js']
     }],
+    'arrow-parens': ['error', 'as-needed'],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-underscore-dangle': 0,
     'valid-jsdoc': ['error', {
       'requireReturn': true,
       'requireReturnType': true,
@@ -45,7 +47,6 @@ module.exports = {
             'MethodDefinition': true,
             'ClassDeclaration': true
         }
-    }],
-    'no-underscore-dangle': 0
+    }]
   }
 }

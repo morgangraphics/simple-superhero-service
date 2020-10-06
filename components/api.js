@@ -292,7 +292,7 @@ this.srchExtended = `
   permutate(name) { // eslint-disable-line class-methods-use-this
     const options = [];
     const p = (name instanceof Array) ? name.map(itm => itm.trim()) : [name];
-    p.forEach((itm) => {
+    p.forEach(itm => {
       if (!options.includes(itm)) { options.push(itm); }
       if (itm.includes(' ')) {
         options.push(itm.replace(' ', '-'));
@@ -332,7 +332,7 @@ this.srchExtended = `
       every: [],
       exclude: [],
     };
-    sArry.forEach((itm) => {
+    sArry.forEach(itm => {
       if (itm.startsWith('-')) {
         chars = this.permutate(itm.replace('-', ''));
         search.exclude = chars.concat(search.exclude);
@@ -363,7 +363,7 @@ this.srchExtended = `
   sortObj(sortStr) {
     const sort = [];
     const sortArry = this.handleParamTypes(sortStr);
-    sortArry.forEach((itm) => {
+    sortArry.forEach(itm => {
       if (this.isStr(itm) && itm.includes(':')) {
         const t = itm.split(':');
         sort.push({ column: t[0], sort: this.direction(t[1]) });

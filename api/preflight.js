@@ -8,7 +8,6 @@
  * https://github.com/hapijs/hapi/issues/3238
  */
 
-
 // const preflight = {
 //   method: 'OPTIONS',
 //   path: '/{p*}',

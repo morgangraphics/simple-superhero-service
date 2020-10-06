@@ -105,7 +105,7 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 | page_id          | integer | The unique identifier for that characters page within the wikia                                                                              |
 | name             | string  | The name of the character                                                                                                                    |
 | urlslug          | string  | The unique url within the wikia that takes you to the character                                                                              |
-| id               | string  | The identity status of the character (Secret Identity, Public identity, \[on marvel only: No Dual Identity\])                                  |
+| id               | string  | The identity status of the character (Secret Identity, Public identity, \[on marvel only: No Dual Identity\])                                |
 | align            | string  | If the character is Good, Bad or Neutral                                                                                                     |
 | eye              | string  | Eye color of the character                                                                                                                   |
 | hair             | string  | Hair color of the character                                                                                                                  |

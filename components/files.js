@@ -71,7 +71,7 @@ class FileUtils {
     const s = this.config.characters.some;
     const e = this.config.characters.every;
     const x = this.config.characters.exclude;
-    common.cache[this.universe].forEach((itm) => {
+    common.cache[this.universe].forEach(itm => {
       // See above for explanation
       if (((s.length > 0 && s.some(str => itm.name.includes(str)))
             || (e.length > 0 && e.every(str => itm.name.includes(str))))
@@ -195,7 +195,7 @@ class FileUtils {
               return value;
             },
           }))
-          .on('data', (data) => {
+          .on('data', data => {
             // if prune is set and we are sorting, we have to ensure
             // the object have all the keys with valid values (no null) to sort on
             if ('prune' in this.config && 's' in this.config) {

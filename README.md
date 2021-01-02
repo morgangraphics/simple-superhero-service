@@ -77,9 +77,6 @@ DC URL: [](https://localhost:3000/dc)
 
 Swagger Interface: [](https://localhost:3000/documentation#!/)
 
-
-
-
 ## Dataset
 
 Data is the comic book character dataset from [@fivethrityeight](https://github.com/fivethirtyeight/data/tree/master/comic-characters)
@@ -99,7 +96,6 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 
 #### Data types
 
-
 | Variable         | Type    | Definition                                                                                                                                   |
 |------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | page_id          | integer | The unique identifier for that characters page within the wikia                                                                              |
@@ -112,14 +108,13 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 | sex              | string  | Sex of the character (e.g. Male, Female, etc.)                                                                                               |
 | gsm              | string  | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)                                            |
 | alive            | string  | If the character is alive or deceased                                                                                                        |
-| appearances      | int     | The number of appearances of the character in comic books <sup>*</sup>                                                                       |
+| appearances      | integer | The number of appearances of the character in comic books <sup>*</sup>                                                                       |
 | first appearance <sup>**</sup> | string  | The month and year of the character’s first appearance in a comic book, if available                                           |
-| year           | int     | The year of the character’s first appearance in a comic book, if available                                                                     |
+| year           | integer | The year of the character’s first appearance in a comic book, if available                                                                     |
 
 <sup>\* as of Sep. 2, 2014. Number will become increasingly out of date as time goes on</sup>
 
 <sup>\** `first appearance` date formatting can be different </sup>
-
 
 #### Example Output
 ```json
@@ -161,7 +156,6 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
   }
 ]
 ```
-
 
 ### Retrieving Data `/marvel` or `/dc`
 
@@ -377,7 +371,6 @@ The base endpoints allow for retrieving data and applying a series of filters to
     }
 ]
 ```
-
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel?help'`
 ```text
@@ -763,7 +756,6 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
     }
 ]
 ```
-
 
 ## License
 

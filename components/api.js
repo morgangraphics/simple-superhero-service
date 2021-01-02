@@ -433,7 +433,7 @@ this.srchExtended = `
         .items(
           Joi.string()
             .label('h: column name')
-            .valid(this.columns),
+            .valid(...this.columns),
         )
         .label('h: array of column names');
 
@@ -506,7 +506,7 @@ this.srchExtended = `
 
     if (validParams.includes('s')) {
       const obj = Joi.object({
-        column: Joi.required().valid(this.columns),
+        column: Joi.required().valid(...this.columns),
         sort: Joi.required().valid('asc', 'desc'),
       })
         .label('s: sort object');

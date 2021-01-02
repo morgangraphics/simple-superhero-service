@@ -17,7 +17,7 @@ const dcGetBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = { ...req.query, ...universe };
+      const options = { ...req.query, ...{ universe } };
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
@@ -52,7 +52,7 @@ const dcPostBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = { ...req.query, ...req.payload, ...universe };
+      const options = { ...req.query, ...req.payload, ...{ universe } };
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
@@ -89,7 +89,7 @@ const dcGetByCharacter = {
   options: {
     handler: (req, handlr) => {
       const options = {
-        ...req.query, ...req.payload, ...req.params, ...universe,
+        ...req.query, ...req.payload, ...req.params, ...{ universe },
       };
       let response;
       if ('help' in options) {

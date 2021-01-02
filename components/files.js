@@ -71,7 +71,7 @@ class FileUtils {
     const s = this.config.characters.some;
     const e = this.config.characters.every;
     const x = this.config.characters.exclude;
-    common.cache[this.universe].forEach(itm => {
+    common.cache[this.universe].forEach((itm) => {
       // See above for explanation
       if (((s.length > 0 && s.some(str => itm.name.includes(str)))
             || (e.length > 0 && e.every(str => itm.name.includes(str))))
@@ -195,7 +195,7 @@ class FileUtils {
               return value;
             },
           }))
-          .on('data', data => {
+          .on('data', (data) => {
             // if prune is set and we are sorting, we have to ensure
             // the object have all the keys with valid values (no null) to sort on
             if ('prune' in this.config && 's' in this.config) {
@@ -245,10 +245,12 @@ class FileUtils {
     // The first entry in the array will always the the first solumn we sort on
     let srt = firstBy(this.config.s[0].column,
       { cmp: this.sortIl8nStr.bind(this), direction: this.config.s[0].sort });
+    // console.log('srt 1 = ', results.slice().sort(srt).slice(0, 3));
     // If there are more than one item then we dynamically sort on those
     for (let i = 1; i < this.config.s.length; i += 1) {
       srt = srt.thenBy(this.config.s[i].column,
         { cmp: this.sortIl8nStr.bind(this), direction: this.config.s[i].sort });
+      // console.log('srt 2 = ', results.slice().sort(srt).slice(0, 3));
     }
     return results.sort(srt);
   }
@@ -260,19 +262,21 @@ class FileUtils {
    * @return {Object}   Sorted Object
    */
   sortIl8nStr(a, b) {
+    // console.log('a = ', a, 'b = ', b);
     if (this.config.nulls === 'first') {
+      // console.log('here ', a, b)
       // Compare if values are empty/null/undefined
-      if (!a) {
+      if (!a && b) {
         return 1;
       }
-      if (!b) {
+      if (!b && a) {
         return -1;
       }
     } else {
-      if (!a) {
+      if (!a && b) {
         return -1;
       }
-      if (!b) {
+      if (!b && a) {
         return 1;
       }
     }
@@ -297,7 +301,6 @@ class FileUtils {
     return a.localeCompare(b, 'en', { ignorePunctuation: true });
   }
 }
-
 
 module.exports = {
   FileUtils,

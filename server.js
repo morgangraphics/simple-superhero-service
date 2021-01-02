@@ -3,8 +3,8 @@ const fs = require('fs');
 const hapi = require('@hapi/hapi');
 const HapiSwagger = require('hapi-swagger');
 const http2 = require('http2');
-const Inert = require('inert');
-const Vision = require('vision');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
 const Routes = require('./api/index');
 
 const hapiPlugins = [];

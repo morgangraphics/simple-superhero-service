@@ -24,7 +24,7 @@
     "@hapi/hapi": "20.0.3",
     "@hapi/inert": "6.0.3",
     "@hapi/vision": "6.0.1",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "boom": "7.3.0",
     "bunyan": "1.8.12",
     "chance": "1.1.4",

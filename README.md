@@ -77,6 +77,16 @@ DC URL: [](https://localhost:3000/dc)
 
 Swagger Interface: [](https://localhost:3000/documentation#!/)
 
+### Working with Docker
+1.  Build image `docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=13.14.0 .`
+1.  Run container `docker run --tty --detach --name simple-superhero-service --network host -p 3000:3000 simple-superhero-service:1.0`
+
+There are two optional build arguments:
+1.  NODE=<EXACT_VERSION_OF_NODE> e.g. `NODE=13.14.0` DEFAULT: 12.22.3
+1.  NODE_ENV=<development|production> e.g. `NOE_ENV=production` DEFAULT: development
+
+To access the service at localhost, you must pass in `--network host` in the run command
+
 ## Dataset
 
 Data is the comic book character dataset from [@fivethrityeight](https://github.com/fivethirtyeight/data/tree/master/comic-characters)

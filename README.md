@@ -71,11 +71,11 @@ pm2 `npm install pm2`
 1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
 1.  The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
-Marvel URL: [](https://localhost:3000/marvel)
+Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
 
-DC URL: [](https://localhost:3000/dc)
+DC URL: [https://localhost:3000/dc](https://localhost:3000/dc)
 
-Swagger Interface: [](https://localhost:3000/documentation#!/)
+Swagger Interface: [https://localhost:3000/documentation#!/](https://localhost:3000/documentation#!/)
 
 ### Working with Docker
 1.  Build image `docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=13.14.0 .`

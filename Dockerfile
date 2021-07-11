@@ -7,7 +7,7 @@ LABEL maintainer="MORGANGRAPHICS,INC"
 ARG NODE=12.22.3
 ARG USER=node-user
 ARG NODE_VERSION=$NODE
-ARG NODE_ENV=production:-development
+ARG NODE_ENV=${NODE_ENV:-development}
 
 # ==============================================================================
 # RUN AS ROOT
@@ -24,6 +24,7 @@ RUN apt-get update -y \
   && adduser --disabled-password --gecos '' ${USER} \
   && adduser ${USER} sudo \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 
 # Warn users if they are running as root. See the "Invoked with name sh" section of
 # https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html .
@@ -42,13 +43,15 @@ ENV NVM_DIR /home/${USER}/.nvm
 ENV PATH $NVM_DIR/versions/node/v${NODE_VERSION}/bin:$PATH
 ENV NODE_ENV ${NODE_ENV}
 
-# Set working Directory
-WORKDIR /home/${USER}/api
+# Set working Directory - This creates the dir as root
+WORKDIR /home/${USER}/service
 
 # Copy Application files to the working directory
 COPY --chown=${USER}:${USER} . .
 
-RUN ls -al \
+# Because WORKDIR creates directory as root we need to change the owner so npm doesn't thow
+# EACCESS errors on install
+RUN sudo chown ${USER}:${USER} ../service \
   && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
   && . $NVM_DIR/nvm.sh \
   && nvm install ${NODE_VERSION} \

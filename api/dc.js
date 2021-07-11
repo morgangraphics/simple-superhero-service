@@ -17,7 +17,7 @@ const dcGetBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, { universe });
+      const options = { ...req.query, ...{ universe } };
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
@@ -26,7 +26,7 @@ const dcGetBase = {
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
-          .then((data) => {
+          .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
             return handlr.response(d).header('Content-Type', 'application/json');
           })
@@ -52,7 +52,7 @@ const dcPostBase = {
   path: '/dc',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, req.payload, { universe });
+      const options = { ...req.query, ...req.payload, ...{ universe } };
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
@@ -61,7 +61,7 @@ const dcPostBase = {
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
-          .then((data) => {
+          .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
             return handlr.response(d).header('Content-Type', 'application/json');
           })
@@ -88,7 +88,9 @@ const dcGetByCharacter = {
   path: '/dc/{characters}',
   options: {
     handler: (req, handlr) => {
-      const options = Object.assign({}, req.query, req.payload, req.params, { universe });
+      const options = {
+        ...req.query, ...req.payload, ...req.params, ...{ universe },
+      };
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
@@ -97,7 +99,7 @@ const dcGetByCharacter = {
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
-          .then((data) => {
+          .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
             return handlr.response(d).header('Content-Type', 'application/json');
           })

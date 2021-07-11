@@ -39,48 +39,53 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/context:javascript)
 
-
-
 I needed a self-contained, data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
 Service runs on Node and Hapi.js.
 
 The service itself and the data contained within service may be useful for testing:
 
-* CORS configuration
-* Server configuration
-* Bandwidth
-* Form population
-* Data visualization
-* Stubbing out UI components
-* ...
+*   CORS configuration
+*   Server configuration
+*   Bandwidth
+*   Form population
+*   Data visualization
+*   Stubbing out UI components
+*   ...
 
 ## Service
 
 ![Simple Superhero Service](img/swagger.png)
 
-#### Requirements
+### Requirements
 node.js (12+)
 
 pm2 `npm install pm2`
 
-#### Installation
-1. Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
-1. cd into the directory and install node.js requirements `npm install`
-1. Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
-1. Rename the `config/default.example.yaml` file to `config/default.yaml`
-1. Update the ``<PLACEHOLDERS>`` according to your setup
-1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
-1. The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
+### Installation
+1.  Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
+1.  cd into the directory and install node.js requirements `npm install`
+1.  Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
+1.  Rename the `config/default.example.yaml` file to `config/default.yaml`
+1.  Update the ``<PLACEHOLDERS>`` according to your setup
+1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
+1.  The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
-Marvel URL: https://localhost:3000/marvel
+Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
 
-DC URL: https://localhost:3000/dc
+DC URL: [https://localhost:3000/dc](https://localhost:3000/dc)
 
-Swagger Interface: https://localhost:3000/documentation#!/
+Swagger Interface: [https://localhost:3000/documentation#!/](https://localhost:3000/documentation#!/)
 
+### Working with Docker
+1.  Build image `docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=13.14.0 .`
+1.  Run container `docker run --tty --detach --name simple-superhero-service --network host -p 3000:3000 simple-superhero-service:1.0`
 
+There are two optional build arguments:
+1.  NODE=<EXACT_VERSION_OF_NODE> e.g. `NODE=13.14.0` DEFAULT: 12.22.3
+1.  NODE_ENV=<development|production> e.g. `NOE_ENV=production` DEFAULT: development
 
+To access the service at localhost, you must pass in `--network host` in the run command
 
 ## Dataset
 
@@ -95,33 +100,31 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 
 #### Number of characters
 
-| Marvel  |  DC    |
+| Marvel  | DC     |
 |---------|--------|
-|  16,376 |  6,896 |
+|  16,376 | 6,896  |
 
 #### Data types
-
 
 | Variable         | Type    | Definition                                                                                                                                   |
 |------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | page_id          | integer | The unique identifier for that characters page within the wikia                                                                              |
 | name             | string  | The name of the character                                                                                                                    |
 | urlslug          | string  | The unique url within the wikia that takes you to the character                                                                              |
-| id               | string  | The identity status of the character (Secret Identity, Public identity, [on marvel only: No Dual Identity])                                  |
+| id               | string  | The identity status of the character (Secret Identity, Public identity, \[on marvel only: No Dual Identity\])                                |
 | align            | string  | If the character is Good, Bad or Neutral                                                                                                     |
 | eye              | string  | Eye color of the character                                                                                                                   |
 | hair             | string  | Hair color of the character                                                                                                                  |
 | sex              | string  | Sex of the character (e.g. Male, Female, etc.)                                                                                               |
 | gsm              | string  | If the character is a gender or sexual minority (e.g. Homosexual characters, bisexual characters)                                            |
 | alive            | string  | If the character is alive or deceased                                                                                                        |
-| appearances      | int     | The number of appearances of the character in comic books <sup>*</sup>                                                                       |
+| appearances      | integer | The number of appearances of the character in comic books <sup>*</sup>                                                                       |
 | first appearance <sup>**</sup> | string  | The month and year of the character’s first appearance in a comic book, if available                                           |
-| year           | int     | The year of the character’s first appearance in a comic book, if available                                                                     |
+| year           | integer | The year of the character’s first appearance in a comic book, if available                                                                     |
 
 <sup>\* as of Sep. 2, 2014. Number will become increasingly out of date as time goes on</sup>
 
 <sup>\** `first appearance` date formatting can be different </sup>
-
 
 #### Example Output
 ```json
@@ -164,7 +167,6 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 ]
 ```
 
-
 ### Retrieving Data `/marvel` or `/dc`
 
 The base endpoints allow for retrieving data and applying a series of filters to that data to accomplish whatever you need with an array or JSON objects. They can be used in combination with one another
@@ -178,12 +180,12 @@ The base endpoints allow for retrieving data and applying a series of filters to
 | headers       | h        | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year) |
 | help *        | help     | false    | Display Help                                                                                                           |
 | limit         | limit    | 100      | Limit results (0 = unlimited)                                                                                          |
-| nulls         | nulls    | first    | When sorting, null values show up first or last depending e.g. [null, 1, 2, 3] or [1, 2, 3, null] †                    |
+| nulls         | nulls    | first    | When sorting, null values show up first or last depending e.g. \[null, 1, 2, 3\] or \[1, 2, 3, null\] †                |
 | pretty *      | pretty   | false    | Pretty print JSON results                                                                                              |
 | prune *       | prune    | false    | Prune null values from result sets                                                                                     |
 | random * **   | random   | false    | Retrieve a random number of characters based on limit                                                                  |
 | seed * **     | seed     | false    | Keep the random number of characters consistent between requests                                                       |
-| sort          | s        | unsorted | Sort response asc or desc e.g.s=name,appearances:desc                                                                   |
+| sort          | s        | unsorted | Sort response asc or desc e.g.s=name,appearances:desc                                                                  |
 
 <sup>\* Shorthand query parameter, meaning its presence automatically equates to true</sup>
 
@@ -379,7 +381,6 @@ The base endpoints allow for retrieving data and applying a series of filters to
     }
 ]
 ```
-
 
 `curl -X GET --header 'Accept: application/json' 'https://localhost:3000/marvel?help'`
 ```text
@@ -765,7 +766,6 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
     }
 ]
 ```
-
 
 ## License
 

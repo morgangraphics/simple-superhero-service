@@ -20,7 +20,6 @@ const validBaseQParams = ['characters', 'format', 'h', 'help', 'limit', 'nulls',
  */
 const validCharQParams = ['characters', 'format', 'h', 'help', 'limit', 'nulls', 'pretty', 'prune', 's'];
 
-
 module.exports = {
   cache,
   validBaseQParams,

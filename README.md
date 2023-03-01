@@ -61,7 +61,7 @@ Constantly assailed by 1000+ tests.
 ![Simple Superhero Service](img/swagger.png)
 
 ### Requirements
-node.js (12+)
+node.js (13+)
 
 pm2 `npm install pm2`
 

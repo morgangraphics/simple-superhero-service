@@ -53,6 +53,9 @@ The service itself and the data contained within service may be useful for testi
 *   Stubbing out UI components
 *   ...
 
+
+Constantly assailed by 1000+ tests. 
+
 ## Service
 
 ![Simple Superhero Service](img/swagger.png)
@@ -66,9 +69,9 @@ pm2 `npm install pm2`
 1.  Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
 1.  cd into the directory and install node.js requirements `npm install`
 1.  Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
-1.  Rename the `config/default.example.yaml` file to `config/default.yaml`
+1.  Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. `cp config/default.example.yaml config/default.yaml`
 1.  Update the ``<PLACEHOLDERS>`` according to your setup
-1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
+1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run test` (testing)
 1.  The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
 Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
@@ -125,6 +128,7 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 <sup>\* as of Sep. 2, 2014. Number will become increasingly out of date as time goes on</sup>
 
 <sup>\** `first appearance` date formatting can be different </sup>
+ 
 
 #### Example Output
 ```json
@@ -171,7 +175,9 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 
 The base endpoints allow for retrieving data and applying a series of filters to that data to accomplish whatever you need with an array or JSON objects. They can be used in combination with one another
 
-:warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality.
+:warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality as API filters.
+
+Diacritic safe search e.g. `tefe holland` === `tefé holland` however, `tefé holland` != `tefe holland`
 
 #### Filter options
 | Variable Name | Variable | Default  | Description                                                                                                            |
@@ -192,6 +198,8 @@ The base endpoints allow for retrieving data and applying a series of filters to
 <sup>\** Only available on /{character} endpoints</sup>
 
 <sup>† Does not apply when sorting on column/header which contains a null value, records with null values are removed</sup>
+
+:warning: The API will ignore any non sanctioned or misspelled filter options (e.g. bimit) and **WILL NOT** throw an error but will return an empty array.
 
 
 ##### Examples

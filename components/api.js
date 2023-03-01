@@ -99,11 +99,15 @@ this.srchExtended = `
    {
      "character": "spider-man,iron man"
    }
+
    OR
+
    {
      "character": ["spider-man", "iron man"]
    }
   </code></pre>
+
+
 **h: h can be a string, or an array (preferred)** e.g.
   <pre><code>
    {
@@ -114,6 +118,8 @@ this.srchExtended = `
      "h": ["name", "appearances", "year"]
    }
   </code></pre>
+
+
 **s: can be a string, an object, array of strings, or an array of objects (preferred)** e.g.
   <pre><code>
   {
@@ -228,13 +234,12 @@ this.srchExtended = `
     }
     config.format = format;
     if (h) {
-      let val;
+      let val = '';
       if (this.isStr(h)) {
         val = h.split(',').map(v => v.toString());
-      } else if (h instanceof Array) {
+      }
+      if (h instanceof Array) {
         val = h;
-      } else {
-        val = '';
       }
       config.h = val;
     }
@@ -405,20 +410,21 @@ this.srchExtended = `
 
     if (validParams.includes('characters')) {
       const str = Joi.string()
-        .description('Character(s) to search for')
+        .description('Character(s) to search for.')
         .label('String')
         .optional()
+
         .regex(commaSepRegEx);
       const arryStr = Joi.string()
         .label('characters: characters');
       const arry = Joi.array()
-        .description('Character(s) to search for. Either a string or Array of strings')
+        .description('Character(s) to search for. Either a string or Array of strings.')
         .items(arryStr)
         .label('characters: array of characters');
 
       const c = (method === 'post') ? Joi.alternatives().try(arry, arryStr) : Joi.alternatives().try(str);
       params = params.append({
-        characters: c.description('Character(s) to search for. Either a string or Array of strings'),
+        characters: c.description('Character(s) to search for. Either a string or Array of strings.'),
       });
     }
 
@@ -498,7 +504,7 @@ this.srchExtended = `
       params = params.append({
         random: Joi.boolean()
           .allow('')
-          .description(`Returns array of random characters based on limit. ${tfText}`)
+          .description(`Returns array of random superheros based on limit. ${tfText}`)
           .optional()
           .valid(true, false),
       });
@@ -515,7 +521,7 @@ this.srchExtended = `
         .items(obj)
         .label('s: array of sort objects');
       const str = Joi.string()
-        .description('Columns to sort on')
+        .description('Columns to sort on.')
         .example('s=name:asc')
         .label('s: string representation of sort object')
         .optional()

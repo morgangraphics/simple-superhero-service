@@ -46,7 +46,7 @@ const server = hapi.server({
       origin: env.ORIGIN || '*',
       headers: ['Accept', 'Content-Type'],
       // additionalHeaders = access-control-allow-headers
-      // additionalHeaders: [],
+      exposedHeaders: ['x-simple-superhero-service'],
     },
     payload: {
       allow: ['application/json', 'application/*+json'],
@@ -55,7 +55,6 @@ const server = hapi.server({
   },
   tls: true,
 });
-
 
 
 if (env.SWAGGER_ENABLED) {

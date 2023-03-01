@@ -20,8 +20,14 @@ const validBaseQParams = ['characters', 'format', 'h', 'help', 'limit', 'nulls',
  */
 const validCharQParams = ['characters', 'format', 'h', 'help', 'limit', 'nulls', 'pretty', 'prune', 's'];
 
+/**
+ * GLobal Variable declared for x-simple-superhero-service header
+ */
+global.VERSION = process.env.npm_package_version;
+
+
 module.exports = {
   cache,
   validBaseQParams,
-  validCharQParams,
+  validCharQParams
 };

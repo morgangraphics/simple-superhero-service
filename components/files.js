@@ -3,6 +3,7 @@ const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
 const firstBy = require('thenby');
+const dcs = require('diacritics');
 
 const common = require('../api/_common');
 
@@ -29,11 +30,11 @@ class FileUtils {
      */
     this.config = '';
     /**
-     * buffr is an attempt help reduce the number of overlaps on multiple requests by generating
+     * buffer is an attempt help reduce the number of overlaps on multiple requests by generating
      * a unique list form a larger pool of numbers
      * @type {Number}
      */
-    this.limit_buffer = 200;
+    this.limit_buffer = 300;
     /**
      * Seed needed for randomization freezing
      * @type {Int}
@@ -57,12 +58,21 @@ class FileUtils {
    *
    * const s = ['superman', 'super man', 'super-man']
    * const e = ['super', 'man']
+   * const x = ["bat"]
    * If s.length > 0 and item.name includes any entry in s
    * OR
-   * If e.length > 0 and item.name includes any entry in e
+   * If e.length > 0 and item.name includes every entry in e
+   * 
    * AND
-   * Doesn't contain any exclusions
-   * add to search array
+   * 
+   * Doesn't contain anything in x 
+   * 
+   * Then add to search array
+   * 
+   * Diacritic safe search (tefe === tefé) however, (tefé !== tefe)
+   * If name includes any diacritic characters e.g. Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ ą ć ę ł ń ó ś ź ż ä ö ü ß
+   * Convert them to their Latin equivalent, ensure that all entries are unique (Set) 
+   * and search for matches
    *
    * @return {Array} Of matching characters
    */
@@ -71,11 +81,13 @@ class FileUtils {
     const s = this.config.characters.some;
     const e = this.config.characters.every;
     const x = this.config.characters.exclude;
+    console.log(this.config);
     common.cache[this.universe].forEach(itm => {
       // See above for explanation
-      if (((s.length > 0 && s.some(str => itm.name.includes(str)))
-            || (e.length > 0 && e.every(str => itm.name.includes(str))))
-         && !x.some(str => itm.name.includes(str))) {
+      const sa = new Set([itm.name, dcs.remove(itm.name)]);
+      if (((s.length > 0 && s.some(itm => [...sa].some(subitm => subitm.includes(itm))))
+            || (e.length > 0 && e.every(itm => [...sa].every(subitm => subitm.includes(itm)))))
+         && !x.some(itm => [...sa].some(subitm => subitm.includes(itm)))) {
         dataInPlay.push(itm);
       }
     });
@@ -298,7 +310,7 @@ class FileUtils {
     if (a === b) {
       return 0;
     }
-    return a.localeCompare(b, 'en', { ignorePunctuation: true });
+    return a.localeCompare(b, 'en', { sensitivity: 'base', ignorePunctuation: true });
   }
 }
 

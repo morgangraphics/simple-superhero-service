@@ -21,14 +21,18 @@ const marvelGetBase = {
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
-        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+        response = handlr.response(hlp)
+        .header('Content-Type', 'text/plain')
+        .header('x-simple-superhero-service', VERSION);
       }
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
           .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
-            return handlr.response(d).header('Content-Type', 'application/json');
+            return handlr.response(d)
+            .header('Content-Type', 'application/json')
+            .header('x-simple-superhero-service', VERSION);
           })
           .catch(err => Boom.badRequest(err.message))
           .finally(() => { });
@@ -56,14 +60,18 @@ const marvelPostBase = {
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
-        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+        response = handlr.response(hlp)
+        .header('Content-Type', 'text/plain')
+        .header('x-simple-superhero-service', VERSION);
       }
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
           .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
-            return handlr.response(d).header('Content-Type', 'application/json');
+            return handlr.response(d)
+            .header('Content-Type', 'application/json')
+            .header('x-simple-superhero-service', VERSION);
           })
           .catch(err => Boom.badRequest(err.message))
           .finally(() => { });
@@ -94,14 +102,18 @@ const marvelGetByCharacter = {
       let response;
       if ('help' in options) {
         const hlp = (!options.characters) ? api.helpBase : api.helpSearch();
-        response = handlr.response(hlp).header('Content-Type', 'text/plain');
+        response = handlr.response(hlp)
+        .header('Content-Type', 'text/plain')
+        .header('x-simple-superhero-service', VERSION);
       }
       if (!('help' in options)) {
         const config = api.handleConfig(options);
         response = file.readCharacterFile(config)
           .then(data => {
             const d = config.pretty ? JSON.stringify(data, null, 4) : data;
-            return handlr.response(d).header('Content-Type', 'application/json');
+            return handlr.response(d)
+            .header('Content-Type', 'application/json')
+            .header('x-simple-superhero-service', VERSION);
           })
           .catch(err => Boom.badRequest(err.message))
           .finally(() => { });

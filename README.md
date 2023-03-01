@@ -58,7 +58,7 @@ The service itself and the data contained within service may be useful for testi
 ![Simple Superhero Service](img/swagger.png)
 
 ### Requirements
-node.js (12+)
+node.js (14+)
 
 pm2 `npm install pm2`
 

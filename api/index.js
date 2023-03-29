@@ -1,11 +1,13 @@
 const healthcheck = require('./healthcheck');
 const dc = require('./dc');
 const marvel = require('./marvel');
+const preflight = require('./preflight');
 
 const routes = [
-  ...healthcheck,
-  ...dc,
-  ...marvel,
+    ...preflight,
+    ...healthcheck,
+    ...dc,
+    ...marvel,
 ];
 
 module.exports = routes;

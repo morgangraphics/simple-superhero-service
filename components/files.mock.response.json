@@ -59,21 +59,7 @@
         "first appearance": "nov-50",
         "year": 1950
     },
-    {
-        "page_id": 2458,
-        "name": "benjamin grimm (earth-616)",
-        "urlslug": "/benjamin_grimm_(earth-616)",
-        "id": "public identity",
-        "align": "good characters",
-        "eye": "blue eyes",
-        "hair": "no hair",
-        "sex": "male characters",
-        "gsm": null,
-        "alive": "living characters",
-        "appearances": 2255,
-        "first appearance": "nov-61",
-        "year": 1961
-    },
+
     {
         "page_id": 2166,
         "name": "reed richards (earth-616)",
@@ -86,6 +72,21 @@
         "gsm": null,
         "alive": "living characters",
         "appearances": 2072,
+        "first appearance": "nov-61",
+        "year": 1961
+    },
+    {
+        "page_id": 2458,
+        "name": "benjamin grimm (earth-616)",
+        "urlslug": "/benjamin_grimm_(earth-616)",
+        "id": "public identity",
+        "align": "good characters",
+        "eye": "blue eyes",
+        "hair": "no hair",
+        "sex": "male characters",
+        "gsm": null,
+        "alive": "living characters",
+        "appearances": 2255,
         "first appearance": "nov-61",
         "year": 1961
     },
@@ -208,5 +209,20 @@
         "appearances": null,
         "first appearance": "jul-80",
         "year": 1980
+    },
+    {
+        "page_id": 1863,
+        "name": "susan storm (earth-616)",
+        "urlslug": "/susan_storm_(earth-616)",
+        "id": "public identity",
+        "align": "good characters",
+        "eye": "blue eyes",
+        "hair": "blond hair",
+        "sex": "female characters",
+        "gsm": null,
+        "alive": "living characters",
+        "appearances": 1713,
+        "first appearance": "nov-61",
+        "year": 1961
     }
 ]

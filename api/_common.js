@@ -3,9 +3,9 @@
  * @type {Object}
  */
 const cache = {
-  dc: [],
-  marvel: [],
-  search: [],
+    dc: [],
+    marvel: [],
+    search: [],
 };
 
 /**
@@ -23,11 +23,21 @@ const validCharQParams = ['characters', 'format', 'h', 'help', 'limit', 'nulls',
 /**
  * GLobal Variable declared for x-simple-superhero-service header
  */
-global.VERSION = process.env.npm_package_version;
+const VERSION = process.env.npm_package_version;
 
+/**
+ * Quick and dirty Deep Copy function
+ * @param {Object} data Object we want to copy
+ * @returns {Object} deep copy of Object
+ */
+function copy(data) {
+    return JSON.parse(JSON.stringify(data));
+}
 
 module.exports = {
-  cache,
-  validBaseQParams,
-  validCharQParams
+    cache,
+    copy,
+    validBaseQParams,
+    validCharQParams,
+    VERSION,
 };

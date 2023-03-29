@@ -1,7 +1,6 @@
-const api = require('./api.js');
+const api = require('./api');
 
 describe('Testing api.js  - Class instaniation Marvel', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('class instantiated', () => {
@@ -41,52 +40,41 @@ describe('Testing api.js  - Class instaniation Marvel', () => {
     });
 
     test('constructor - universe', () => {
-        expect(c.universe).toEqual("marvel");
+        expect(c.universe).toEqual('marvel');
     });
-
 });
 
 describe('Testing api.js - Class instaniation DC', () => {
-
     test('class instantiated - dc', () => {
         const c = new api.ApiUtils('dc');
-         expect(c.universe).toEqual("dc");
+        expect(c.universe).toEqual('dc');
     });
-
 });
 
 describe('Testing api.js - Class instaniation DarkHorse', () => {
-
     test('class instantiated - darkhorse', () => {
         const c = new api.ApiUtils('darkhorse');
-        expect(c.universe).toEqual("darkhorse");
+        expect(c.universe).toEqual('darkhorse');
     });
-
 });
 
 describe('method - helpSearch() Marvel', () => {
-
     test('Character Search is renderend differently - Marvel', () => {
         const c = new api.ApiUtils('marvel');
         expect(c.helpSearch()).toEqual(expect.stringContaining('iron man'));
         expect(c.helpSearch()).toEqual(expect.stringContaining('spider-man'));
     });
-
 });
 
 describe('method - helpSearch() DC', () => {
-
     test('Character Search is renderend differently - DC', () => {
         const c = new api.ApiUtils('dc');
         expect(c.helpSearch()).toEqual(expect.stringContaining('superman'));
         expect(c.helpSearch()).toEqual(expect.stringContaining('batman'));
     });
-
 });
 
-
 describe('method - commonText() Marvel', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('Marvel specific documentation rendering', () => {
@@ -99,28 +87,26 @@ describe('method - commonText() Marvel', () => {
         expect(bn).toEqual(
             expect.arrayContaining([
                 expect.stringContaining('Marvel'),
-            ])
+            ]),
         );
 
         expect(c.commonText()).toHaveProperty('character');
         expect(c.commonText()).toHaveProperty('character.description');
         expect(c.commonText()).toHaveProperty('character.description', expect.stringContaining('Marvel'));
-        
+
         const cn = c.commonText().character.notes;
         expect(cn).toEqual(
             expect.arrayContaining([
                 expect.stringContaining('iron man'),
-                expect.stringContaining('spider-man')
-            ])
+                expect.stringContaining('spider-man'),
+            ]),
         );
 
         expect(c.commonText()).toHaveProperty('character.notesExtended');
     });
-
 });
 
 describe('method - commonText() DC', () => {
-
     const c = new api.ApiUtils('dc');
 
     test('DC specific documentation rendering', () => {
@@ -133,43 +119,39 @@ describe('method - commonText() DC', () => {
         expect(bn).toEqual(
             expect.arrayContaining([
                 expect.stringContaining('DC'),
-            ])
+            ]),
         );
 
         expect(c.commonText()).toHaveProperty('character');
         expect(c.commonText()).toHaveProperty('character.description');
         expect(c.commonText()).toHaveProperty('character.description', expect.stringContaining('DC'));
-        
+
         const rt = c.commonText().character.notes;
         expect(rt).toEqual(
             expect.arrayContaining([
                 expect.stringContaining('superman'),
-                expect.stringContaining('batman')
-            ])
+                expect.stringContaining('batman'),
+            ]),
         );
 
         expect(c.commonText()).toHaveProperty('character.notesExtended');
     });
-
 });
 
 describe('method -  direction()', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('direction utility', () => {
         expect(c.direction('asc')).toEqual(1);
         expect(c.direction('desc')).toEqual(-1);
     });
-
 });
 
 describe('method - handleConfig()', () => {
-
     const c = new api.ApiUtils('marvel');
 
     const config1 = { limit: 10, universe: 'marvel' };
-    
+
     const config2 = {
         h: 'name,first appearance,gsm,appearances,sex,year',
         s: 'year:asc,appearances:desc',
@@ -178,26 +160,26 @@ describe('method - handleConfig()', () => {
         random: -1,
         seed: -1,
         limit: 100,
-        universe: 'dc'
-      };
+        universe: 'dc',
+    };
 
     const config3 = {
         characters: 'man,-woman',
-        h: [ 'name', 'first appearance', 'appearances', 'sex', 'year' ],
+        h: ['name', 'first appearance', 'appearances', 'sex', 'year'],
         s: [
-          { column: 'year', sort: 'asc' },
-          { column: 'appearances', sort: 'desc' }
+            { column: 'year', sort: 'asc' },
+            { column: 'appearances', sort: 'desc' },
         ],
         random: false,
         limit: 100,
-        universe: 'dc'
-      };
-    
-      const config4 = {
-          random: true,
-          seed: true,
-          universe: 'dc'
-      }
+        universe: 'dc',
+    };
+
+    const config4 = {
+        random: true,
+        seed: true,
+        universe: 'dc',
+    };
 
     test('config 1', () => {
         const cf1 = c.handleConfig(config1);
@@ -268,68 +250,57 @@ describe('method - handleConfig()', () => {
         expect(cf1).not.toHaveProperty('s');
         expect(cf1).toHaveProperty('universe', 'dc');
     });
-
 });
 
 describe('method - handleParamTypes()', () => {
-
     const c = new api.ApiUtils('dc');
 
     test('handlePramTypes utility', () => {
         expect(c.handleParamTypes('string1,string2')).toEqual(expect.arrayContaining(['string1', 'string2']));
-        expect(c.handleParamTypes(['string1','string2'])).toEqual(expect.arrayContaining(['string1', 'string2']));
-        
-        const obj = c.handleParamTypes({'string1':'string2'});
+        expect(c.handleParamTypes(['string1', 'string2'])).toEqual(expect.arrayContaining(['string1', 'string2']));
+
+        const obj = c.handleParamTypes({ string1: 'string2' });
         expect(obj[0]).toHaveProperty('string1', 'string2');
     });
-
 });
 
-
 describe('method - isStr()', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('isStr utility', () => {
         expect(c.isStr('1')).toEqual(true);
         expect(c.isStr(1)).toEqual(false);
     });
-
 });
 
 describe('method - permutate()', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('permutation utility', () => {
         expect(c.permutate('spider-man')).toEqual(expect.arrayContaining(['spider-man', 'spider man', 'spiderman']));
         expect(c.permutate(['spider-man', 'wonder woman'])).toEqual(expect.arrayContaining([
-            'spider-man', 
-            'spider man', 
+            'spider-man',
+            'spider man',
             'spiderman',
-            'wonder woman', 
-            'wonder-woman', 
-            'wonderwoman'
+            'wonder woman',
+            'wonder-woman',
+            'wonderwoman',
         ]));
     });
-
 });
 
 describe('method - popText()', () => {
-
     const c = new api.ApiUtils('marvel');
 
     test('popText utility', () => {
-        expect(c.popText('base.description')).toEqual(expect.stringContaining('Marvel'))
+        expect(c.popText('base.description')).toEqual(expect.stringContaining('Marvel'));
     });
-
 });
 
 describe('method - searchObject()', () => {
-
     const c = new api.ApiUtils('dc');
-    const so1 = c.searchObj([ 'grösshorn', 'growler', 'grover', '-cleveland', 'züm', 'zuggernaut' ])
-    const so2 = c.searchObj([ 'bat+man', '-earth' ])
+    const so1 = c.searchObj(['grösshorn', 'growler', 'grover', '-cleveland', 'züm', 'zuggernaut']);
+    const so2 = c.searchObj(['bat+man', '-earth']);
 
     test('searchObject utility - Config 1', () => {
         expect(so1).toHaveProperty('some', expect.arrayContaining(['zuggernaut', 'züm', 'grover', 'growler', 'grösshorn']));
@@ -341,18 +312,14 @@ describe('method - searchObject()', () => {
         expect(so2).toHaveProperty('some', []);
         expect(so2).toHaveProperty('every', expect.arrayContaining(['bat', 'man']));
         expect(so2).toHaveProperty('exclude', expect.arrayContaining(['earth']));
-    
     });
-
 });
 
-
 describe('method - sortObject()', () => {
-
     const c = new api.ApiUtils('dc');
     const so1 = c.sortObj('name:desc');
     const so2 = c.sortObj('year:asc,appearances:desc');
-    const so3 = c.sortObj({'column': 'year', 'sort': 'asc'});
+    const so3 = c.sortObj({ column: 'year', sort: 'asc' });
     const so4 = c.sortObj('name');
 
     test('sortObject utility - Config 1 - String', () => {
@@ -376,7 +343,6 @@ describe('method - sortObject()', () => {
         expect(so4[0]).toHaveProperty('column', 'name');
         expect(so4[0]).toHaveProperty('sort', 1);
     });
-
 });
 
 /**
@@ -386,28 +352,26 @@ describe('method - sortObject()', () => {
  * it's very highly nested and would be brittle to test in depth
  */
 describe('method - validateParams()', () => {
-
     const c = new api.ApiUtils('dc');
-    
+
     test('validateParams utility - Config 1 - characters, format', () => {
         const validBaseQParams = ['characters', 'format'];
-        
+
         // POST request applies 1 JOI alternatives (str)
-        const so1  = c.validateParams(validBaseQParams, 'get');
+        const so1 = c.validateParams(validBaseQParams, 'get');
         expect(so1).toHaveProperty('_ids._byKey');
-        const keys = [...so1['_ids']['_byKey'].keys()];
-        expect(keys).toEqual(expect.arrayContaining(validBaseQParams))
-        
-        const char = so1['_ids']['_byKey'].get('characters')
+        const keys = [...so1._ids._byKey.keys()];
+        expect(keys).toEqual(expect.arrayContaining(validBaseQParams));
+
+        const char = so1._ids._byKey.get('characters');
         expect(char).toHaveProperty('id', 'characters');
         expect(char).toHaveProperty('schema.$_terms.matches.length', 1);
-    
+
         // POST request applies 2 JOI alternatives (arry, arryStr)
         const so2 = c.validateParams(['characters'], 'post');
-        const char2 = so2['_ids']['_byKey'].get('characters');
+        const char2 = so2._ids._byKey.get('characters');
         expect(char2).toHaveProperty('id', 'characters');
         expect(char2).toHaveProperty('schema.$_terms.matches.length', 2);
-    
     });
 
     test('validateParams utility - Config 2 - h, help', () => {
@@ -416,38 +380,38 @@ describe('method - validateParams()', () => {
         // POST request applies 1 JOI alternatives (str)
         const so1 = c.validateParams(validBaseQParams, 'get');
         expect(so1).toHaveProperty('_ids._byKey');
-        const keys = [...so1['_ids']['_byKey'].keys()];
-        expect(keys).toEqual(expect.arrayContaining(validBaseQParams))
-        
-        const char1 = so1['_ids']['_byKey'].get('h')
+        const keys = [...so1._ids._byKey.keys()];
+        expect(keys).toEqual(expect.arrayContaining(validBaseQParams));
+
+        const char1 = so1._ids._byKey.get('h');
         expect(char1).toHaveProperty('id', 'h');
         expect(char1).toHaveProperty('schema._flags.description', 'Headers to display. Either a string or Array of strings');
         expect(char1).toHaveProperty('schema.$_terms.matches.length', 1);
 
-        const char2 = so1['_ids']['_byKey'].get('help');
+        const char2 = so1._ids._byKey.get('help');
         expect(char2).toHaveProperty('id', 'help');
         expect(char2).toHaveProperty('schema._flags.description', expect.stringContaining('List available options.'));
-    
-         // POST request applies 2 JOI alternatives (arry, str)
-         const so3 = c.validateParams(['h'], 'post');
-         const char3 = so3['_ids']['_byKey'].get('h');
-         expect(char3).toHaveProperty('id', 'h');
-         expect(char3).toHaveProperty('schema.$_terms.matches.length', 2);
+
+        // POST request applies 2 JOI alternatives (arry, str)
+        const so3 = c.validateParams(['h'], 'post');
+        const char3 = so3._ids._byKey.get('h');
+        expect(char3).toHaveProperty('id', 'h');
+        expect(char3).toHaveProperty('schema.$_terms.matches.length', 2);
     });
 
     test('validateParams utility - Config 3 - limit, nulls', () => {
         const validBaseQParams = ['limit', 'nulls'];
         const so1 = c.validateParams(validBaseQParams, 'get');
-        
+
         expect(so1).toHaveProperty('_ids._byKey');
-        const keys = [...so1['_ids']['_byKey'].keys()];
-        expect(keys).toEqual(expect.arrayContaining(validBaseQParams))
-        
-        const char1 = so1['_ids']['_byKey'].get('limit')
+        const keys = [...so1._ids._byKey.keys()];
+        expect(keys).toEqual(expect.arrayContaining(validBaseQParams));
+
+        const char1 = so1._ids._byKey.get('limit');
         expect(char1).toHaveProperty('id', 'limit');
         expect(char1).toHaveProperty('schema._flags.description', 'Limit result set. \'0\' for no limit');
 
-        const char2 = so1['_ids']['_byKey'].get('nulls')
+        const char2 = so1._ids._byKey.get('nulls');
         expect(char2).toHaveProperty('id', 'nulls');
         expect(char2).toHaveProperty('schema._flags.description', expect.stringContaining('Sort null values first or last in order.'));
     });
@@ -455,16 +419,16 @@ describe('method - validateParams()', () => {
     test('validateParams utility - Config 4 - pretty, prune', () => {
         const validBaseQParams = ['pretty', 'prune'];
         const so1 = c.validateParams(validBaseQParams, 'get');
-        
+
         expect(so1).toHaveProperty('_ids._byKey');
-        const keys = [...so1['_ids']['_byKey'].keys()];
-        expect(keys).toEqual(expect.arrayContaining(validBaseQParams))
-        
-        const char1 = so1['_ids']['_byKey'].get('pretty')
+        const keys = [...so1._ids._byKey.keys()];
+        expect(keys).toEqual(expect.arrayContaining(validBaseQParams));
+
+        const char1 = so1._ids._byKey.get('pretty');
         expect(char1).toHaveProperty('id', 'pretty');
         expect(char1).toHaveProperty('schema._flags.description', expect.stringContaining('Pretty print the result set.'));
 
-        const char2 = so1['_ids']['_byKey'].get('prune')
+        const char2 = so1._ids._byKey.get('prune');
         expect(char2).toHaveProperty('id', 'prune');
         expect(char2).toHaveProperty('schema._flags.description', expect.stringContaining('Remove keys with null values.'));
     });
@@ -472,29 +436,26 @@ describe('method - validateParams()', () => {
     test('validateParams utility - Config 4 - random, sort, seed', () => {
         const validBaseQParams = ['random', 's', 'seed'];
 
-         // POST request applies 3 JOI alternatives (str, arry, obj)
+        // POST request applies 3 JOI alternatives (str, arry, obj)
         const so1 = c.validateParams(validBaseQParams, 'get');
-        
+
         expect(so1).toHaveProperty('_ids._byKey');
-        const keys = [...so1['_ids']['_byKey'].keys()];
-        expect(keys).toEqual(expect.arrayContaining(validBaseQParams))
-        
-        const char1 = so1['_ids']['_byKey'].get('random')
+        const keys = [...so1._ids._byKey.keys()];
+        expect(keys).toEqual(expect.arrayContaining(validBaseQParams));
+
+        const char1 = so1._ids._byKey.get('random');
         expect(char1).toHaveProperty('id', 'random');
         expect(char1).toHaveProperty('schema._flags.description', expect.stringContaining('Returns array of random superheros based on limit.'));
 
         // POST request applies 3 JOI alternatives (arry, obj, str)
         const so2 = c.validateParams(['s'], 'post');
 
-        const char2 = so2['_ids']['_byKey'].get('s')
+        const char2 = so2._ids._byKey.get('s');
         expect(char2).toHaveProperty('id', 's');
         expect(char2).toHaveProperty('schema.$_terms.matches.length', 3);
 
-
-        const char3 = so1['_ids']['_byKey'].get('seed')
+        const char3 = so1._ids._byKey.get('seed');
         expect(char3).toHaveProperty('id', 'seed');
         expect(char3).toHaveProperty('schema._flags.description', expect.stringContaining('Keep the same random characters on multiple requests.'));
     });
-
-
 });

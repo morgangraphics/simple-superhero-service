@@ -55,7 +55,7 @@ commands:
       - run:
           name: npm install
           command: |
-            npm ci
+            npm install
    
  
 jobs:

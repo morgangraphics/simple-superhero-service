@@ -45,9 +45,9 @@ commands:
           command: |
             echo "========================================="
             VERSION="echo $(cat package.json) | jq -r '.version'"
-            echo ${VERSION}
+            echo VERSION=${VERSION}
             TAG="<< parameters.project_name >>:${VERSION}"
-            echo ${TAG}
+            echo TAG=${TAG}
             export DOCKER_IMAGE_TAG=${TAG}
       - run:
           name: verify

@@ -1,0 +1,109 @@
+---
+version: 2.1
+
+orbs:
+  jq: circleci/jq@2.2.0
+
+commands:
+
+  setup-docker-build-environment:
+    description: set the environment variables needed within the docker build environment in circleci
+    steps:
+      - run:
+          name: set the env var based on branch
+          command: |
+              case "$CIRCLE_BRANCH" in
+                dev|develop)
+                  echo "SETTING DEV ENVIRONMENT VARIABLES"
+                  echo "export SOME_VAR_NAME='dev'" >> "$BASH_ENV"
+                  ;;
+                master)
+                  eecho "SETTING MASTER ENVIRONMENT VARIABLES"
+                  ;;
+                *)
+                  echo "NO ENV VAR SET - DEFAULTING"
+                  echo "export DOCKER_IMAGE_TAG=''" >> "$BASH_ENV"
+                  ;;
+              esac
+
+  build-docker-image:
+    description: Build a docker image for the simple superhero service
+    parameters:
+      project_name:
+        type: string
+      dockerfile_path:
+        type: string
+    steps:
+      - jq/install
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - add_ssh_keys:
+          fingerprints:
+            - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
+      - run:
+          name: set DOCKER_TMAGE_TAG
+          command: DOCKER_IMAGE_TAG=<< parameters.project_name >>:"echo $(cat package.json) | jq -r '.version'"
+      - run:
+          name: Build docker image
+          command: |
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=16 -f << parameters.dockerfile_path >> .
+            
+            
+  npm-install:
+    description: Install project dependencies using the cached deps where possible
+    steps:
+      - run:
+          name: npm install
+          command: |
+            npm ci
+   
+ 
+jobs:
+ 
+  build-sss:
+    docker:
+      - image: google/cloud-sdk:${GCLOUD_SDK_VERSION}
+    steps:
+      - checkout
+      - build-docker-image:
+          project_name: ${CIRCLE_PROJECT_REPONAME}
+          dockerfile_path: ./Dockerfile
+
+  tests-cors:
+    docker:
+      - image: cypress/base:12.18.0
+    steps:
+      - checkout
+      - npm-install
+      - run:
+          name: valid cors test
+          command: 'npm run test:cors:valid'
+      - run:
+          name: invalid cors test
+          command: 'npm run test:cors:invalid'
+
+  
+workflows:
+  
+  test-build:
+    jobs:
+
+      # =============================================
+      # DEV CONFIG
+      # =============================================
+      - build-sss:
+          name: build sss
+          filters:
+            branches:
+              only:
+                - dev
+      
+      # cors test sss
+      - tests-cors:
+          filters:
+            branches:
+              ignore:
+                - stage
+                - master
+
+ 

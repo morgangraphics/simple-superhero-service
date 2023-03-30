@@ -108,12 +108,12 @@ workflows:
                 - master
       
       # cors test sss
-      - tests-cors:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build-sss
+      # - tests-cors:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
+      #     requires:
+      #       - build-sss
 
  

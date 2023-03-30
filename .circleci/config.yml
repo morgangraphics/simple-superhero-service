@@ -53,10 +53,12 @@ commands:
     description: Install project dependencies using the cached deps where possible
     steps:
       - run:
+          name: where am I
+          command: ls -al
+      - run:
           name: npm install
           command: |
             npm install
-   
  
 jobs:
  

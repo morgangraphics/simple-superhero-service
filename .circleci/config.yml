@@ -42,7 +42,7 @@ commands:
             - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
       - run:
           name: set DOCKER_IMAGE_TAG
-          command: set DOCKER_IMAGE_TAG=<< parameters.project_name >>:"echo $(cat package.json) | jq -r '.version'"
+          command: export DOCKER_IMAGE_TAG=<< parameters.project_name >>:"echo $(cat package.json) | jq -r '.version'"
       - run:
           name: verify
           command: echo $(printenv | sort)
@@ -96,7 +96,6 @@ workflows:
       # DEV CONFIG
       # =============================================
       - build-sss:
-          name: build sss
           filters:
             branches:
               ignore:
@@ -108,5 +107,7 @@ workflows:
             branches:
               ignore:
                 - master
+          requires:
+            - build-sss
 
  

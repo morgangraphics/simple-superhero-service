@@ -41,8 +41,8 @@ commands:
           fingerprints:
             - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
       - run:
-          name: set DOCKER_TMAGE_TAG
-          command: DOCKER_IMAGE_TAG=<< parameters.project_name >>:"echo $(cat package.json) | jq -r '.version'"
+          name: set DOCKER_IMAGE_TAG
+          command: set DOCKER_IMAGE_TAG=<< parameters.project_name >>:"echo $(cat package.json) | jq -r '.version'"
       - run:
           name: Build docker image
           command: |
@@ -52,9 +52,6 @@ commands:
   npm-install:
     description: Install project dependencies using the cached deps where possible
     steps:
-      - run:
-          name: where am I
-          command: ls -al
       - run:
           name: npm install
           command: |
@@ -67,15 +64,17 @@ jobs:
       - image: google/cloud-sdk:${GCLOUD_SDK_VERSION}
     steps:
       - checkout
+      - setup-docker-build-environment
       - build-docker-image:
           project_name: ${CIRCLE_PROJECT_REPONAME}
           dockerfile_path: ./Dockerfile
 
   tests-cors:
     docker:
-      - image: cypress/base:12.18.0
+      - image: ${DOCKER_IMAGE_TAG}
     steps:
       - checkout
+      - setup-docker-build-environment
       - npm-install
       - run:
           name: valid cors test
@@ -97,15 +96,14 @@ workflows:
           name: build sss
           filters:
             branches:
-              only:
-                - dev
+              ignore:
+                - master
       
       # cors test sss
       - tests-cors:
           filters:
             branches:
               ignore:
-                - stage
                 - master
 
  

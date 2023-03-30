@@ -55,7 +55,7 @@ commands:
       - run:
           name: Build docker image
           command: |
-            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG} -f << parameters.dockerfile_path >> .
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=14 -f << parameters.dockerfile_path >> .
             
             
   npm-install:

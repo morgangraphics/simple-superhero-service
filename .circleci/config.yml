@@ -46,13 +46,16 @@ commands:
             VERSION=$(echo $(cat package.json) | jq -r '.version')
             TAG="<< parameters.project_name >>:${VERSION}"
             echo "export DOCKER_IMAGE_TAG='${TAG}'" >> "$BASH_ENV"
+      - run: 
+          name: generate self signed certs
+          command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
       - run:
           name: verify
-          command: echo $(printenv | sort)
+          command: printenv | sort
       - run:
           name: Build docker image
           command: |
-            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=16 -f << parameters.dockerfile_path >> .
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG} -f << parameters.dockerfile_path >> .
             
             
   npm-install:

@@ -43,12 +43,9 @@ commands:
       - run:
           name: set DOCKER_IMAGE_TAG
           command: |
-            echo "========================================="
             VERSION=$(echo $(cat package.json) | jq -r '.version')
-            echo VERSION=${VERSION}
             TAG="<< parameters.project_name >>:${VERSION}"
-            echo TAG=${TAG}
-            export DOCKER_IMAGE_TAG=${TAG}
+            echo "export DOCKER_IMAGE_TAG='${TAG}'" >> "$BASH_ENV"
       - run:
           name: verify
           command: echo $(printenv | sort)

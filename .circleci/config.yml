@@ -38,7 +38,7 @@ commands:
           name: docker run command
           command: |
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
-  
+
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
     steps:
@@ -61,6 +61,15 @@ commands:
                   echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
                   ;;
               esac
+  run-tests:
+    descripption: Run all the tests
+    steps:
+      - run:
+          name: valid cors test
+          command: 'npm run test:cors:valid'
+      - run:
+          name: invalid cors test
+          command: 'npm run test:cors:invalid'
 
   setup-sss-project:
     description: setup simple superhero service specific stuff
@@ -92,20 +101,7 @@ jobs:
           node-version: "14"
       - node/install-packages
       - run-docker-container
-
-
-  tests-cors:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - setup-docker-build-environment
-      - run:
-          name: valid cors test
-          command: 'npm run test:cors:valid'
-      - run:
-          name: invalid cors test
-          command: 'npm run test:cors:invalid'
+      - run-tests
 
   
 workflows:
@@ -129,15 +125,5 @@ workflows:
                 - master
           requires:
             - build-sss
-      
-      # cors test sss
-      - tests-cors:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build-sss
-            - run-sss
 
  

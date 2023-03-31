@@ -6,6 +6,38 @@ orbs:
 
 commands:
 
+  build-docker-image:
+    description: Build a docker image for the simple superhero service
+    parameters:
+      project_name:
+        type: string
+      dockerfile_path:
+        type: string
+    steps:
+      - jq/install
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - add_ssh_keys:
+          fingerprints:
+            - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
+      - run:
+          name: verify
+          command: printenv | sort
+      - run:
+          name: Build and tag docker image
+          command: |
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=14 -f << parameters.dockerfile_path >> .
+            
+  run-docker-container:
+    description: "we've built the container, let's run it for tests"
+    steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - run:
+          name: docker run command
+          command: |
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
+  
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
     steps:
@@ -29,30 +61,7 @@ commands:
                   ;;
               esac
 
-  build-docker-image:
-    description: Build a docker image for the simple superhero service
-    parameters:
-      project_name:
-        type: string
-      dockerfile_path:
-        type: string
-    steps:
-      - jq/install
-      - setup_remote_docker:
-         docker_layer_caching: true
-      - add_ssh_keys:
-          fingerprints:
-            - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
-      - run:
-          name: verify
-          command: printenv | sort
-      - run:
-          name: Build docker image
-          command: |
-            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=14 -f << parameters.dockerfile_path >> .
-            
-            
-  npm-install:
+  setup-npm:
     description: Install project dependencies using the cached deps where possible
     steps:
       - run:
@@ -60,20 +69,6 @@ commands:
           command: |
             npm install
 
-  run-docker-container:
-    description: "we've built the container, let's run it for tests"
-    steps:
-      - setup_remote_docker:
-         docker_layer_caching: true
-      - run:
-          name: docker run command
-          command: |
-            docker image ls
-            echo ==========================
-            printenv | sort
-            echo docker run ${DOCKER_IMAGE_TAG}
-            docker run ${DOCKER_IMAGE_TAG}
-  
   setup-sss-project:
     description: setup simple superhero service specific stuff
     steps:
@@ -101,7 +96,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - run-docker-container
-      - npm-install
+      - setup-npm
 
   tests-cors:
     docker:

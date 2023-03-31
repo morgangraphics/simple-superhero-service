@@ -12,6 +12,9 @@ commands:
       - run:
           name: set the env var based on branch
           command: |
+              DOCKER_IMAGE_VERSION=$(echo $(cat package.json) | jq -r '.version')
+              DOCKER_IMAGE_TAG="${CIRCLE_PROJECT_REPONAME}:${DOCKER_IMAGE_VERSION}"
+              
               case "$CIRCLE_BRANCH" in
                 dev|develop)
                   echo "SETTING DEV ENVIRONMENT VARIABLES"
@@ -22,7 +25,7 @@ commands:
                   ;;
                 *)
                   echo "NO ENV VAR SET - DEFAULTING"
-                  echo "export DOCKER_IMAGE_TAG=''" >> "$BASH_ENV"
+                  echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
                   ;;
               esac
 
@@ -41,15 +44,6 @@ commands:
           fingerprints:
             - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
       - run:
-          name: set DOCKER_IMAGE_TAG
-          command: |
-            VERSION=$(echo $(cat package.json) | jq -r '.version')
-            TAG="<< parameters.project_name >>:${VERSION}"
-            echo "export DOCKER_IMAGE_TAG='${TAG}'" >> "$BASH_ENV"
-      - run: 
-          name: generate self signed certs
-          command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
-      - run:
           name: verify
           command: printenv | sort
       - run:
@@ -65,7 +59,28 @@ commands:
           name: npm install
           command: |
             npm install
- 
+
+  run-docker-container:
+    description: "we've built the container, let's run it for tests"
+    steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - run:
+          name: docker run command
+          command: |
+            docker image ls
+            echo ==========================
+            printenv | sort
+            echo docker run ${DOCKER_IMAGE_TAG}
+            docker run ${DOCKER_IMAGE_TAG}
+  
+  setup-sss-project:
+    description: setup simple superhero service specific stuff
+    steps:
+       - run: 
+          name: generate self signed certs
+          command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
+
 jobs:
  
   build-sss:
@@ -74,17 +89,26 @@ jobs:
     steps:
       - checkout
       - setup-docker-build-environment
+      - setup-sss-project
       - build-docker-image:
           project_name: ${CIRCLE_PROJECT_REPONAME}
           dockerfile_path: ./Dockerfile
 
-  tests-cors:
+  run-sss:
     docker:
-      - image: ${DOCKER_IMAGE_TAG}
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup-docker-build-environment
+      - run-docker-container
       - npm-install
+
+  tests-cors:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
       - run:
           name: valid cors test
           command: 'npm run test:cors:valid'
@@ -107,13 +131,22 @@ workflows:
               ignore:
                 - master
       
+      - run-sss:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+      
       # cors test sss
-      # - tests-cors:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - master
-      #     requires:
-      #       - build-sss
+      - tests-cors:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+            - run-sss
 
  

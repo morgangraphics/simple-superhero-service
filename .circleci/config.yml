@@ -75,6 +75,7 @@ commands:
           name: docker run command
           command: |
             docker image ls
+            echo docker run ${DOCKER_IMAGE_TAG}
             docker run ${DOCKER_IMAGE_TAG}
  
 jobs:

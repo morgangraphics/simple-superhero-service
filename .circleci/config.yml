@@ -13,7 +13,7 @@ commands:
           name: set the env var based on branch
           command: |
               DOCKER_IMAGE_VERSION=$(echo $(cat package.json) | jq -r '.version')
-              DOCKER_IMAGE_TAG="${CIRCLE_PROJECT_REPONAME}:${VERSION}"
+              DOCKER_IMAGE_TAG="${CIRCLE_PROJECT_REPONAME}:${DOCKER_IMAGE_VERSION}"
               
               case "$CIRCLE_BRANCH" in
                 dev|develop)

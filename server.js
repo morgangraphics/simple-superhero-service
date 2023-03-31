@@ -8,6 +8,7 @@ const Vision = require('@hapi/vision');
 const Routes = require('./api/index');
 
 const hapiPlugins = [];
+let env;
 
 /**
  * Default environment configuration options
@@ -15,9 +16,17 @@ const hapiPlugins = [];
  * If needed elsewhere, this will need to be redone
  * @type {[type]}
  */
-const env = config.get(process.env.NODE_ENV || 'development');
+try {
+  env = config.get(process.env.NODE_ENV || 'development');
+} catch (error) {
+  console.warn("Environment file not defined. Attempting to look for environment variables");
+  env = {};
+  env.HOST = process.env.HOST || 'localhost';
+  env.PORT = process.env.PORT || 3000;
+  env.ORIGIN = process.env.ORIGIN || ["*"];
+  env.SWAGGER_ENABLED = true;
+}
 
-console.log('env = ', env)
 
 /**
  * TLS Configuration with Self Signed Certs
@@ -39,15 +48,15 @@ const listener = http2.createSecureServer({
  * @type {[type]}
  */
 const server = hapi.server({
-  host: env.HOST || 'localhost',
+  host: env.HOST,
   listener,
-  port: env.PORT || 3000,
+  port: env.PORT,
   router: {
     stripTrailingSlash: true,
   },
   routes: {
     cors: {
-      origin: env.ORIGIN || ['*'],
+      origin: env.ORIGIN,
       headers: ['Accept', 'Authorization', 'Content-Type'],
       //additionalHeaders = access-control-allow-headers
       exposedHeaders: ['x-simple-superhero-service'],
@@ -89,7 +98,7 @@ if (env.SWAGGER_ENABLED) {
       }
     },
     schemes: ['https'],
-    host: `${env.HOST || 'localhost'}:${env.PORT || 3000}`,
+    host: `${env.HOST}:${env.PORT}`,
     uiCompleteScript: `
       $(document).ready(() => {
         // $('input[name=help],input[name=pretty],input[name=random],input[name=seed]').toggle(false);

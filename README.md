@@ -67,7 +67,7 @@ node.js (14+)
 1.  `cd` into the directory and pull the test submodule `git submodule update --init --recursive`
 1. Then install node.js requirements `npm install`
 1.  Generate a self signed cert 
-`openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
+`openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="`
 1.  Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. 
 `cp config/default.example.yaml config/default.yaml`
 1.  Update the ``<PLACEHOLDERS>`` according to your setup

@@ -19,14 +19,15 @@ let env;
 try {
   env = config.get(process.env.NODE_ENV || 'development');
 } catch (error) {
-  console.warn("Environment file not defined. Attempting to look for environment variables");
+  console.warn("Environment file not defined. Attempting to look for environment variables or set defaults");
   env = {};
   env.HOST = process.env.HOST || 'localhost';
   env.PORT = process.env.PORT || 3000;
   env.ORIGIN = process.env.ORIGIN || ["*"];
-  env.SWAGGER_ENABLED = true;
+  env.SWAGGER_ENABLED = process.env.SWAGGER_ENABLED || true;
 }
 
+console.log('env = ', env);
 
 /**
  * TLS Configuration with Self Signed Certs

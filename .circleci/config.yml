@@ -51,7 +51,15 @@ commands:
           command: |
             docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=14 -f << parameters.dockerfile_path >> .
             
-  
+            
+  npm-install:
+    description: Install project dependencies using the cached deps where possible
+    steps:
+      - run:
+          name: npm install
+          command: |
+            npm install
+
   run-docker-container:
     description: "we've built the container, let's run it for tests"
     steps:
@@ -72,11 +80,6 @@ commands:
        - run: 
           name: generate self signed certs
           command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
-       - run:
-          name: npm install
-          command: |
-            sudo apt-get install -y nodejs
-            npm install
 
 jobs:
  
@@ -98,6 +101,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - run-docker-container
+      - npm-install
 
   tests-cors:
     docker:

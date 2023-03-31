@@ -127,6 +127,8 @@ workflows:
             branches:
               ignore:
                 - master
+          requires:
+            - build-sss
       
       # cors test sss
       - tests-cors:

@@ -7,6 +7,7 @@ orbs:
 
 commands:
 
+  # Build docker image for testing
   build-docker-image:
     description: Build a docker image for the simple superhero service
     parameters:
@@ -15,7 +16,6 @@ commands:
       dockerfile_path:
         type: string
     steps:
-      - jq/install
       - setup_remote_docker:
          docker_layer_caching: true
       - add_ssh_keys:
@@ -46,6 +46,7 @@ commands:
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
     steps:
+      - jq/install
       - run:
           name: set the env var based on branch
           command: |
@@ -73,6 +74,7 @@ commands:
           name: generate self signed certs
           command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
 
+# ======================================== JOBS ========================================
 jobs:
  
   build-sss:
@@ -86,7 +88,7 @@ jobs:
           project_name: ${CIRCLE_PROJECT_REPONAME}
           dockerfile_path: ./Dockerfile
 
-  run-sss:
+  run-sss-valid-origin:
     docker:
       - image: cimg/base:stable
     steps:
@@ -98,6 +100,18 @@ jobs:
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
 
+  run-sss-invalid-origin:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
+      - node/install:
+          node-version: "14"
+      - node/install-packages
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:2111"
+
   tests-cors:
     docker:
       - image: cypress/base:14
@@ -108,12 +122,8 @@ jobs:
           name: valid cors test
           command: |
             ./node_modules/.bin/cypress run
-      
-      # - run:
-      #     name: invalid cors test
-      #     command: 'npm run test:cors:invalid'
 
-  
+#======================================== WORKFLOWS ========================================
 workflows:
   
   test-build:
@@ -128,7 +138,15 @@ workflows:
               ignore:
                 - master
       
-      - run-sss:
+      - run-sss-valid-origin:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+
+      - run-sss-invalid-origin:
           filters:
             branches:
               ignore:
@@ -144,6 +162,7 @@ workflows:
                 - master
           requires:
             - build-sss
-            - run-sss
+            - run-sss-valid-origin
+            - run-sss-invalid-origin
 
  

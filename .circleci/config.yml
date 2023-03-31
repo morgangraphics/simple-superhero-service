@@ -73,7 +73,8 @@ commands:
          docker_layer_caching: true
       - run:
           name: docker run command
-          command: docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
+          command: |
+            docker run --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
  
 jobs:
  

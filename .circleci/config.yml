@@ -75,6 +75,7 @@ commands:
        - run:
           name: npm install
           command: |
+            sudo apt-get install -y nodejs
             npm install
 
 jobs:

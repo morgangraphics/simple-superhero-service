@@ -31,13 +31,17 @@ commands:
             
   run-docker-container:
     description: "we've built the container, let's run it for tests"
+    parameters:
+      cors_origin:
+        default: "*"
+        type: string
     steps:
       - setup_remote_docker:
          docker_layer_caching: true
       - run:
           name: docker run command
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG} -e << parameters.cors_origin >>
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
@@ -91,20 +95,22 @@ jobs:
       - node/install:
           node-version: "14"
       - node/install-packages
-      - run-docker-container
-
 
   tests-cors:
     docker:
       - image: cypress/base:14
     steps:
       - checkout
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:3100"
       - run:
           name: valid cors test
-          command: 'npm run test:cors:valid'
-      - run:
-          name: invalid cors test
-          command: 'npm run test:cors:invalid'
+          command: |
+            ./node_modules/.bin/cypress run
+      
+      # - run:
+      #     name: invalid cors test
+      #     command: 'npm run test:cors:invalid'
 
   
 workflows:

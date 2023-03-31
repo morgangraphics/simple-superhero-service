@@ -17,6 +17,8 @@ const hapiPlugins = [];
  */
 const env = config.get(process.env.NODE_ENV || 'development');
 
+console.log('env = ', env)
+
 /**
  * TLS Configuration with Self Signed Certs
  * allowHTTP1 is needed for Software that does not support
@@ -32,6 +34,8 @@ const listener = http2.createSecureServer({
 /**
  * Hapi Server configuration
  * tls: true is needed to tell hapi.js that TLS is running when you pass in a custom listener
+ * https://github.com/hapijs/hapi/issues/4437 explains the issue in detail, when applying CORS configuration here
+ * you have to explicitly allow ["*"] at the routes you dont need the ORIGIN enforced
  * @type {[type]}
  */
 const server = hapi.server({
@@ -43,10 +47,10 @@ const server = hapi.server({
   },
   routes: {
     cors: {
-      origin: env.ORIGIN || '*',
-      headers: ['Accept', 'Content-Type'],
-      // additionalHeaders = access-control-allow-headers
-      // additionalHeaders: [],
+      origin: env.ORIGIN || ['*'],
+      headers: ['Accept', 'Authorization', 'Content-Type'],
+      //additionalHeaders = access-control-allow-headers
+      exposedHeaders: ['x-simple-superhero-service'],
     },
     payload: {
       allow: ['application/json', 'application/*+json'],
@@ -55,7 +59,6 @@ const server = hapi.server({
   },
   tls: true,
 });
-
 
 
 if (env.SWAGGER_ENABLED) {
@@ -161,6 +164,9 @@ const banner = (server) => {
     await server.start();
     server.route(Routes);
     console.log(banner(server));
+    //console.log('server config = ', server);
+    
+    //console.log('server config = ', server._core.router.routes.get('get').routes[2]);
   } catch (err) {
     console.log(err);
   }
@@ -170,3 +176,6 @@ process.on('unhandledRejection', (err) => {
   console.log(err);
   process.exit(1);
 });
+process.on('SIGHUP', (err) => {
+  console.log(`*^!@4=> Received event: ${err}`)
+})

@@ -3,19 +3,21 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
+    ecmaVersion: 13,
     sourceType: 'module'
   },
   env: {
     browser: true,
+    jest: true,
   },
   extends: [
     'airbnb-base',
     'plugin:security/recommended',
   ],
+  
   // required to lint *.vue files
   plugins: [
-    'html',
+    //'html',
     'security',
   ],
   // check if imports actually resolve
@@ -23,16 +25,9 @@ module.exports = {
   },
   // add your custom rules here
   'rules': {
-    // don't require .vue extension when importing
-    'import/extensions': ['error', 'always', {
-      'js': 'never',
-    }],
-    // allow optionalDependencies
-    'import/no-extraneous-dependencies': ['error', {
-      'optionalDependencies': ['test/unit/index.js']
-    }],
     'arrow-parens': ['error', 'as-needed'],
     // allow debugger during development
+    indent: ['error', 4],
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-underscore-dangle': 0,
     'valid-jsdoc': ['error', {

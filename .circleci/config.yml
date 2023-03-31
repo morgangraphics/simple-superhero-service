@@ -62,7 +62,7 @@ commands:
                   ;;
               esac
   run-tests:
-    descripption: Run all the tests
+    description: Run all the tests
     steps:
       - run:
           name: valid cors test

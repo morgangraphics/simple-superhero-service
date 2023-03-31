@@ -75,6 +75,8 @@ commands:
           name: docker run command
           command: |
             docker image ls
+            echo ==========================
+            printenv | sort
             echo docker run ${DOCKER_IMAGE_TAG}
             docker run ${DOCKER_IMAGE_TAG}
  
@@ -95,7 +97,6 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup-docker-build-environment
       - run-docker-container
       - npm-install
 

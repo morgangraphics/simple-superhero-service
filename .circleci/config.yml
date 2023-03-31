@@ -103,9 +103,11 @@ jobs:
       - image: cypress/base:14
     steps:
       - checkout
+      - node/install-packages
       - run:
           name: valid cors test
-          command: cypress run
+          command: |
+            ./node_modules/.bin/cypress run
       
       # - run:
       #     name: invalid cors test

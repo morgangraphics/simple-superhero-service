@@ -95,14 +95,14 @@ jobs:
       - node/install:
           node-version: "14"
       - node/install-packages
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:3100"
 
   tests-cors:
     docker:
       - image: cypress/base:14
     steps:
       - checkout
-      - run-docker-container:
-          cors_origin: "https://127.0.0.1:3100"
       - run:
           name: valid cors test
           command: |

@@ -105,8 +105,7 @@ jobs:
       - checkout
       - run:
           name: valid cors test
-          command: |
-            ./node_modules/.bin/cypress run
+          command: cypress run
       
       # - run:
       #     name: invalid cors test

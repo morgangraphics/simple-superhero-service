@@ -65,6 +65,13 @@ commands:
           name: npm install
           command: |
             npm install
+
+  run-docker-container:
+    description: "we've built the container, let's run it for tests"
+    steps:
+      - run:
+          name: docker run command
+          command: docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
  
 jobs:
  
@@ -78,13 +85,21 @@ jobs:
           project_name: ${CIRCLE_PROJECT_REPONAME}
           dockerfile_path: ./Dockerfile
 
-  tests-cors:
+  run-sss:
     docker:
-      - image: ${DOCKER_IMAGE_TAG}
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup-docker-build-environment
+      - run-docker-container
       - npm-install
+
+  tests-cors:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
       - run:
           name: valid cors test
           command: 'npm run test:cors:valid'
@@ -107,6 +122,12 @@ workflows:
               ignore:
                 - master
       
+      - run-sss:
+          filters:
+            branches:
+              ignore:
+                - master
+      
       # cors test sss
       - tests-cors:
           filters:
@@ -115,5 +136,6 @@ workflows:
                 - master
           requires:
             - build-sss
+            - run-sss
 
  

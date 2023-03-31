@@ -74,7 +74,8 @@ commands:
       - run:
           name: docker run command
           command: |
-            docker run --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG}
+            docker image ls
+            docker run ${DOCKER_IMAGE_TAG}
  
 jobs:
  

@@ -8,7 +8,7 @@ ARG NODE=14.21.3
 ARG USER=node-user
 ARG NODE_VERSION=$NODE
 ARG NODE_ENV=${NODE_ENV:-development}
-ARG PORT=port
+ARG PORT=${port:-3000}
 
 # ==============================================================================
 # RUN AS ROOT

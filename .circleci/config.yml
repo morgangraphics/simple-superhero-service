@@ -44,7 +44,7 @@ commands:
       - run:
           name: docker run command
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG} -e << parameters.cors_origin >> -e << parameters.port >>
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host -e cors_origin=<< parameters.cors_origin >> -e port=<< parameters.port >> ${DOCKER_IMAGE_TAG}
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci

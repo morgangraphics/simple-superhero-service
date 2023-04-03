@@ -140,6 +140,12 @@ jobs:
       - node/install:
           node-version: "14"
       - node/install-packages
+      - run:
+          name: list docker containers
+          command: docker container ls
+      - run:
+          name: list docker images
+          command: docker image ls
       - run-docker-container
       - run: 
           name: docker logs

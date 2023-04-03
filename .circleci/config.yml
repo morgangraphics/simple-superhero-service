@@ -148,8 +148,11 @@ jobs:
           command: docker image ls
       - run-docker-container
       - run: 
+          name: sleep 5
+          command: sleep 5
+      - run: 
           name: docker logs
-          command: docker logs -f --until=30s ${CIRCLE_PROJECT_REPONAME}
+          command: docker logs ${CIRCLE_PROJECT_REPONAME}
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive

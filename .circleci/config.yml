@@ -141,7 +141,7 @@ jobs:
           node-version: "14"
       - node/install-packages
       - run-docker-container:
-          cors_origin: "[*]"
+          cors_origin: "'*'"
           port: 3000
       - run: 
           name: docker logs

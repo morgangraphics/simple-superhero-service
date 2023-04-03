@@ -46,7 +46,7 @@ describe('OPTIONS Request test', () => {
 
 describe('CORS marvel endpoint', () => {
     // This test should only run if there is a valid CORS ORIGIN
-    if (process.env['cors-valid']) {
+    if (Cypress.env('NODE_ENV') === 'cors-valid') {
         it('marvel endpoint - get - valid-origin', () => {
             axios({
                 method: 'get',
@@ -57,7 +57,8 @@ describe('CORS marvel endpoint', () => {
                 expect(response.data.length).to.equal(5);
             });
         });
-    } else {
+    }
+    if (Cypress.env('NODE_ENV') === 'cors-invalid') {
         it('marvel endpoint - get - invalid-origin', () => {
             axios({
                 method: 'get',

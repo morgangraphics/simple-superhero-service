@@ -8,6 +8,7 @@ ARG NODE=14.21.3
 ARG USER=node-user
 ARG NODE_VERSION=$NODE
 ARG NODE_ENV=${NODE_ENV:-development}
+ARG PORT=port
 
 # ==============================================================================
 # RUN AS ROOT
@@ -42,6 +43,7 @@ USER ${USER}
 ENV NVM_DIR /home/${USER}/.nvm
 ENV PATH $NVM_DIR/versions/node/v${NODE_VERSION}/bin:$PATH
 ENV NODE_ENV ${NODE_ENV}
+ENV PORT ${PORT}
 
 # Set working Directory - This creates the dir as root
 WORKDIR /home/${USER}/service
@@ -57,7 +59,7 @@ RUN sudo chown ${USER}:${USER} ../service \
   && nvm install ${NODE_VERSION} \
   && npm ci --only=production
 
-EXPOSE 3000
+EXPOSE $
 
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
 # https://github.com/Yelp/dumb-init#usage

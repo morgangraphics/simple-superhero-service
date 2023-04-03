@@ -9,8 +9,8 @@
     "start": "npm run service && sleep 5",
     "stop": "./node_modules/.bin/pm2 stop \"simple superhero service\" --silent && ./node_modules/.bin/pm2 delete \"simple superhero service\" --silent",
     "tests": "npm run test:postman && npm run test:unit && npm run test:cors:valid && npm run test:cors:invalid",
-    "test:cors:valid": "NODE_ENV=cors-valid npm run start && ./node_modules/.bin/cypress run && npm run stop",
-    "test:cors:invalid": "NODE_ENV=cors-invalid npm run start && ./node_modules/.bin/cypress run && npm run stop",
+    "test:cors:valid": "NODE_ENV=cors-valid npm run start && NODE_ENV=cors-valid ./node_modules/.bin/cypress run --headed --no-exit && npm run stop",
+    "test:cors:invalid": "NODE_ENV=cors-invalid npm run start NODE_ENV=cors-invalid ./node_modules/.bin/cypress run && npm run stop",
     "test:postman": "npm run start && ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --environment tests/tests/test.postman_environment.json --insecure && npm run stop",
     "test:unit": "./node_modules/.bin/jest"
   },

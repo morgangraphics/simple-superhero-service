@@ -33,7 +33,7 @@ commands:
     description: "we've built the container, let's run it for tests"
     parameters:
       cors_origin:
-        default: "*"
+        default: "'*'"
         type: string
       port:
         default: 3000
@@ -44,7 +44,7 @@ commands:
       - run:
           name: docker run command
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host -e cors_origin=<< parameters.cors_origin >> -e port=<< parameters.port >> ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
@@ -140,9 +140,7 @@ jobs:
       - node/install:
           node-version: "14"
       - node/install-packages
-      - run-docker-container:
-          cors_origin: "'*'"
-          port: 3000
+      - run-docker-container
       - run: 
           name: docker logs
           command: docker logs simple-superhero-service

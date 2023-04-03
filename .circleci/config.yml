@@ -35,13 +35,16 @@ commands:
       cors_origin:
         default: "*"
         type: string
+      port:
+        default: 3000
+        type: integer
     steps:
       - setup_remote_docker:
          docker_layer_caching: true
       - run:
           name: docker run command
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG} -e << parameters.cors_origin >>
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} --network host ${DOCKER_IMAGE_TAG} -e << parameters.cors_origin >> -e << parameters.port >>
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
@@ -99,7 +102,8 @@ jobs:
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
-
+          port: 3000
+  
   run-sss-invalid-origin:
     docker:
       - image: cimg/base:stable
@@ -111,6 +115,7 @@ jobs:
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"
+          port: 3001
 
   tests-cors:
     docker:
@@ -120,12 +125,10 @@ jobs:
       - node/install-packages
       - run:
           name: valid cors test
-          command: |
-            NODE_ENV=cors-valid ./node_modules/.bin/cypress run
+          command: NODE_ENV=cors-valid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3000
       - run:
           name: invalid cors test
-          command: |
-            NODE_ENV=cors-invalid ./node_modules/.bin/cypress run
+          command: NODE_ENV=cors-invalid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3001
 
 #======================================== WORKFLOWS ========================================
 workflows:
@@ -149,7 +152,7 @@ workflows:
                 - master
           requires:
             - build-sss
-
+      
       - run-sss-invalid-origin:
           filters:
             branches:
@@ -167,6 +170,5 @@ workflows:
           requires:
             - build-sss
             - run-sss-valid-origin
-            - run-sss-invalid-origin
 
  

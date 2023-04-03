@@ -134,9 +134,12 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - setup_remote_docker:
-         docker_layer_caching: true
       - checkout
+      - setup-docker-build-environment
+      - setup-sss-project
+      - build-docker-image:
+          project_name: ${CIRCLE_PROJECT_REPONAME}
+          dockerfile_path: ./Dockerfile
       - node/install:
           node-version: "14"
       - node/install-packages
@@ -161,6 +164,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - node/install:
+          node-version: "14"
       - node/install-packages
       - run:
           name: unit tests

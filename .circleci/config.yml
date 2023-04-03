@@ -141,7 +141,7 @@ jobs:
           node-version: "14"
       - node/install-packages
       - run-docker-container:
-          cors_origin: "https://127.0.0.1:3100"
+          cors_origin: "*"
           port: 3000
       - run: 
           name: pull git submodules 
@@ -157,7 +157,7 @@ jobs:
           command: docker image ls
       - run:
           name: newman(postman) tests
-          command: ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --environment tests/tests/test.postman_environment.json
+          command: ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
   
   tests-unit:
     docker:

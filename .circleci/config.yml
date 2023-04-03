@@ -145,7 +145,7 @@ jobs:
           port: 3000
       - run: 
           name: docker logs
-          command: docker logs --follow
+          command: docker logs --follow simple-superhero-service
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive

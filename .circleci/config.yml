@@ -137,12 +137,12 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - setup-sss-project
-      - build-docker-image:
-          project_name: ${CIRCLE_PROJECT_REPONAME}
-          dockerfile_path: ./Dockerfile
       - node/install:
           node-version: "14"
       - node/install-packages
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:3100"
+          port: 3000
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive

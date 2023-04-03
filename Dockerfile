@@ -59,7 +59,7 @@ RUN sudo chown ${USER}:${USER} ../service \
   && nvm install ${NODE_VERSION} \
   && npm ci --only=production
 
-EXPOSE $
+EXPOSE ${PORT}
 
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
 # https://github.com/Yelp/dumb-init#usage

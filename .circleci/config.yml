@@ -76,9 +76,6 @@ commands:
       - run: 
           name: generate self signed certs
           command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
-      - run: 
-          name: pull git submodules 
-          command: git submodule update --recursive --remote
 
 # ======================================== JOBS ========================================
 jobs:
@@ -139,6 +136,9 @@ jobs:
     steps:
       - checkout
       - node/install-packages
+      - run: 
+          name: pull git submodules 
+          command: git submodule update --recursive --remote
       - run:
           name: list directory contents
           command: ls -al tests

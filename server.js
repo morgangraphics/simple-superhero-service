@@ -27,6 +27,9 @@ try {
   env.SWAGGER_ENABLED = process.env.SWAGGER_ENABLED || true;
 }
 
+console.log('env ========+++++++++++++++++++++++++++++= ', process.env.NODE_ENV);
+console.log('env ========+++++++++++++++++++++++++++++= ', env);
+
 /**
  * TLS Configuration with Self Signed Certs
  * allowHTTP1 is needed for Software that does not support

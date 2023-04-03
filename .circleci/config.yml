@@ -137,6 +137,8 @@ jobs:
       - setup_remote_docker:
          docker_layer_caching: true
       - checkout
+      - node/install:
+          node-version: "14"
       - node/install-packages
       - run: 
           name: pull git submodules 

@@ -91,7 +91,7 @@ jobs:
           project_name: ${CIRCLE_PROJECT_REPONAME}
           dockerfile_path: ./Dockerfile
 
-  run-sss-valid-origin:
+  run-sss-valid-origin-container:
     docker:
       - image: cimg/base:stable
     steps:
@@ -104,7 +104,7 @@ jobs:
           cors_origin: "https://127.0.0.1:3100"
           port: 3000
   
-  run-sss-invalid-origin:
+  run-sss-invalid-origin-container:
     docker:
       - image: cimg/base:stable
     steps:
@@ -130,6 +130,26 @@ jobs:
           name: invalid cors test
           command: NODE_ENV=cors-invalid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3001
 
+  tests-functional:
+    docker:
+      - image: cypress/base:14
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: newman(postman) tests
+          command: ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --environment tests/tests/test.postman_environment.json
+  
+  tests-unit:
+    docker:
+      - image: cypress/base:14
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: unit tests
+          command: ./node_modules/.bin/jest
+
 #======================================== WORKFLOWS ========================================
 workflows:
   
@@ -145,7 +165,8 @@ workflows:
               ignore:
                 - master
       
-      - run-sss-valid-origin:
+      # Setup a valid Origin Container (based on server configuration) to run run all the tests
+      - run-sss-valid-origin-container:
           filters:
             branches:
               ignore:
@@ -153,7 +174,8 @@ workflows:
           requires:
             - build-sss
       
-      - run-sss-invalid-origin:
+      # Setup a valid Invrigin Container (based on server configuration) to run CORS tests
+      - run-sss-invalid-origin-container:
           filters:
             branches:
               ignore:
@@ -169,6 +191,25 @@ workflows:
                 - master
           requires:
             - build-sss
-            - run-sss-valid-origin
+            - run-sss-valid-origin-container
+            - run-sss-invalid-origin-container
+
+      - tests-unit:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
+
+      - tests-functional:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
 
  

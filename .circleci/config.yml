@@ -132,8 +132,10 @@ jobs:
 
   tests-functional:
     docker:
-      - image: cypress/base:14
+      - image: cimg/base:stable
     steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
       - checkout
       - node/install-packages
       - run: 
@@ -143,12 +145,18 @@ jobs:
           name: list directory contents
           command: ls -al tests
       - run:
+          name: list docker containers
+          command: docker container ls
+      - run:
+          name: list docker images
+          command: docker image ls
+      - run:
           name: newman(postman) tests
           command: ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --environment tests/tests/test.postman_environment.json
   
   tests-unit:
     docker:
-      - image: cypress/base:14
+      - image: cimg/base:stable
     steps:
       - checkout
       - node/install-packages

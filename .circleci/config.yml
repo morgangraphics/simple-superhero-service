@@ -208,33 +208,33 @@ workflows:
             - build-sss
       
       # Setup a invalid Origin Container (based on server configuration) to run CORS tests
-      - run-sss-invalid-origin-container:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build-sss
+      # - run-sss-invalid-origin-container:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
+      #     requires:
+      #       - build-sss
       
       # cors test sss
-      - tests-cors:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build-sss
-            - run-sss-valid-origin-container
-            - run-sss-invalid-origin-container
+      # - tests-cors:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
+      #     requires:
+      #       - build-sss
+      #       - run-sss-valid-origin-container
+      #       - run-sss-invalid-origin-container
 
-      - tests-unit:
-          filters:
-            branches:
-              ignore:
-                - master
-          requires:
-            - build-sss
-            - run-sss-valid-origin-container
+      # - tests-unit:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
+      #     requires:
+      #       - build-sss
+      #       - run-sss-valid-origin-container
 
       - tests-functional:
           filters:

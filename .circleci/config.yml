@@ -154,11 +154,11 @@ jobs:
       - run:
           name: newman(postman) tests
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 ${DOCKER_IMAGE_TAG}
             sleep 5
             docker logs ${CIRCLE_PROJECT_REPONAME}
             docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
-            #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
+            ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
       - run: 
           name: docker logs
           command: docker logs ${CIRCLE_PROJECT_REPONAME}

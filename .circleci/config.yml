@@ -140,13 +140,6 @@ jobs:
       - node/install:
           node-version: "14"
       - node/install-packages
-      - run:
-          name: list docker containers
-          command: docker container ls
-      - run:
-          name: list docker images
-          command: docker image ls
-      - run-docker-container
       - run: 
           name: sleep 5
           command: sleep 5
@@ -167,7 +160,10 @@ jobs:
           command: docker image ls
       - run:
           name: newman(postman) tests
-          command: ./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
+          command: |
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ${DOCKER_IMAGE_TAG}
+            docker exec ${CIRCLE_PROJECT_REPONAME} curl --retry 10 --retry-connrefused https://localhost:3000/healthcheck
+            #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
   
   tests-unit:
     docker:

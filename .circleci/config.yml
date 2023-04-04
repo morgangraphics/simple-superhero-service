@@ -157,7 +157,7 @@ jobs:
           command: |
             docker create -v /tests -v /node_modules --name test-configs alpine:3.4 /bin/true
             docker cp ./tests test-configs:/tests
-            docker cp ./node_modules test-configs:/node_modules
+            docker cp ./node_modules/. test-configs:/node_modules
             sleep 5
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from test-configs ${DOCKER_IMAGE_TAG}
             sleep 5

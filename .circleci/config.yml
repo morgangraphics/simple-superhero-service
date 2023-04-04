@@ -24,6 +24,9 @@ commands:
       - run:
           name: verify
           command: printenv | sort
+      - run: 
+          name: pull git submodules 
+          command: git submodule update --init --recursive
       - run:
           name: Build and tag docker image
           command: |
@@ -44,7 +47,7 @@ commands:
       - run:
           name: docker run command
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -p 3000:3000 -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
@@ -130,6 +133,11 @@ jobs:
           name: invalid cors test
           command: NODE_ENV=cors-invalid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3001
 
+  # The way CircleCI suggests worksflows is that you push a Docker container to some artifact repository, then pull it, then work with it.
+  # I don't want to be pushing garbage until all the tests pass first which makes interacting with containers hard within the Docker build environemnt
+  # https://circleci.com/docs/building-docker-images/#separation-of-environments suggests that you build and interact with the container 
+  # within the same step
+  
   tests-functional:
     docker:
       - image: cimg/base:stable
@@ -138,28 +146,25 @@ jobs:
          docker_layer_caching: true
       - checkout
       - setup-docker-build-environment
-      - setup-sss-project
       - node/install:
           node-version: "14"
       - node/install-packages
       - run: 
-          name: sleep 5
-          command: sleep 5
-      - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive
       - run:
-          name: list directory contents
-          command: ls -al tests
-      - run:
           name: newman(postman) tests
           command: |
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 ${DOCKER_IMAGE_TAG}
+            docker create -v /tests -v /node_modules --name test-configs alpine:3.4 /bin/true
+            docker cp ./tests test-configs:/tests
+            docker cp ./node_modules/ test-configs:/node_modules
+            sleep 5
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from test-configs ${DOCKER_IMAGE_TAG}
             sleep 5
             docker logs ${CIRCLE_PROJECT_REPONAME}
             docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
-            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -c 'ls -al node_mudules/.bin/'
-            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -c './node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json'
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -c 'ls -al ./node_mudules/.bin/'
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -c './node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
             #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
       - run: 
           name: docker logs

@@ -136,8 +136,7 @@ jobs:
   # The way CircleCI suggests worksflows is that you push a Docker container to some artifact repository, then pull it, then work with it.
   # I don't want to be pushing garbage until all the tests pass first which makes interacting with containers hard within the Docker build environemnt
   # https://circleci.com/docs/building-docker-images/#separation-of-environments suggests that you build and interact with the container 
-  # within the same step
-  
+  # within the same step via the steps below
   tests-functional:
     docker:
       - image: cimg/base:stable
@@ -157,23 +156,16 @@ jobs:
           command: |
             docker create -v /tests -v /node_modules --name test-configs alpine:3.4 /bin/true
             docker cp ./tests test-configs:/tests
+            docker cp ./node_modules/. test-configs:/node_modules
             sleep 5
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from test-configs ${DOCKER_IMAGE_TAG}
             sleep 5
-            docker logs ${CIRCLE_PROJECT_REPONAME}
-            docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
-            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ci 'ls -al ./node_mudules/.bin/'
-            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ci 'npm install newman@latest && ./node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
+            #docker logs ${CIRCLE_PROJECT_REPONAME}
+            #docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'ls -al ./node_mudules'
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'ls -al ./node_mudules/.bin'
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic './node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
             #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
-      - run: 
-          name: docker logs
-          command: docker logs ${CIRCLE_PROJECT_REPONAME}
-      - run:
-          name: list docker containers
-          command: docker container ls
-      - run:
-          name: list docker images
-          command: docker image ls
 
   tests-unit:
     docker:

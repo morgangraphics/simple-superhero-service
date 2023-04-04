@@ -157,14 +157,13 @@ jobs:
           command: |
             docker create -v /tests -v /node_modules --name test-configs alpine:3.4 /bin/true
             docker cp ./tests test-configs:/tests
-            docker cp ./node_modules/. test-configs:/node_modules
             sleep 5
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from test-configs ${DOCKER_IMAGE_TAG}
             sleep 5
             docker logs ${CIRCLE_PROJECT_REPONAME}
             docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
             docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ci 'ls -al ./node_mudules/.bin/'
-            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ci './node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ci 'npm install newman@latest && ./node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
             #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
       - run: 
           name: docker logs

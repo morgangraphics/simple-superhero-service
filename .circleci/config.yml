@@ -144,27 +144,27 @@ jobs:
           name: sleep 5
           command: sleep 5
       - run: 
-          name: docker logs
-          command: docker logs ${CIRCLE_PROJECT_REPONAME}
-      - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive
       - run:
           name: list directory contents
           command: ls -al tests
       - run:
-          name: list docker containers
-          command: docker container ls
-      - run:
-          name: list docker images
-          command: docker image ls
-      - run:
           name: newman(postman) tests
           command: |
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ${DOCKER_IMAGE_TAG}
             docker exec ${CIRCLE_PROJECT_REPONAME} curl --retry 10 --retry-connrefused https://localhost:3000/healthcheck
             #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
-  
+      - run: 
+          name: docker logs
+          command: docker logs ${CIRCLE_PROJECT_REPONAME}
+      - run:
+          name: list docker containers
+          command: docker container ls
+      - run:
+          name: list docker images
+          command: docker image ls
+
   tests-unit:
     docker:
       - image: cimg/base:stable

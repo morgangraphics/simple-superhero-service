@@ -52,9 +52,16 @@ commands:
   setup-node-env:
     description: Setup the dfault Node JS version within the task
     steps:
-      - node/install:
-          node-version: "14"
+      # - node/install:
+      #     node-version: "14"
       - node/install-packages
+      - node/test:
+          matrix:
+            paramteters:
+              version:
+                - 14
+                - 15
+                - 16
 
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci

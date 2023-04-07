@@ -36,3 +36,6 @@ config/default.yaml
 
 # Merge conflict
 *.orig
+
+# Cypress video files
+*.mp4

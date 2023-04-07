@@ -36,8 +36,8 @@
 
 ```
 
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/morgangraphics/simple-superhero-service.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/morgangraphics/simple-superhero-service/context:javascript)
+Builds: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/morgangraphics/simple-superhero-service/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/morgangraphics/simple-superhero-service/tree/master)
+
 
 I needed a self-contained, data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
@@ -53,6 +53,8 @@ The service itself and the data contained within service may be useful for testi
 *   Stubbing out UI components
 *   ...
 
+Constantly assailed by 1000+ tests. 
+
 ## Service
 
 ![Simple Superhero Service](img/swagger.png)
@@ -60,16 +62,17 @@ The service itself and the data contained within service may be useful for testi
 ### Requirements
 node.js (14+)
 
-pm2 `npm install pm2`
-
 ### Installation
-1.  Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
-1.  cd into the directory and install node.js requirements `npm install`
-1.  Generate a self signed cert `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out sss-cert.pem -keyout sss-key.pem -days 365`
-1.  Rename the `config/default.example.yaml` file to `config/default.yaml`
-1.  Update the ``<PLACEHOLDERS>`` according to your setup
-1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
-1.  The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
+1. Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
+1. `cd` into the directory and pull the test submodule `git submodule update --init --recursive`
+1. Then install node.js requirements `npm install`
+1. Generate a self signed cert 
+`openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="`
+1. Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. 
+`cp config/default.example.yaml config/default.yaml`
+1. Update the ``<PLACEHOLDERS>`` according to your setup
+1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run test` (testing)
+1. The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
 Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
 
@@ -77,15 +80,7 @@ DC URL: [https://localhost:3000/dc](https://localhost:3000/dc)
 
 Swagger Interface: [https://localhost:3000/documentation#!/](https://localhost:3000/documentation#!/)
 
-### Working with Docker
-1.  Build image `docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=13.14.0 .`
-1.  Run container `docker run --tty --detach --name simple-superhero-service --network host -p 3000:3000 simple-superhero-service:1.0`
-
-There are two optional build arguments:
-1.  NODE=<EXACT_VERSION_OF_NODE> e.g. `NODE=13.14.0` DEFAULT: 12.22.3
-1.  NODE_ENV=<development|production> e.g. `NOE_ENV=production` DEFAULT: development
-
-To access the service at localhost, you must pass in `--network host` in the run command
+**:warning: not suitable for production**
 
 ## Dataset
 
@@ -125,6 +120,7 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 <sup>\* as of Sep. 2, 2014. Number will become increasingly out of date as time goes on</sup>
 
 <sup>\** `first appearance` date formatting can be different </sup>
+ 
 
 #### Example Output
 ```json
@@ -171,7 +167,9 @@ Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#
 
 The base endpoints allow for retrieving data and applying a series of filters to that data to accomplish whatever you need with an array or JSON objects. They can be used in combination with one another
 
-:warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality.
+:warning: THIS IS NOT A DATABASE! Nor is it intended to be. It's primary purpose is to be self contained. As such traditional ANSI SQL like queries with will not work. However, I've approximated some of SQL's functionality as API filters.
+
+Diacritic safe search e.g. `tefe holland` === `tefé holland` however, `tefé holland` != `tefe holland`
 
 #### Filter options
 | Variable Name | Variable | Default  | Description                                                                                                            |
@@ -192,6 +190,8 @@ The base endpoints allow for retrieving data and applying a series of filters to
 <sup>\** Only available on /{character} endpoints</sup>
 
 <sup>† Does not apply when sorting on column/header which contains a null value, records with null values are removed</sup>
+
+:warning: The API will ignore any non sanctioned or misspelled filter options (e.g. bimit) and **WILL NOT** throw an error but will return an empty array.
 
 
 ##### Examples
@@ -766,6 +766,47 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
     }
 ]
 ```
+
+### Working wth the tests
+
+#### All
+
+`npm run tests`
+
+#### Postman
+1. Select the `Collections` Tab in Postman
+1. Hit the `Import` button, then the `Folder` tab to import the tests directory
+1. Update your local environment variables to match the ones you chose in the `config/default.yaml` file
+
+  OR
+
+  1. you may run the test suit with `npm run test:postman`
+
+####  Jest
+
+`npm run test:unit`
+
+#### Cypress (for CORS)
+
+`./node_modules/.bin/cypress open`
+
+OR
+
+`npm run test:cors:valid` or `npm run test:cors:invalid`
+
+### Working with Docker
+1.  Build image 
+`docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=16 .`
+1.  Run container 
+`docker run --tty --detach --name simple-superhero-service --network host simple-superhero-service:1.0`
+
+There are two optional build arguments:
+1.  NODE=<EXACT_VERSION_OF_NODE> e.g. `NODE=14.21.3` DEFAULT: 14.21.3
+1.  NODE_ENV=<development|production> e.g. `NOE_ENV=production` DEFAULT: development
+
+To access the service at localhost, you must pass in `--network host` in the run command
+
+Cleanup: `docker stop $(docker ps -aq) && docker rm $(docker ps -aq)`
 
 ## License
 

@@ -8,6 +8,7 @@ const Vision = require('@hapi/vision');
 const Routes = require('./api/index');
 
 const hapiPlugins = [];
+let env;
 
 /**
  * Default environment configuration options
@@ -15,7 +16,16 @@ const hapiPlugins = [];
  * If needed elsewhere, this will need to be redone
  * @type {[type]}
  */
-const env = config.get(process.env.NODE_ENV || 'development');
+try {
+  env = config.get(process.env.NODE_ENV || 'development');
+} catch (error) {
+  console.warn("Environment file not defined. Attempting to look for environment variables or set defaults");
+  env = {};
+  env.HOST = process.env.HOST || 'localhost';
+  env.PORT = process.env.PORT || 3000;
+  env.ORIGIN = !Array.isArray(process.env?.ORIGIN) ? [process.env.ORIGIN || '*'] : process.env.ORIGIN;
+  env.SWAGGER_ENABLED = process.env.SWAGGER_ENABLED || true;
+}
 
 /**
  * TLS Configuration with Self Signed Certs
@@ -32,21 +42,23 @@ const listener = http2.createSecureServer({
 /**
  * Hapi Server configuration
  * tls: true is needed to tell hapi.js that TLS is running when you pass in a custom listener
+ * https://github.com/hapijs/hapi/issues/4437 explains the issue in detail, when applying CORS configuration here
+ * you have to explicitly allow ["*"] at the routes you dont need the ORIGIN enforced
  * @type {[type]}
  */
 const server = hapi.server({
-  host: env.HOST || 'localhost',
+  host: env.HOST,
   listener,
-  port: env.PORT || 3000,
+  port: env.PORT,
   router: {
     stripTrailingSlash: true,
   },
   routes: {
     cors: {
-      origin: env.ORIGIN || '*',
-      headers: ['Accept', 'Content-Type'],
-      // additionalHeaders = access-control-allow-headers
-      // additionalHeaders: [],
+      origin: env.ORIGIN,
+      headers: ['Accept', 'Authorization', 'Content-Type'],
+      //additionalHeaders = access-control-allow-headers
+      exposedHeaders: ['x-simple-superhero-service'],
     },
     payload: {
       allow: ['application/json', 'application/*+json'],
@@ -55,7 +67,6 @@ const server = hapi.server({
   },
   tls: true,
 });
-
 
 
 if (env.SWAGGER_ENABLED) {
@@ -86,7 +97,7 @@ if (env.SWAGGER_ENABLED) {
       }
     },
     schemes: ['https'],
-    host: `${env.HOST || 'localhost'}:${env.PORT || 3000}`,
+    host: `${env.HOST}:${env.PORT}`,
     uiCompleteScript: `
       $(document).ready(() => {
         // $('input[name=help],input[name=pretty],input[name=random],input[name=seed]').toggle(false);
@@ -161,6 +172,9 @@ const banner = (server) => {
     await server.start();
     server.route(Routes);
     console.log(banner(server));
+    //console.log('server config = ', server);
+    
+    //console.log('server config = ', server._core.router.routes.get('get').routes[2]);
   } catch (err) {
     console.log(err);
   }
@@ -170,3 +184,6 @@ process.on('unhandledRejection', (err) => {
   console.log(err);
   process.exit(1);
 });
+process.on('SIGHUP', (err) => {
+  console.log(`*^!@4=> Received event: ${err}`)
+})

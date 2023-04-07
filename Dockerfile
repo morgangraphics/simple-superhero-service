@@ -4,10 +4,11 @@
 # Use an official Ubuntu Minimal 18.04 runtime as a parent image
 FROM ubuntu:bionic AS base
 LABEL maintainer="MORGANGRAPHICS,INC"
-ARG NODE=12.22.3
+ARG NODE=14.21.3
 ARG USER=node-user
 ARG NODE_VERSION=$NODE
 ARG NODE_ENV=${NODE_ENV:-development}
+ARG PORT=${port:-3000}
 
 # ==============================================================================
 # RUN AS ROOT
@@ -30,7 +31,7 @@ RUN apt-get update -y \
 # https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html .
 # See also https://www.tldp.org/LDP/Linux-Filesystem-Hierarchy/html/etc.html .
 RUN printf "%s" "if [ "\$\(whoami\)" = 'root' ]; then printf \"\n\033[1;31m%s\033[0m\n\n\" \"WARNING: YOU ARE RUNNING AS THE ROOT USER!\"; fi" \
- >> /etc/profile.d/warn-root.sh
+>> /etc/profile.d/warn-root.sh
 
 # ==============================================================================
 # RUN AS User
@@ -42,6 +43,7 @@ USER ${USER}
 ENV NVM_DIR /home/${USER}/.nvm
 ENV PATH $NVM_DIR/versions/node/v${NODE_VERSION}/bin:$PATH
 ENV NODE_ENV ${NODE_ENV}
+ENV PORT ${PORT}
 
 # Set working Directory - This creates the dir as root
 WORKDIR /home/${USER}/service
@@ -55,10 +57,12 @@ RUN sudo chown ${USER}:${USER} ../service \
   && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
   && . $NVM_DIR/nvm.sh \
   && nvm install ${NODE_VERSION} \
-  && npm ci
+  && npm ci --only=production
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
-# Start Server
-CMD ["dumb-init", "node", "server.js"]
+# https://github.com/Yelp/dumb-init#usage
+# https://docs.docker.com/engine/reference/builder/#cmd
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["/bin/bash", "-ic", "node server.js"]

@@ -1,0 +1,264 @@
+---
+version: 2.1
+
+orbs:
+  jq: circleci/jq@2.2.0
+  node: circleci/node@5.1.0
+
+commands:
+
+  # Build docker image for testing
+  build-docker-image:
+    description: Build a docker image for the simple superhero service
+    parameters:
+      project_name:
+        type: string
+        default: ${CIRCLE_PROJECT_REPONAME}
+      dockerfile_path:
+        type: string
+        default: ./Dockerfile
+    steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - add_ssh_keys:
+          fingerprints:
+            - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
+      - run: 
+          name: pull git submodules 
+          command: git submodule update --init --recursive
+      - run:
+          name: Build and tag docker image
+          command: |
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=${DEFAULT_NODE_VERSION} -f << parameters.dockerfile_path >> .
+            
+  run-docker-container:
+    description: "we've built the container, let's run it for tests"
+    parameters:
+      cors_origin:
+        default: "'*'"
+        type: string
+      port:
+        default: 3000
+        type: integer
+    steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - run:
+          name: docker run command
+          command: |
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
+
+  setup-docker-build-environment:
+    description: set the environment variables needed within the docker build environment in circleci
+    steps:
+      - jq/install
+      - run:
+          name: set the env var based on branch
+          command: |
+              DOCKER_IMAGE_VERSION=$(echo $(cat package.json) | jq -r '.version')
+              DOCKER_IMAGE_TAG="${CIRCLE_PROJECT_REPONAME}:${DOCKER_IMAGE_VERSION}"
+              
+              case "$CIRCLE_BRANCH" in
+                dev|develop)
+                  echo "SETTING DEV ENVIRONMENT VARIABLES"
+                  echo "export SOME_VAR_NAME='dev'" >> "$BASH_ENV"
+                  ;;
+                master)
+                  eecho "SETTING MASTER ENVIRONMENT VARIABLES"
+                  ;;
+                *)
+                  echo "NO ENV VAR SET - DEFAULTING"
+                  echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
+                  echo "export DEFAULT_NODE_VERSION='14'" >> "$BASH_ENV"
+                  ;;
+              esac
+      - run: 
+          name: printenv
+          command: printenv | sort
+
+  setup-sss-project:
+    description: setup simple superhero service specific stuff
+    steps:
+      - run: 
+          name: generate self signed certs
+          command: openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="
+
+# ======================================== JOBS ========================================
+jobs:
+ 
+  build-sss:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
+      - setup-sss-project
+      - build-docker-image
+
+  run-sss-valid-origin-container:
+    parameters:
+      node-version:
+        type: string
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:3100"
+          port: 3000
+  
+  run-sss-invalid-origin-container:
+    parameters:
+      node-version:
+        type: string
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup-docker-build-environment
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
+      - run-docker-container:
+          cors_origin: "https://127.0.0.1:2111"
+          port: 3001
+
+  tests-cors:
+    parameters:
+      node-version:
+        type: string
+    docker:
+      - image: cypress/base:14
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
+      - run:
+          name: valid cors test
+          command: NODE_ENV=cors-valid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3000
+      - run:
+          name: invalid cors test
+          command: NODE_ENV=cors-invalid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3001
+
+  # The way CircleCI suggests worksflows is that you push a Docker container to some artifact repository, then pull it, then work with it.
+  # I don't want to be pushing garbage until all the tests pass first which makes interacting with containers is hard within the Docker build environemnt
+  # https://circleci.com/docs/building-docker-images/#separation-of-environments suggests that you build and interact with the container 
+  # within the same step via the steps below
+  tests-functional:
+    parameters:
+      node-version:
+        type: string
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - setup_remote_docker:
+         docker_layer_caching: true
+      - checkout
+      - setup-docker-build-environment
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
+      - run: 
+          name: pull git submodules 
+          command: git submodule update --init --recursive
+      - run:
+          name: newman(postman) tests
+          command: |
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 ${DOCKER_IMAGE_TAG}
+            sleep 5
+            # Install newman to run [ostman tests because we don't install it with a --only=production build
+            docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'npm install newman@latest && ./node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
+
+  tests-unit:
+    parameters:
+      node-version:
+        type: string
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
+      - run:
+          name: unit tests
+          command: ./node_modules/.bin/jest
+
+#======================================== WORKFLOWS ========================================
+workflows:
+  
+  test-build:
+    jobs:
+
+      # =============================================
+      # DEV CONFIG
+      # =============================================
+      - build-sss:
+          filters:
+            branches:
+              ignore:
+                - master
+      
+      # Setup a valid Origin Container (based on server configuration) to run run all the tests
+      - run-sss-valid-origin-container:
+          filters:
+            branches:
+              ignore:
+                - master
+          matrix: &matrix
+            parameters:
+              node-version:
+                - "14"
+                - "15"
+                - "16"
+          requires:
+            - build-sss
+      
+      # Setup a invalid Origin Container (based on server configuration) to run CORS tests
+      - run-sss-invalid-origin-container:
+          filters:
+            branches:
+              ignore:
+                - master
+          matrix: *matrix
+          requires:
+            - build-sss
+      
+      # cors test sss
+      - tests-cors:
+          filters:
+            branches:
+              ignore:
+                - master
+          matrix: *matrix
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
+            - run-sss-invalid-origin-container
+
+      - tests-unit:
+          filters:
+            branches:
+              ignore:
+                - master
+          matrix: *matrix
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
+
+      - tests-functional:
+          filters:
+            branches:
+              ignore:
+                - master
+          matrix: *matrix
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
+
+ 

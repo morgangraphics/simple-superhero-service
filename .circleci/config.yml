@@ -69,7 +69,7 @@ commands:
                 *)
                   echo "NO ENV VAR SET - DEFAULTING"
                   echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
-                  echo "export DEFAULT_NODE_VERSION='14'" >> "$BASH_ENV"
+                  echo "export DEFAULT_NODE_VERSION=14" >> "$BASH_ENV"
                   ;;
               esac
 
@@ -99,7 +99,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: "${DEFAULT_NODE_VERSION}"
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
@@ -112,7 +112,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: "${DEFAULT_NODE_VERSION}"
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"
@@ -144,7 +144,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: "${DEFAULT_NODE_VERSION}"
       - node/install-packages
       - run: 
           name: pull git submodules 
@@ -163,7 +163,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: "${DEFAULT_NODE_VERSION}"
       - node/install-packages
       - run:
           name: unit tests

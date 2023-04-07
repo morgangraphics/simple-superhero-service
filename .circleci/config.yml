@@ -154,11 +154,11 @@ jobs:
       - run:
           name: newman(postman) tests
           command: |
-            docker create -v /home/node-user/project/tests -v /home/node-user/project/node_modules --name test-configs alpine:3.4 /bin/true
-            docker cp ./tests test-configs:/home/node-user/project/tests
-            docker cp ./node_modules/. test-configs:/home/node-user/project/node_modules
+            docker create -it -w /home/node-user -v project/tests -v project/node_modules --name testconfigs alpine /bin/true
+            docker cp ./tests testconfigs:project/tests
+            docker cp ./node_modules/. testconfigs:project/node_modules
             sleep 5
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from test-configs ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from testconfigs ${DOCKER_IMAGE_TAG}
             sleep 5
             #docker logs ${CIRCLE_PROJECT_REPONAME}
             #docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck

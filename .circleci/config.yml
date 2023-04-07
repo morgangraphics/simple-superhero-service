@@ -154,9 +154,9 @@ jobs:
       - run:
           name: newman(postman) tests
           command: |
-            docker create -it -w /home/node-user -v /home/node-user/service/tests -v /home/node-user/service/node_modules --name testconfigs alpine /bin/true
-            docker cp --archive ./tests testconfigs:/home/node-user/service/tests
-            docker cp --archive ./node_modules/. testconfigs:/home/node-user/node_modules
+            docker create -it -w /home/node-user -v /home/node-user/service/tests -v /home/node-user/service/node_modules --name testconfigs alpine
+            docker cp ./tests testconfigs:/home/node-user/service/tests
+            docker cp ./node_modules/. testconfigs:/home/node-user/node_modules
             sleep 5
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from testconfigs ${DOCKER_IMAGE_TAG}
             sleep 5

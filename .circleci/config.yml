@@ -48,6 +48,14 @@ commands:
           command: |
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
 
+  # Set the default Node Version here. Orbs will not interpolate environment variables for Orb parameters
+  setup-node-env:
+    description: Setup the dfault Node JS version within the task
+    steps:
+      - node/install:
+          node-version: "14"
+      - node/install-packages
+
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
     steps:
@@ -101,9 +109,7 @@ jobs:
     steps:
       - checkout
       - setup-docker-build-environment
-      - node/install:
-          node-version: "$DEFAULT_NODE_VERSION"
-      - node/install-packages
+      - setup-node-env
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
           port: 3000
@@ -114,9 +120,7 @@ jobs:
     steps:
       - checkout
       - setup-docker-build-environment
-      - node/install:
-          node-version: "$DEFAULT_NODE_VERSION"
-      - node/install-packages
+      - setup-node-env
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"
           port: 3001
@@ -146,9 +150,7 @@ jobs:
          docker_layer_caching: true
       - checkout
       - setup-docker-build-environment
-      - node/install:
-          node-version: "${DEFAULT_NODE_VERSION}"
-      - node/install-packages
+      - setup-node-env
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive
@@ -165,9 +167,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - node/install:
-          node-version: "${DEFAULT_NODE_VERSION}"
-      - node/install-packages
+      - setup-node-env
       - run:
           name: unit tests
           command: ./node_modules/.bin/jest

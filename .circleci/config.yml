@@ -102,7 +102,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: $(echo ${DEFAULT_NODE_VERSION})
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
@@ -115,7 +115,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: ${DEFAULT_NODE_VERSION}
+          node-version: $(echo ${DEFAULT_NODE_VERSION})
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"

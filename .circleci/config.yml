@@ -29,7 +29,7 @@ commands:
       - run:
           name: Build and tag docker image
           command: |
-            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=14 -f << parameters.dockerfile_path >> .
+            docker build --no-cache --rm --tag ${DOCKER_IMAGE_TAG}  --build-arg NODE=${DEFAULT_NODE_VERSION} -f << parameters.dockerfile_path >> .
             
   run-docker-container:
     description: "we've built the container, let's run it for tests"
@@ -69,9 +69,11 @@ commands:
                 *)
                   echo "NO ENV VAR SET - DEFAULTING"
                   echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
-                  echo "export DEFAULT_NODE_VERSION=14" >> "$BASH_ENV"
+                  echo "export DEFAULT_NODE_VERSION='14'" >> "$BASH_ENV"
                   ;;
               esac
+            
+              printenv | sort
 
   setup-sss-project:
     description: setup simple superhero service specific stuff

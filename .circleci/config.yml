@@ -72,8 +72,9 @@ commands:
                   echo "export DEFAULT_NODE_VERSION='14'" >> "$BASH_ENV"
                   ;;
               esac
-            
-              printenv | sort
+      - run: 
+          name: printenv
+          command: printenv | sort
 
   setup-sss-project:
     description: setup simple superhero service specific stuff

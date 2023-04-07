@@ -158,7 +158,7 @@ jobs:
             # docker cp ./tests testconfigs:/home/node-user/service/tests
             # docker cp ./node_modules/. testconfigs:/home/node-user/node_modules
             # sleep 5
-            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 --volumes-from testconfigs ${DOCKER_IMAGE_TAG}
+            docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 ${DOCKER_IMAGE_TAG}
             sleep 5
             #docker logs ${CIRCLE_PROJECT_REPONAME}
             #docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck

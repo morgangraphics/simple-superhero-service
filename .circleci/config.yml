@@ -13,17 +13,16 @@ commands:
     parameters:
       project_name:
         type: string
+        default: ${CIRCLE_PROJECT_REPONAME}
       dockerfile_path:
         type: string
+        default: ./Dockerfile
     steps:
       - setup_remote_docker:
          docker_layer_caching: true
       - add_ssh_keys:
           fingerprints:
             - 93:a9:f3:d3:97:84:fe:e3:a2:63:9e:fe:3f:be:6e:73
-      - run:
-          name: verify
-          command: printenv | sort
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive
@@ -70,6 +69,7 @@ commands:
                 *)
                   echo "NO ENV VAR SET - DEFAULTING"
                   echo "export DOCKER_IMAGE_TAG='${DOCKER_IMAGE_TAG}'" >> "$BASH_ENV"
+                  echo "export DEFAULT_NODE_VERSION='14'" >> "$BASH_ENV"
                   ;;
               esac
 
@@ -90,9 +90,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - setup-sss-project
-      - build-docker-image:
-          project_name: ${CIRCLE_PROJECT_REPONAME}
-          dockerfile_path: ./Dockerfile
+      - build-docker-image
 
   run-sss-valid-origin-container:
     docker:
@@ -101,7 +99,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: "14"
+          node-version: ${DEFAULT_NODE_VERSION}
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
@@ -114,7 +112,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: "14"
+          node-version: ${DEFAULT_NODE_VERSION}
       - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"
@@ -134,7 +132,7 @@ jobs:
           command: NODE_ENV=cors-invalid ./node_modules/.bin/cypress run --env sssApuUrl=https://127.0.0.1:3001
 
   # The way CircleCI suggests worksflows is that you push a Docker container to some artifact repository, then pull it, then work with it.
-  # I don't want to be pushing garbage until all the tests pass first which makes interacting with containers hard within the Docker build environemnt
+  # I don't want to be pushing garbage until all the tests pass first which makes interacting with containers is hard within the Docker build environemnt
   # https://circleci.com/docs/building-docker-images/#separation-of-environments suggests that you build and interact with the container 
   # within the same step via the steps below
   tests-functional:
@@ -146,7 +144,7 @@ jobs:
       - checkout
       - setup-docker-build-environment
       - node/install:
-          node-version: "14"
+          node-version: ${DEFAULT_NODE_VERSION}
       - node/install-packages
       - run: 
           name: pull git submodules 
@@ -154,18 +152,10 @@ jobs:
       - run:
           name: newman(postman) tests
           command: |
-            # docker create -it -w /home/node-user -v /home/node-user/service/tests -v /home/node-user/service/node_modules --name testconfigs alpine
-            # docker cp ./tests testconfigs:/home/node-user/service/tests
-            # docker cp ./node_modules/. testconfigs:/home/node-user/node_modules
-            # sleep 5
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e HOST=0.0.0.0 ${DOCKER_IMAGE_TAG}
             sleep 5
-            #docker logs ${CIRCLE_PROJECT_REPONAME}
-            #docker exec ${CIRCLE_PROJECT_REPONAME} curl --insecure --retry 10 --retry-connrefused https://0.0.0.0:3000/healthcheck
-            # docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'ls -al node_modules/'
-            # #docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'ls -al ./node_mudules/.bin'
+            # Install newman to run [ostman tests because we don't install it with a --only=production build
             docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'npm install newman@latest && ./node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
-            #./node_modules/.bin/newman run tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment tests/tests/test.postman_environment.json
 
   tests-unit:
     docker:
@@ -173,7 +163,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "14"
+          node-version: ${DEFAULT_NODE_VERSION}
       - node/install-packages
       - run:
           name: unit tests
@@ -204,33 +194,33 @@ workflows:
             - build-sss
       
       # Setup a invalid Origin Container (based on server configuration) to run CORS tests
-      # - run-sss-invalid-origin-container:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - master
-      #     requires:
-      #       - build-sss
+      - run-sss-invalid-origin-container:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
       
       # cors test sss
-      # - tests-cors:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - master
-      #     requires:
-      #       - build-sss
-      #       - run-sss-valid-origin-container
-      #       - run-sss-invalid-origin-container
+      - tests-cors:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
+            - run-sss-invalid-origin-container
 
-      # - tests-unit:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - master
-      #     requires:
-      #       - build-sss
-      #       - run-sss-valid-origin-container
+      - tests-unit:
+          filters:
+            branches:
+              ignore:
+                - master
+          requires:
+            - build-sss
+            - run-sss-valid-origin-container
 
       - tests-functional:
           filters:

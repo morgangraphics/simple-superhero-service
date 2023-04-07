@@ -53,7 +53,6 @@ The service itself and the data contained within service may be useful for testi
 *   Stubbing out UI components
 *   ...
 
-
 Constantly assailed by 1000+ tests. 
 
 ## Service
@@ -63,25 +62,23 @@ Constantly assailed by 1000+ tests.
 ### Requirements
 node.js (14+)
 
-
 ### Installation
-1.  Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
-1.  `cd` into the directory and pull the test submodule `git submodule update --init --recursive`
+1. Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
+1. `cd` into the directory and pull the test submodule `git submodule update --init --recursive`
 1. Then install node.js requirements `npm install`
-1.  Generate a self signed cert 
+1. Generate a self signed cert 
 `openssl req -new -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -keyout sss-key.pem -out sss-cert.pem -subj "/C=US/ST=of Confusion/L=Gotham/O=/OU=/CN="`
-1.  Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. 
+1. Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. 
 `cp config/default.example.yaml config/default.yaml`
-1.  Update the ``<PLACEHOLDERS>`` according to your setup
-1.  `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run test` (testing)
-1.  The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
+1. Update the ``<PLACEHOLDERS>`` according to your setup
+1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run test` (testing)
+1. The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
 Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
 
 DC URL: [https://localhost:3000/dc](https://localhost:3000/dc)
 
 Swagger Interface: [https://localhost:3000/documentation#!/](https://localhost:3000/documentation#!/)
-
 
 **:warning: not suitable for production**
 

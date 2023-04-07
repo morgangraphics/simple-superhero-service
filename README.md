@@ -36,6 +36,8 @@
 
 ```
 
+Builds: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/morgangraphics/simple-superhero-service/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/morgangraphics/simple-superhero-service/tree/master)
+
 
 I needed a self-contained, data service (no Database) for testing a number of different scenarios with a diverse and robust dataset that also contains some sparseness.
 
@@ -80,6 +82,8 @@ DC URL: [https://localhost:3000/dc](https://localhost:3000/dc)
 
 Swagger Interface: [https://localhost:3000/documentation#!/](https://localhost:3000/documentation#!/)
 
+
+**:warning: not suitable for production**
 
 ## Dataset
 

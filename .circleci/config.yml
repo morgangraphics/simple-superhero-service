@@ -48,21 +48,6 @@ commands:
           command: |
             docker run --tty --detach --name ${CIRCLE_PROJECT_REPONAME} -e ORIGIN=<< parameters.cors_origin >> -e PORT=<< parameters.port >> ${DOCKER_IMAGE_TAG}
 
-  # Set the default Node Version here. Orbs will not interpolate environment variables for Orb parameters
-  setup-node-env:
-    description: Setup the dfault Node JS version within the task
-    steps:
-      # - node/install:
-      #     node-version: "14"
-      - node/install-packages
-      - node/test:
-          matrix:
-            paramteters:
-              version:
-                - 14
-                - 15
-                - 16
-
   setup-docker-build-environment:
     description: set the environment variables needed within the docker build environment in circleci
     steps:
@@ -111,32 +96,47 @@ jobs:
       - build-docker-image
 
   run-sss-valid-origin-container:
+    parameters:
+      node-version:
+        type: string
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - setup-docker-build-environment
-      - setup-node-env
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:3100"
           port: 3000
   
   run-sss-invalid-origin-container:
+    parameters:
+      node-version:
+        type: string
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - setup-docker-build-environment
-      - setup-node-env
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
       - run-docker-container:
           cors_origin: "https://127.0.0.1:2111"
           port: 3001
 
   tests-cors:
+    parameters:
+      node-version:
+        type: string
     docker:
       - image: cypress/base:14
     steps:
       - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
       - node/install-packages
       - run:
           name: valid cors test
@@ -150,6 +150,9 @@ jobs:
   # https://circleci.com/docs/building-docker-images/#separation-of-environments suggests that you build and interact with the container 
   # within the same step via the steps below
   tests-functional:
+    parameters:
+      node-version:
+        type: string
     docker:
       - image: cimg/base:stable
     steps:
@@ -157,7 +160,9 @@ jobs:
          docker_layer_caching: true
       - checkout
       - setup-docker-build-environment
-      - setup-node-env
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
       - run: 
           name: pull git submodules 
           command: git submodule update --init --recursive
@@ -170,11 +175,16 @@ jobs:
             docker exec -it ${CIRCLE_PROJECT_REPONAME} /bin/bash -ic 'npm install newman@latest && ./node_modules/.bin/newman run ./tests/tests/simple_super_hero_service.postman_collection.json --insecure --environment ./tests/tests/test.postman_environment.json'
 
   tests-unit:
+    parameters:
+      node-version:
+        type: string
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup-node-env
+      - node/install:
+          node-version: << parameters.node-version >>
+      - node/install-packages
       - run:
           name: unit tests
           command: ./node_modules/.bin/jest
@@ -200,6 +210,12 @@ workflows:
             branches:
               ignore:
                 - master
+          matrix: &matrix
+            parameters:
+              node-version:
+                - "14"
+                - "15"
+                - "16"
           requires:
             - build-sss
       
@@ -209,6 +225,7 @@ workflows:
             branches:
               ignore:
                 - master
+          matrix: *matrix
           requires:
             - build-sss
       
@@ -218,6 +235,7 @@ workflows:
             branches:
               ignore:
                 - master
+          matrix: *matrix
           requires:
             - build-sss
             - run-sss-valid-origin-container
@@ -228,6 +246,7 @@ workflows:
             branches:
               ignore:
                 - master
+          matrix: *matrix
           requires:
             - build-sss
             - run-sss-valid-origin-container
@@ -237,6 +256,7 @@ workflows:
             branches:
               ignore:
                 - master
+          matrix: *matrix
           requires:
             - build-sss
             - run-sss-valid-origin-container

@@ -201,15 +201,13 @@ workflows:
       - build-sss:
           filters:
             branches:
-              ignore:
-                - master
+               - master
       
       # Setup a valid Origin Container (based on server configuration) to run run all the tests
       - run-sss-valid-origin-container:
           filters:
             branches:
-              ignore:
-                - master
+               - master
           matrix: &matrix
             parameters:
               node-version:
@@ -223,8 +221,7 @@ workflows:
       - run-sss-invalid-origin-container:
           filters:
             branches:
-              ignore:
-                - master
+               - master
           matrix: *matrix
           requires:
             - build-sss
@@ -233,8 +230,7 @@ workflows:
       - tests-cors:
           filters:
             branches:
-              ignore:
-                - master
+               - master
           matrix: *matrix
           requires:
             - build-sss
@@ -244,8 +240,7 @@ workflows:
       - tests-unit:
           filters:
             branches:
-              ignore:
-                - master
+               - master
           matrix: *matrix
           requires:
             - build-sss
@@ -254,8 +249,7 @@ workflows:
       - tests-functional:
           filters:
             branches:
-              ignore:
-                - master
+               - master
           matrix: *matrix
           requires:
             - build-sss

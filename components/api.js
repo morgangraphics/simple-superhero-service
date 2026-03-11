@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const getValue = require('get-value');
+const getValue = require('get-value').default;
 
 /**
  * Class surrounding API scaffolding and common API specific functionality

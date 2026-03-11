@@ -36,6 +36,7 @@
 
 ```
 
+
 Builds: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/morgangraphics/simple-superhero-service/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/morgangraphics/simple-superhero-service/tree/master)
 
 
@@ -60,7 +61,7 @@ Constantly assailed by 1000+ tests.
 ![Simple Superhero Service](img/swagger.png)
 
 ### Requirements
-node.js (14+)
+node.js (18+)
 
 ### Installation
 1. Clone the repo `git clone https://github.com/morgangraphics/simple-superhero-service.git`
@@ -91,7 +92,7 @@ Data is the comic book character dataset from [@fivethrityeight](https://github.
 >
 > The data is split into two files, for DC and Marvel, respectively: dc-wikia-data.csv and marvel-wikia-data.csv.
 
-Read more about it here: [https://datahub.io/five-thirty-eight/comic-characters#readme](https://datahub.io/five-thirty-eight/comic-characters#readme)
+Read more about it here: [https://fivethirtyeight.com/features/women-in-comic-books/](https://fivethirtyeight.com/features/women-in-comic-books/)
 
 #### Number of characters
 
@@ -796,13 +797,15 @@ OR
 
 ### Working with Docker
 1.  Build image 
-`docker build --no-cache --rm --tag simple-superhero-service:1.0 --build-arg NODE=16 .`
+`docker build --no-cache --rm --tag simple-superhero-service:2.5 .`
 1.  Run container 
-`docker run --tty --detach --name simple-superhero-service --network host simple-superhero-service:1.0`
+`docker run --tty --detach --name simple-superhero-service --network host -v $(pwd)/sss-cert.pem:/home/node/service/sss-cert.pem:ro -v $(pwd)/sss-key.pem:/home/node/service/sss-key.pem:ro simple-superhero-service:2.5`
+
+TLS certificates (`sss-cert.pem`, `sss-key.pem`) are **not** baked into the image. They must be mounted at runtime using `-v` as shown above.
 
 There are two optional build arguments:
-1.  NODE=<EXACT_VERSION_OF_NODE> e.g. `NODE=14.21.3` DEFAULT: 14.21.3
-1.  NODE_ENV=<development|production> e.g. `NOE_ENV=production` DEFAULT: development
+1.  `NODE=<MAJOR_VERSION>` e.g. `--build-arg NODE=22` DEFAULT: 22
+1.  `NODE_ENV=<development|production>` e.g. `--build-arg NODE_ENV=development` DEFAULT: production
 
 To access the service at localhost, you must pass in `--network host` in the run command
 

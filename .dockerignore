@@ -3,7 +3,6 @@ node_modules
 *.pem
 coverage
 cypress
-tests
 .github
 .circleci
 img

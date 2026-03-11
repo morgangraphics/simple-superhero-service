@@ -24,12 +24,16 @@ ENV PORT=${PORT}
 
 WORKDIR /home/node/service
 
+# Copy package manifests first so the npm install layer is only invalidated
+# when dependencies change, not on every source file change.
+COPY --chown=node:node package.json package-lock.json ./
+
+RUN npm ci --omit=dev
+
 # NOTE: sss-cert.pem and sss-key.pem are excluded via .dockerignore and must be
 # mounted at runtime, e.g.:
 #   docker run -v /path/to/certs:/home/node/service ...
 COPY --chown=node:node . .
-
-RUN npm ci --omit=dev
 
 EXPOSE ${PORT}
 

@@ -25,7 +25,17 @@ jobs:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Generate temporary self-signed TLS certificates required by the service
+      - name: Generate temporary TLS certificates
+        run: |
+          openssl req -x509 -newkey rsa:4096 -keyout sss-key.pem -out sss-cert.pem \
+            -sha256 -days 1 -nodes \
+            -subj "/C=US/ST=CI/L=CI/O=CI/CN=localhost"
+
       # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@v4

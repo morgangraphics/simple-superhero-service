@@ -797,9 +797,9 @@ OR
 
 ### Working with Docker
 1.  Build image 
-`docker build --no-cache --rm --tag simple-superhero-service:2.5 .`
+`docker build --no-cache --rm --tag simple-superhero-service:2.5.0 .`
 1.  Run container 
-`docker run --tty --detach --name simple-superhero-service --network host -v $(pwd)/sss-cert.pem:/home/node/service/sss-cert.pem:ro -v $(pwd)/sss-key.pem:/home/node/service/sss-key.pem:ro simple-superhero-service:2.5`
+`docker run --tty --detach --name simple-superhero-service --network host -v $(pwd)/sss-cert.pem:/home/node/service/sss-cert.pem:ro -v $(pwd)/sss-key.pem:/home/node/service/sss-key.pem:ro simple-superhero-service:2.5.0`
 
 TLS certificates (`sss-cert.pem`, `sss-key.pem`) are **not** baked into the image. They must be mounted at runtime using `-v` as shown above.
 

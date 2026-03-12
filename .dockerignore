@@ -1,2 +1,8 @@
 .git
 node_modules
+*.pem
+coverage
+cypress
+.github
+.circleci
+img

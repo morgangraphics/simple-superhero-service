@@ -53,9 +53,24 @@ jobs:
           # This will handover control about PR rejection to the GitHub side
           max-allowed-issues: 2147483647
       
+      # Split the multi-run SARIF into individual per-tool files to satisfy the
+      # requirement that each category upload contains only a single run.
+      # See: https://github.blog/changelog/2025-07-21-code-scanning-will-stop-combining-multiple-sarif-runs-uploaded-in-the-same-sarif-file/
+      - name: Split SARIF results into individual tool files
+        run: |
+          mkdir -p sarif-runs
+          count=$(jq '.runs | length' results.sarif)
+          for i in $(seq 0 $((count - 1))); do
+            tool=$(jq -r ".runs[$i].tool.driver.name" results.sarif \
+              | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+            jq --argjson i "$i" \
+              '{"version": .version, "$schema": .["$schema"], "runs": [.runs[$i]]}' \
+              results.sarif > "sarif-runs/${tool}.sarif"
+          done
+
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: results.sarif
+          sarif_file: sarif-runs/
           category: codacy

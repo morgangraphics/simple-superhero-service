@@ -154,7 +154,7 @@ this.srchExtended = `
    */
     helpSearch() {
         return `
-      character  |         | empty    | Output format (currently only JSON)
+      characters |         | empty    | Output format (currently only JSON)
                  |         |          | {keyword1},{keyword2} e.g. ${this.docParams[this.universe].characters[0]},${this.docParams[this.universe].characters[1]} will search for each character individually
                  |         |          | {keyword1}+{keyword2} e.g. ${this.docParams[this.universe].search[0]}+${this.docParams[this.universe].search[1]} will search for a character name with both '${this.docParams[this.universe].search[0]}' AND '${this.docParams[this.universe].search[1]}' in it
                  |         |          | {keyword1},-{keyword2} e.g. ${this.docParams[this.universe].characters[0]},${this.docParams[this.universe].exclude} will search for character names containing '${this.docParams[this.universe].characters[0]}' EXCLUDING results with ${this.docParams[this.universe].exclude} in it
@@ -198,7 +198,7 @@ this.srchExtended = `
            dataset`,
                     'Shorthand query syntax is available for help, pretty, and prune. Meaning their presence equates to true',
                     ' e.g. <code>?pretty</code> and <code>?pretty=true</code> are functionally equivalent',
-                    '**character: character filters can used like:**',
+                    '**characters: character filters can used like:**',
                     `{keyword1},{keyword2} e.g. ${this.docParams[this.universe].characters[0]},${this.docParams[this.universe].characters[1]} will search for each character individually`,
                     `{keyword1}+{keyword2} e.g. ${this.docParams[this.universe].search[0]}+${this.docParams[this.universe].search[1]} will search for a character name with both '${this.docParams[this.universe].search[0]}' AND '${this.docParams[this.universe].search[1]}' in it`,
                     `{keyword1},-{keyword2} e.g. ${this.docParams[this.universe].characters[0]},${this.docParams[this.universe].exclude} will search for character names containing '${this.docParams[this.universe].characters[0]}' EXCLUDING results with ${this.docParams[this.universe].exclude} in it`,

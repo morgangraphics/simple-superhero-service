@@ -448,16 +448,16 @@ This request is looking for a character name that contains both "spider" AND 'ma
 
 ### Posting Data `/marvel` or `/dc`
 
-character: character can be a string, or an array of strings (preferred) e.g.
+characters: character can be a string, or an array of strings (preferred) e.g.
 ```json
  {
-   "character": "spider-man,iron man"
+   "characters": "spider-man,iron man"
  }
 
  OR
 
  {
-   "character": ["spider-man", "iron man"]
+   "characters": ["spider-man", "iron man"]
  }
 ```
 
@@ -507,7 +507,7 @@ OR
 
 `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
   "format": "json",
-  "character": [
+  "characters": [
     "spider man"
   ],
   "h": [

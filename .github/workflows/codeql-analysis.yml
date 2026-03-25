@@ -29,7 +29,15 @@ jobs:
         # https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#overriding-automatic-language-detection
 
     steps:
+    - name: Checkout PR head
+      if: github.event_name == 'pull_request'
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: 0
+
     - name: Checkout repository
+      if: github.event_name != 'pull_request'
       uses: actions/checkout@v4
 
     # Initializes the CodeQL tools for scanning.

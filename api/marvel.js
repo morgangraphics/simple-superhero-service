@@ -34,21 +34,24 @@ const marvelGetBase = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('base.description'),
         notes: api.popText('base.notes'),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
             query: api.validateParams(common.validBaseQParams, 'get'),
         },
     },
 };
 /**
- * [marvelPostBase description]
+ * Base Marvel POST endpoint — accepts filters as JSON payload
+ * Returns an array of Marvel characters based on the filters passed in
  * @type {Object}
  */
 const marvelPostBase = {
@@ -73,14 +76,16 @@ const marvelPostBase = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('character.description'),
         notes: api.popText('character.notes').concat(api.popText('character.notesExtended')),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
             payload: api.validateParams(common.validBaseQParams, 'post'),
         },
@@ -115,16 +120,18 @@ const marvelGetByCharacter = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('character.description'),
         notes: api.popText('character.notes'),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
-            params: api.validateParams(['characters'], 'post'),
+            params: api.validateParams(['characters'], 'get'),
             query: api.validateParams(common.validCharQParams, 'get'),
         },
     },

@@ -19,12 +19,16 @@ let env;
 try {
   env = config.get(process.env.NODE_ENV || 'development');
 } catch (error) {
-  console.warn("Environment file not defined. Attempting to look for environment variables or set defaults");
+  if (process.env.NODE_ENV === 'production') {
+    console.error('FATAL: No config found for NODE_ENV=production. Refusing to start with insecure defaults.');
+    process.exit(1);
+  }
+  console.warn('Environment file not defined. Attempting to look for environment variables or set defaults');
   env = {};
   env.HOST = process.env.HOST || 'localhost';
   env.PORT = process.env.PORT || 3000;
-  env.ORIGIN = !Array.isArray(process.env?.ORIGIN) ? [process.env.ORIGIN || '*'] : process.env.ORIGIN;
-  env.SWAGGER_ENABLED = process.env.SWAGGER_ENABLED || true;
+  env.ORIGIN = [process.env.ORIGIN || '*'];
+  env.SWAGGER_ENABLED = process.env.SWAGGER_ENABLED !== 'false';
 }
 
 /**

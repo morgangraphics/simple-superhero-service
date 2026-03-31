@@ -5,7 +5,6 @@ describe('Testing _common.js  - cache', () => {
         const c = common.cache;
         expect(c).toHaveProperty('dc', []);
         expect(c).toHaveProperty('marvel', []);
-        expect(c).toHaveProperty('search', []);
     });
 });
 

@@ -16,7 +16,6 @@ const dcGetBase = {
     method: 'GET',
     path: '/dc',
     options: {
-        cors: true,
         handler: (req, handlr) => {
             const options = { ...req.query, ...{ universe } };
             let response;
@@ -35,21 +34,24 @@ const dcGetBase = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('base.description'),
         notes: api.popText('base.notes'),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
             query: api.validateParams(common.validBaseQParams, 'get'),
         },
     },
 };
 /**
- * [dclPostBase description]
+ * Base dc POST endpoint — accepts filters as JSON payload
+ * Returns an array of DC characters based on the filters passed in
  * @type {Object}
  */
 const dcPostBase = {
@@ -74,14 +76,16 @@ const dcPostBase = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('character.description'),
         notes: api.popText('character.notes').concat(api.popText('character.notesExtended')),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
             payload: api.validateParams(common.validBaseQParams, 'post'),
         },
@@ -116,16 +120,18 @@ const dcGetByCharacter = {
                             .header('Content-Type', 'application/json')
                             .header('x-simple-superhero-service', common.VERSION);
                     })
-                    .catch(err => Boom.badRequest(err.message))
-                    .finally(() => { });
+                    .catch(err => {
+                        console.error(err);
+                        return Boom.badRequest('Request failed');
+                    });
             }
             return response;
         },
         description: api.popText('character.description'),
         notes: api.popText('character.notes'),
-        tags: ['api'], // ADD THIS TAG
+        tags: ['api'],
         validate: {
-            params: api.validateParams(['characters'], 'post'),
+            params: api.validateParams(['characters'], 'get'),
             query: api.validateParams(common.validCharQParams, 'get'),
         },
     },

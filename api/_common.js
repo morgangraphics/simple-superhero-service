@@ -5,7 +5,6 @@
 const cache = {
     dc: [],
     marvel: [],
-    search: [],
 };
 
 /**

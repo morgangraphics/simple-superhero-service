@@ -22,3 +22,18 @@ production:
     - <PRODUCTION_CORS_ORIGIN_2>
  PORT: <PRODUCTION_SERVICE_PORT>
  SWAGGER_ENABLED: false
+
+# Required for Cypress CORS integration tests (npm run test:cors:valid / test:cors:invalid)
+cors-valid:
+  HOST: 127.0.0.1
+  ORIGIN:
+    - http://localhost:3100
+  PORT: 3000
+  SWAGGER_ENABLED: false
+
+cors-invalid:
+  HOST: 127.0.0.1
+  ORIGIN:
+    - https://example.com
+  PORT: 3000
+  SWAGGER_ENABLED: false

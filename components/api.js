@@ -227,12 +227,11 @@ this.srchExtended = `
         const config = {};
         // These are the only params we're concerned about - Object Destructuring
         const {
-            characters, format, h, help, limit, nulls, pretty, prune, random, s, seed, universe,
+            characters, h, limit, nulls, pretty, prune, random, s, seed, universe,
         } = options;
         if (characters) {
             config.characters = this.searchObj(characters);
         }
-        config.format = format;
         if (h) {
             let val = '';
             if (this.isStr(h)) {
@@ -243,7 +242,6 @@ this.srchExtended = `
             }
             config.h = val;
         }
-        config.help = (help === true || help === '') || false;
         config.limit = limit;
         config.nulls = nulls || 'first';
         config.pretty = (pretty === true || pretty === '') || false;
@@ -289,10 +287,10 @@ this.srchExtended = `
     }
 
     /**
-   * Will attempt to make perumtations on names passed in so empty result sets are limited
+   * Will attempt to make permutations on names passed in so empty result sets are limited
    * e.g. spider man, spider-man, spiderman
    * @param  {String} name name of the character you are searching for
-   * @return {Array}      Array of perumations
+   * @return {Array}      Array of permutations
    */
     permutate(name) { // eslint-disable-line class-methods-use-this
         const options = [];
@@ -314,8 +312,8 @@ this.srchExtended = `
 
     /**
    * Populates the appropriate text for Swagger documentation based on universe and path
-   * getValue is a helper library to access nested objects by dot seperated values
-   * @param  {String} key      dot seperated path to key value e.g. base.notes
+   * getValue is a helper library to access nested objects by dot-separated values
+   * @param  {String} key      dot-separated path to key value e.g. base.notes
    * @return {String}          Swagger endpoint documentation
    */
     popText(key) {
@@ -384,9 +382,9 @@ this.srchExtended = `
     }
 
     /**
-   * Hapi Endpoint Valiation Object. Makes sure data being passed in is
+   * Hapi endpoint validation object. Ensures data passed in is
    * what we expect it to be and in the format we expect it in
-   * @param  {Array} validParams Array of Query, Paramerter or Payload parameters to validate
+   * @param  {Array} validParams Array of Query, Parameter or Payload parameter names to validate
    * @param  {String} method     get or post - depending on method, what kind of validation
    *                             should be first
    * @return {Object}            Joi validation object
@@ -473,9 +471,8 @@ this.srchExtended = `
 
         if (validParams.includes('nulls')) {
             params = params.append({
-                nulls: Joi.boolean()
-                    .allow('')
-                    .description(`Sort null values first or last in order. ${tfText}`)
+                nulls: Joi.string()
+                    .description(`Sort null values first or last in order. Valid values: 'first', 'last'`)
                     .optional()
                     .valid('first', 'last'),
             });

@@ -5,7 +5,7 @@ import axios from 'axios';
  */
 describe('404 route testing', () => {
     it('testing 404 handling', () => {
-        axios({
+        return axios({
             method: 'get',
             url: `${Cypress.env('sssApiUrl')}/foo`,
         }).then(response => response).catch(err => {
@@ -20,7 +20,7 @@ describe('404 route testing', () => {
  */
 describe('CORS healthcheck', () => {
     it('healthcheck endpoint', () => {
-        axios({
+        return axios({
             method: 'get',
             url: `${Cypress.env('sssApiUrl')}/healthcheck`,
             responseType: 'json',
@@ -34,7 +34,7 @@ describe('CORS healthcheck', () => {
 
 describe('OPTIONS Request test', () => {
     it('options response', () => {
-        axios({
+        return axios({
             method: 'options',
             url: `${Cypress.env('sssApiUrl')}/test`,
             responseType: 'json',
@@ -48,7 +48,7 @@ describe('CORS marvel endpoint', () => {
     // This test should only run if there is a valid CORS ORIGIN
     if (Cypress.env('NODE_ENV') === 'cors-valid') {
         it('marvel endpoint - get - valid-origin', () => {
-            axios({
+            return axios({
                 method: 'get',
                 url: `${Cypress.env('sssApiUrl')}/marvel?limit=5`,
                 responseType: 'json',
@@ -60,12 +60,12 @@ describe('CORS marvel endpoint', () => {
     }
     if (Cypress.env('NODE_ENV') === 'cors-invalid') {
         it('marvel endpoint - get - invalid-origin', () => {
-            axios({
+            return axios({
                 method: 'get',
                 url: `${Cypress.env('sssApiUrl')}/marvel?limit=5`,
                 responseType: 'json',
-            }).then(response => {
-
+            }).then(() => {
+                throw new Error('Expected CORS failure but request succeeded');
             }).catch(err => {
                 expect(err.message).to.equal('Network Error');
             });
@@ -77,13 +77,13 @@ describe('CORS marvel endpoint', () => {
    * It will fail
    */
     it('marvel endpoint - pre-flight with custom header', () => {
-        axios({
+        return axios({
             method: 'get',
             url: `${Cypress.env('sssApiUrl')}/marvel`,
             responseType: 'json',
             headers: { 'X-CUSTOM-HEADER': 'CUSTOM-HEADER-VALUE' },
-        }).then(response => {
-
+        }).then(() => {
+            throw new Error('Expected pre-flight failure but request succeeded');
         }).catch(err => {
             expect(err.message).to.equal('Network Error');
         });

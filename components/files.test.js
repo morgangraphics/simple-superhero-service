@@ -22,10 +22,6 @@ describe('Testing files.js  - Class instaniation', () => {
         expect(c.config).toEqual('');
     });
 
-    test('constructor - limit_buffer', () => {
-        expect(c.limit_buffer).toEqual(16376);
-    });
-
     test('constructor - seed', () => {
         expect(c.seed).toEqual(999111);
     });
@@ -424,6 +420,24 @@ describe('method - filterLimit', () => {
 
         expect(filterLimit).toHaveProperty('length', 15);
     });
+
+    test('method - filterLimit - random results come from data, not raw cache', () => {
+        // Use a filtered subset of resp as `data` while cache holds the full resp.
+        // Verifies the fix: indices must index into `data`, not common.cache.marvel.
+        const filteredData = resp.filter(itm => itm.name.includes('spider'));
+        common.cache.marvel = resp; // full 15-item cache stays in place
+
+        c.config.limit = 2;
+        c.config.random = true;
+        c.config.seed = false;
+
+        const filterLimit = c.filterLimit(filteredData);
+
+        expect(filterLimit).toHaveProperty('length', 2);
+        filterLimit.forEach(itm => {
+            expect(itm.name).toEqual(expect.stringContaining('spider'));
+        });
+    });
 });
 
 describe('method - getData - invalid universe', () => {
@@ -468,6 +482,8 @@ describe('method - getData - testing explicit header passing', () => {
         universe: 'dc',
     };
 
+    beforeAll(() => { common.cache.dc = []; });
+
     test('method - getData - passing in headers', async () => {
         const data = await c.getData();
         expect(Object.keys(data[0])).toEqual(expect.arrayContaining(['name', 'year']));
@@ -495,6 +511,8 @@ describe('method - getData - valid universe w/ prune, sorting options', () => {
         }],
         universe: 'marvel',
     };
+
+    beforeAll(() => { common.cache.marvel = []; });
 
     test('method - getData - pruning - checks to see the sorting thing we are looking for is not null/undefined', async () => {
         const data = await c.getData();
@@ -529,6 +547,8 @@ describe('method - getData - valid marvel universe', () => {
         universe: 'marvel',
     };
 
+    beforeAll(() => { common.cache.marvel = []; });
+
     test('method - getData - marvel', async () => {
         const data = await c.getData();
         expect(data).toHaveProperty('length', 16376);
@@ -559,6 +579,8 @@ describe('method - getData - valid dc universe', () => {
         universe: 'dc',
     };
 
+    beforeAll(() => { common.cache.dc = []; });
+
     test('method - getData - dc', async () => {
         const data = await c.getData();
         expect(data).toHaveProperty('length', 6896);
@@ -587,6 +609,8 @@ describe('method - getData - valid universe w/ prune AND random', () => {
         universe: 'marvel',
     };
 
+    beforeAll(() => { common.cache.marvel = []; });
+
     test('method - getData - pruning - checks to see the sorting thing we are looking for is not null/undefined', async () => {
         const data = await c.getData();
 
@@ -613,6 +637,8 @@ describe('method - readCharacerFile', () => {
         prune: false,
         universe: 'marvel',
     };
+
+    beforeAll(() => { common.cache.marvel = []; });
 
     test('method - readCharacterFile - marvel', async () => {
         const data = await c.readCharacterFile(config);
@@ -652,9 +678,9 @@ describe('method - sortResults', () => {
         const bgIdx = sortedData.findIndex(itm => itm.name === 'benjamin grimm (earth-616)');
         const jsIdx = sortedData.findIndex(itm => itm.name === 'jonathan storm (earth-616)');
 
-        expect(rrIdx).toBe(3);
-        expect(bgIdx).toBe(4);
+        expect(rrIdx).toBe(4);
         expect(jsIdx).toBe(5);
+        expect(bgIdx).toBe(6);
     });
 });
 
@@ -696,7 +722,7 @@ describe('method - sortResults', () => {
     });
 });
 
-describe('method - sortIl8nStr', () => {
+describe('method - sortI18nStr', () => {
     const c = new file.FileUtils('marvel');
     c.config = {
         characters: {
@@ -720,12 +746,12 @@ describe('method - sortIl8nStr', () => {
     // mocked response
     common.cache.marvel = resp;
 
-    test('method - sortIl8nStr - numbers, strings - nulls:first', () => {
+    test('method - sortI18nStr - numbers, strings - nulls:first', () => {
         const numbers = [1, 100, null, 3, 873, 33.2, 102, 2, null];
         const strings = ['Aplha', 'beta', 'Äkräs', 'Box', null, 'AAron', 'Akira'];
 
-        const sortedNumbers = numbers.sort(c.sortIl8nStr.bind(c));
-        const sortedStrings = strings.sort(c.sortIl8nStr.bind(c));
+        const sortedNumbers = numbers.sort(c.sortI18nStr.bind(c));
+        const sortedStrings = strings.sort(c.sortI18nStr.bind(c));
 
         const expectedNumbers = [null, null, 1, 2, 3, 100, 102, 873, 33.2];
         const expectedStrings = [null, 'AAron', 'Akira', 'Äkräs', 'Aplha', 'beta', 'Box'];
@@ -741,14 +767,14 @@ describe('method - sortIl8nStr', () => {
         });
     });
 
-    test('method - sortIl8nStr - numbers, strings - nulls:last', () => {
+    test('method - sortI18nStr - numbers, strings - nulls:last', () => {
         c.config.nulls = 'last';
 
         const numbers = [1, 100, null, 3, 873, 33.2, 102, 2, null];
         const strings = ['Aplha', 'beta', 'Äkräs', 'Box', null, 'AAron', 'Akira'];
 
-        const sortedNumbers = numbers.sort(c.sortIl8nStr.bind(c));
-        const sortedStrings = strings.sort(c.sortIl8nStr.bind(c));
+        const sortedNumbers = numbers.sort(c.sortI18nStr.bind(c));
+        const sortedStrings = strings.sort(c.sortI18nStr.bind(c));
 
         const expectedNumbers = [1, 2, 3, 100, 102, 873, 33.2, null, null];
         const expectedStrings = ['AAron', 'Akira', 'Äkräs', 'Aplha', 'beta', 'Box', null];

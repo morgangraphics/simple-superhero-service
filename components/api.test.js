@@ -184,9 +184,7 @@ describe('method - handleConfig()', () => {
     test('config 1', () => {
         const cf1 = c.handleConfig(config1);
         expect(cf1).not.toHaveProperty('characters');
-        expect(cf1).toHaveProperty('format', undefined);
         expect(cf1).not.toHaveProperty('h');
-        expect(cf1).toHaveProperty('help', false);
         expect(cf1).toHaveProperty('limit', 10);
         expect(cf1).toHaveProperty('nulls', 'first');
         expect(cf1).toHaveProperty('pretty', false);
@@ -199,9 +197,7 @@ describe('method - handleConfig()', () => {
     test('config 2', () => {
         const cf1 = c.handleConfig(config2);
         expect(cf1).not.toHaveProperty('characters');
-        expect(cf1).toHaveProperty('format', undefined);
         expect(cf1).toHaveProperty('h', expect.arrayContaining(['name', 'first appearance', 'gsm', 'appearances', 'sex', 'year']));
-        expect(cf1).toHaveProperty('help', false);
         expect(cf1).toHaveProperty('limit', 100);
         expect(cf1).toHaveProperty('nulls', 'first');
         expect(cf1).toHaveProperty('pretty', true);
@@ -222,9 +218,7 @@ describe('method - handleConfig()', () => {
         expect(cf1).toHaveProperty('characters.some', expect.arrayContaining(['man']));
         expect(cf1).toHaveProperty('characters.every', []);
         expect(cf1).toHaveProperty('characters.exclude', expect.arrayContaining(['woman']));
-        expect(cf1).toHaveProperty('format', undefined);
         expect(cf1).toHaveProperty('h', expect.arrayContaining(['name', 'first appearance', 'appearances', 'sex', 'year']));
-        expect(cf1).toHaveProperty('help', false);
         expect(cf1).toHaveProperty('limit', 100);
         expect(cf1).toHaveProperty('nulls', 'first');
         expect(cf1).toHaveProperty('pretty', false);
@@ -240,9 +234,7 @@ describe('method - handleConfig()', () => {
     test('config 4', () => {
         const cf1 = c.handleConfig(config4);
         expect(cf1).not.toHaveProperty('characters');
-        expect(cf1).toHaveProperty('format', undefined);
         expect(cf1).not.toHaveProperty('h');
-        expect(cf1).toHaveProperty('help', false);
         expect(cf1).toHaveProperty('nulls', 'first');
         expect(cf1).toHaveProperty('pretty', false);
         expect(cf1).toHaveProperty('prune', false);

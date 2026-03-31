@@ -72,7 +72,7 @@ node.js (18+)
 1. Rename the `config/default.example.yaml` file to `config/default.yaml` e.g. 
 `cp config/default.example.yaml config/default.yaml`
 1. Update the ``<PLACEHOLDERS>`` according to your setup
-1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run test` (testing)
+1. `npm run service` (production like with pm2) or `npm run dev` (development) or `npm run tests` (testing)
 1. The self-signed certs will make the browser throw a `Potential Security Risk` error. Select the Advanced button/link and `Accept the risk and continue` button/link
 
 Marvel URL: [https://localhost:3000/marvel](https://localhost:3000/marvel)
@@ -175,7 +175,6 @@ Diacritic safe search e.g. `tefe holland` === `tefé holland` however, `tefé ho
 #### Filter options
 | Variable Name | Variable | Default  | Description                                                                                                            |
 |---------------|----------|----------|------------------------------------------------------------------------------------------------------------------------|
-| format        | format   | json     | Output format (currently only JSON)                                                                                    |
 | headers       | h        | all      | Available Columns (page_id, name, urlslug, id, align, eye, hair, sex, gsm, alive, appearances, first appearance, year) |
 | help *        | help     | false    | Display Help                                                                                                           |
 | limit         | limit    | 100      | Limit results (0 = unlimited)                                                                                          |
@@ -188,7 +187,7 @@ Diacritic safe search e.g. `tefe holland` === `tefé holland` however, `tefé ho
 
 <sup>\* Shorthand query parameter, meaning its presence automatically equates to true</sup>
 
-<sup>\** Only available on /{character} endpoints</sup>
+<sup>\** Not available on /{character} endpoints</sup>
 
 <sup>† Does not apply when sorting on column/header which contains a null value, records with null values are removed</sup>
 
@@ -507,7 +506,6 @@ OR
 ```
 
 `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
-  "format": "json",
   "characters": [
     "spider man"
   ],
@@ -768,7 +766,7 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
 ]
 ```
 
-### Working wth the tests
+### Working with the tests
 
 #### All
 
@@ -781,7 +779,7 @@ Filters work the same as the base endpoint. (Excluding `random` and `seed`)
 
   OR
 
-  1. you may run the test suit with `npm run test:postman`
+  1. you may run the test suite with `npm run test:postman`
 
 ####  Jest
 
